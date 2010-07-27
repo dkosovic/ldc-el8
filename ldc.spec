@@ -8,7 +8,7 @@
 
 Name:       ldc
 Version:    0.9.2
-Release:    6.%{alphatag}%{hg_revision}%{?dist}
+Release:    7.%{alphatag}%{hg_revision}%{?dist}
 Summary:    It is a compiler for the D programming language
 
 Group:      Development/Languages    
@@ -71,7 +71,7 @@ rm %{buildroot}%{_prefix}/lib/.empty
 
 mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
-install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/maco.ldc
+install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
 sed -i "s|-I.*/../tango\"|-I%{_includedir}/d/tango\"|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
@@ -96,10 +96,13 @@ rm -rf %{buildroot}
 %{_bindir}/ldmd
 %config(noreplace) %{_sysconfdir}/ldc.rebuild.conf
 %config(noreplace) %{_sysconfdir}/ldc.conf
-%config(noreplace) %{_sysconfdir}/rpm/maco.ldc
+%config(noreplace) %{_sysconfdir}/rpm/macros.ldc
 
 %config(noreplace)
 %changelog
+* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-7.20100609hg1653
+- Fix macros.ldc name
+
 * Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-6.20100609hg1653
 - Add \%{_sysconfdir}/rpm/maco.ldc file for new macro
 - Fix alphatag to YYYYMMDD instead YYYYDDMM
