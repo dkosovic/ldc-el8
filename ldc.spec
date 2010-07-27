@@ -1,20 +1,21 @@
-%global     alphatag        20100706
+%global     alphatag        20100609
 %global     hg_revision     hg1653
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1653 http://bitbucket.org/lindquist/ldc ldc-20100706hg1653
-# tar -cJvf ldc-20100706hg1653.tar.xz ldc-20100706hg1653
+# hg clone -r 1653 http://bitbucket.org/lindquist/ldc ldc-20100609hg1653
+# tar -cJvf ldc-20100609hg1653.tar.xz ldc-20100609hg1653
 
 Name:       ldc
 Version:    0.9.2
-Release:    1.2.%{alphatag}%{hg_revision}%{?dist}
+Release:    6.%{alphatag}%{hg_revision}%{?dist}
 Summary:    It is a compiler for the D programming language
 
 Group:      Development/Languages    
 License:    BSD    
 URL:        http://www.dsource.org/projects/ldc
 Source0:    %{name}-%{alphatag}%{hg_revision}.tar.xz
+Source1:    macro.%{name}
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  llvm-devel
@@ -22,6 +23,7 @@ BuildRequires:  libconfig
 BuildRequires:  cmake
 BuildRequires:  libconfig-devel
 BuildRequires:  gc
+Requires:  	gcc
 Requires:       libconfig
 
 %description
@@ -62,13 +64,14 @@ make VERBOSE=1 %{?_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
-mkdir %{buildroot}/%{_sysconfdir}
+mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 # This empty file is removed because it's never used. "lib" is explicitely used
 # instead of %_libdir because it's always used (not arch dependant)
 rm %{buildroot}%{_prefix}/lib/.empty
 
 mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
+install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/maco.ldc
 
 sed -i "s|-I.*/../tango\"|-I%{_includedir}/d/tango\"|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
@@ -78,6 +81,8 @@ sed -i "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}/tango|" %{buildroot}%{
 sed -i "s|-defaultlib=tango-user-ldc|-defaultlib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "s|-debuglib=tango-user-ldc|-debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "13a \ \ \ \ \ \ \ \ \"-I%{_includedir}/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
+
+sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=@RUNTIME_AIO@ -debuglib=@RUNTIME_AIO@|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
 chmod 755 %{buildroot}%{_bindir}/ldmd
 
@@ -91,12 +96,24 @@ rm -rf %{buildroot}
 %{_bindir}/ldmd
 %config(noreplace) %{_sysconfdir}/ldc.rebuild.conf
 %config(noreplace) %{_sysconfdir}/ldc.conf
+%config(noreplace) %{_sysconfdir}/rpm/maco.ldc
 
+%config(noreplace)
 %changelog
-* Thu Jul 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-1.2.20100706hg1653
+* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-6.20100609hg1653
+- Add \%{_sysconfdir}/rpm/maco.ldc file for new macro
+- Fix alphatag to YYYYMMDD instead YYYYDDMM
+
+* Sun Jul 25 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-5.20100706hg1653
+- Fix ldc.rebuild.conf file
+
+* Fri Jul 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-4.20100706hg1653
+- Add gcc in require
+
+* Thu Jul 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-3.20100706hg1653
 - Perform french description
 
-* Sat Jun 24 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-1.1.20100706hg1653
+* Sat Jun 24 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-2.20100706hg1653
 - Explain why .emty file is removed
 
 * Wed Jun 23 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-1.20100706hg1653
