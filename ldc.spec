@@ -8,14 +8,14 @@
 
 Name:       ldc
 Version:    0.9.2
-Release:    7.%{alphatag}%{hg_revision}%{?dist}
+Release:    8.%{alphatag}%{hg_revision}%{?dist}
 Summary:    It is a compiler for the D programming language
 
 Group:      Development/Languages    
 License:    BSD    
 URL:        http://www.dsource.org/projects/ldc
 Source0:    %{name}-%{alphatag}%{hg_revision}.tar.xz
-Source1:    macro.%{name}
+Source1:    macros.%{name}
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  llvm-devel
@@ -73,16 +73,16 @@ mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebui
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
 install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
-sed -i "s|-I.*/../tango\"|-I%{_includedir}/d/tango\"|" %{buildroot}%{_sysconfdir}/ldc.conf
+sed -i "s|-I.*/../tango\"|-I%{_d_includedir}/tango\"|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "s|-I.*/../tango/tango/core/vendor|-I%{_includedir}/d/tango/core/vendor|" %{buildroot}%{_sysconfdir}/ldc.conf
+sed -i "s|-I.*/../tango/tango/core/vendor|-I%{_d_includedir}/tango/core/vendor|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}/tango|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "s|-defaultlib=tango-user-ldc|-defaultlib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
 sed -i "s|-debuglib=tango-user-ldc|-debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "13a \ \ \ \ \ \ \ \ \"-I%{_includedir}/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
+sed -i "13a \ \ \ \ \ \ \ \ \"-I%{_d_includedir}/\"," %{buildroot}%{_sysconfdir}/ldc.conf
 
-sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=@RUNTIME_AIO@ -debuglib=@RUNTIME_AIO@|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
+sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
 chmod 755 %{buildroot}%{_bindir}/ldmd
 
@@ -94,17 +94,20 @@ rm -rf %{buildroot}
 %doc LICENSE readme.txt
 %{_bindir}/ldc
 %{_bindir}/ldmd
-%config(noreplace) %{_sysconfdir}/ldc.rebuild.conf
-%config(noreplace) %{_sysconfdir}/ldc.conf
-%config(noreplace) %{_sysconfdir}/rpm/macros.ldc
+%config(noreplace)  %{_sysconfdir}/ldc.rebuild.conf
+%config(noreplace)  %{_sysconfdir}/ldc.conf
+%config             %{_sysconfdir}/rpm/macros.ldc
 
 %config(noreplace)
 %changelog
+* Wed Jul 28  2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-8.20100609hg1653
+- Using macro for D package
+
 * Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-7.20100609hg1653
 - Fix macros.ldc name
 
 * Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-6.20100609hg1653
-- Add \%{_sysconfdir}/rpm/maco.ldc file for new macro
+- Add %%{_sysconfdir}/rpm/maco.ldc file for new macro
 - Fix alphatag to YYYYMMDD instead YYYYDDMM
 
 * Sun Jul 25 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-5.20100706hg1653
