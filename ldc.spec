@@ -1,29 +1,30 @@
 %global     alphatag        20100609
-%global     hg_revision     hg1653
+%global     hg_revision     hg1654
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1653 http://bitbucket.org/lindquist/ldc ldc-20100609hg1653
-# tar -cJvf ldc-20100609hg1653.tar.xz ldc-20100609hg1653
+# hg clone -r 1654 http://bitbucket.org/lindquist/ldc ldc-20100609hg1654
+# tar -cJvf ldc-20100609hg1654.tar.xz ldc-20100609hg1654
 
-Name:       ldc
-Version:    0.9.2
-Release:    8.%{alphatag}%{hg_revision}%{?dist}
-Summary:    It is a compiler for the D programming language
+Name:           ldc
+Version:        0.9.2
+Release:        12.%{alphatag}%{hg_revision}%{?dist}
+Summary:        It is a compiler for the D programming language
 
-Group:      Development/Languages    
-License:    BSD    
-URL:        http://www.dsource.org/projects/ldc
-Source0:    %{name}-%{alphatag}%{hg_revision}.tar.xz
-Source1:    macros.%{name}
-BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Group:          Development/Languages    
+License:        BSD    
+URL:            http://www.dsource.org/projects/ldc
+Source0:        %{name}-%{alphatag}%{hg_revision}.tar.xz
+Patch0:         %{name}-0.9.2-fix.patch
+Source1:        macros.%{name}
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  llvm-devel
 BuildRequires:  libconfig
 BuildRequires:  cmake
 BuildRequires:  libconfig-devel
 BuildRequires:  gc
-Requires:  	gcc
+Requires:       gcc
 Requires:       libconfig
 
 %description
@@ -54,33 +55,34 @@ implémenter.
 
 %prep
 %setup -q -n %{name}-%{alphatag}%{hg_revision}
+%patch0 -p1 -b .fix
 
 %build
 %cmake . -DCMAKE_CXX_FLAGS:STRING=-DLLVM_REV=101676
 
-make VERBOSE=1 %{?_smp_mflags}
+make %{?_smp_mflags} VERBOSE=1
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+make %{?_smp_mflags} install DESTDIR=%{buildroot}
 
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 # This empty file is removed because it's never used. "lib" is explicitely used
-# instead of %_libdir because it's always used (not arch dependant)
+# instead of %%_libdir because it's always used (not arch dependant)
 rm %{buildroot}%{_prefix}/lib/.empty
 
 mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
 install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
-sed -i "s|-I.*/../tango\"|-I%{_d_includedir}/tango\"|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "s|-I.*/../tango/tango/core/vendor|-I%{_d_includedir}/tango/core/vendor|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}/tango|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "s|-defaultlib=tango-user-ldc|-defaultlib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "s|-debuglib=tango-user-ldc|-debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.conf
-sed -i "13a \ \ \ \ \ \ \ \ \"-I%{_d_includedir}/\"," %{buildroot}%{_sysconfdir}/ldc.conf
+sed -i -e   "s|-I.*/../tango\"|-I%{_d_includedir}/tango\"|"                             \
+    -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d"           \
+    -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d"    \
+    -e      "s|-I.*/../tango/tango/core/vendor|-I%{_d_includedir}/tango/core/vendor|"   \
+    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_d_libdir}|"                      \
+    -e      "s|-defaultlib=tango-user-ldc|-defaultlib=tango|"                           \
+    -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
+    -e      "13a \ \ \ \ \ \ \ \ \"-I%{_d_includedir}/\"," %{buildroot}%{_sysconfdir}/ldc.conf
 
 sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
@@ -96,10 +98,23 @@ rm -rf %{buildroot}
 %{_bindir}/ldmd
 %config(noreplace)  %{_sysconfdir}/ldc.rebuild.conf
 %config(noreplace)  %{_sysconfdir}/ldc.conf
-%config             %{_sysconfdir}/rpm/macros.ldc
+%config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
-%config(noreplace)
 %changelog
+* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-12.20100609hg1654
+- Add patch
+
+* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-11.20100609hg1654
+- Add %%{?_smp_mflags} macro for makefile
+- Add flag -O2 for good optimizations in %%{_d_optflags} macro
+
+* Sun Aug 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-10.20100609hg1654
+- Update to revision 1654
+
+* Fri Jul 29 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-9.20100609hg1653
+- add %%{_d_libdir} macro in macros.ldc
+- fix lib path in ldc.conf
+
 * Wed Jul 28  2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-8.20100609hg1653
 - Using macro for D package
 
