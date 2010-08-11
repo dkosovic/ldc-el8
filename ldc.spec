@@ -1,21 +1,22 @@
-%global     alphatag        20100609
-%global     hg_revision     hg1654
+%global     alphatag        20100804
+%global     hg_revision     hg1655
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1654 http://bitbucket.org/lindquist/ldc ldc-20100609hg1654
-# tar -cJvf ldc-20100609hg1654.tar.xz ldc-20100609hg1654
+# hg clone -r 1655 http://bitbucket.org/lindquist/ldc ldc-20100804hg1655
+# tar -cJvf ldc-20100804hg1655.tar.xz ldc-20100804hg1655
 
 Name:           ldc
 Version:        0.9.2
-Release:        12.%{alphatag}%{hg_revision}%{?dist}
+Release:        13.%{alphatag}%{hg_revision}%{?dist}
 Summary:        It is a compiler for the D programming language
 
-Group:          Development/Languages    
+Group:          Development/Languages
+# The DMD frontend in dmd/* GPL version 1 or artistic license
+# The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
 Source0:        %{name}-%{alphatag}%{hg_revision}.tar.xz
-Patch0:         %{name}-0.9.2-fix.patch
 Source1:        macros.%{name}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -55,12 +56,12 @@ implémenter.
 
 %prep
 %setup -q -n %{name}-%{alphatag}%{hg_revision}
-%patch0 -p1 -b .fix
+find . -type f -exec sed -i 's/\r//' {} \;
 
 %build
 %cmake . -DCMAKE_CXX_FLAGS:STRING=-DLLVM_REV=101676
 
-make %{?_smp_mflags} VERBOSE=1
+make %{?_smp_mflags} VERBOSE=2
 
 %install
 rm -rf %{buildroot}
@@ -75,11 +76,11 @@ mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebui
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
 install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
-sed -i -e   "s|-I.*/../tango\"|-I%{_d_includedir}/tango\"|"                             \
+sed -i -e   "s|-I.*/../tango\"|-I %{_d_includedir}/tango\"|"                             \
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d"           \
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d"    \
-    -e      "s|-I.*/../tango/tango/core/vendor|-I%{_d_includedir}/tango/core/vendor|"   \
-    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_d_libdir}|"                      \
+    -e      "s|-I.*/../tango/tango/core/vendor|-I %{_d_includedir}/tango/core/vendor|"   \
+    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L %{_d_libdir}|"                      \
     -e      "s|-defaultlib=tango-user-ldc|-defaultlib=tango|"                           \
     -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
     -e      "13a \ \ \ \ \ \ \ \ \"-I%{_d_includedir}/\"," %{buildroot}%{_sysconfdir}/ldc.conf
@@ -101,6 +102,12 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Wed Aug 11 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-13.20100609hg1655
+- fix critical bug in /etc/ldc.conf
+
+* Sun Aug 07 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-12.20100609hg1655
+- Update to revision 1655
+
 * Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-12.20100609hg1654
 - Add patch
 
