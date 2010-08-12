@@ -8,7 +8,7 @@
 
 Name:           ldc
 Version:        0.9.2
-Release:        13.%{alphatag}%{hg_revision}%{?dist}
+Release:        14.%{alphatag}%{hg_revision}%{?dist}
 Summary:        It is a compiler for the D programming language
 
 Group:          Development/Languages
@@ -76,18 +76,18 @@ mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebui
 mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
 install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
-sed -i -e   "s|-I.*/../tango\"|-I %{_d_includedir}/tango\"|"                             \
+sed -i -e   "s|-I.*/../tango\"|-I /usr/include/d/tango\"|"                             \
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d"           \
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d"    \
-    -e      "s|-I.*/../tango/tango/core/vendor|-I %{_d_includedir}/tango/core/vendor|"   \
-    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L %{_d_libdir}|"                      \
+    -e      "s|-I.*/../tango/tango/core/vendor|-I /usr/include/d/tango/tango/core/vendor|"   \
+    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L %{_libdir}/d|"                      \
     -e      "s|-defaultlib=tango-user-ldc|-defaultlib=tango|"                           \
     -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
-    -e      "13a \ \ \ \ \ \ \ \ \"-I%{_d_includedir}/\"," %{buildroot}%{_sysconfdir}/ldc.conf
+    -e      "13a \ \ \ \ \ \ \ \ \"-I /usr/include/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
 
 sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
-chmod 755 %{buildroot}%{_bindir}/ldmd
+chmod 755 %{buildroot}%{_bindir}/ldmd==="
 
 %clean
 rm -rf %{buildroot}
@@ -102,6 +102,9 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-14.20100609hg1655
+- fix critical bug in /etc/ldc.conf
+
 * Wed Aug 11 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-13.20100609hg1655
 - fix critical bug in /etc/ldc.conf
 
