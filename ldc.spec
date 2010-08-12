@@ -8,7 +8,7 @@
 
 Name:           ldc
 Version:        0.9.2
-Release:        14.%{alphatag}%{hg_revision}%{?dist}
+Release:        15.%{alphatag}%{hg_revision}%{?dist}
 Summary:        It is a compiler for the D programming language
 
 Group:          Development/Languages
@@ -85,9 +85,9 @@ sed -i -e   "s|-I.*/../tango\"|-I /usr/include/d/tango\"|"                      
     -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
     -e      "13a \ \ \ \ \ \ \ \ \"-I /usr/include/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
 
-sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L/usr/lib/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
+sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L %{_libdir}/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
-chmod 755 %{buildroot}%{_bindir}/ldmd==="
+chmod 755 %{buildroot}%{_bindir}/ldmd
 
 %clean
 rm -rf %{buildroot}
@@ -102,6 +102,9 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-15.20100609hg1655
+- fix minor bug in /etc/ldc.conf
+
 * Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-14.20100609hg1655
 - fix critical bug in /etc/ldc.conf
 
