@@ -8,8 +8,8 @@
 
 Name:           ldc
 Version:        0.9.2
-Release:        16.%{alphatag}%{hg_revision}%{?dist}
-Summary:        It is a compiler for the D programming language
+Release:        17.%{alphatag}%{hg_revision}%{?dist}
+Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -80,12 +80,12 @@ sed -i -e   "s|-I.*/../tango\"|-I /usr/include/d/tango\"|"                      
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d"           \
     -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d"    \
     -e      "s|-I.*/../tango/tango/core/vendor|-I /usr/include/d/tango/core/vendor|"   \
-    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}/d|"                      \
+    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}|"                      \
     -e      "s|-defaultlib=tango-user-ldc|-defaultlib=tango|"                           \
     -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
     -e      "13a \ \ \ \ \ \ \ \ \"-I /usr/include/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
 
-sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L %{_libdir}/d -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
+sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L %{_libdir} -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
 
 chmod 755 %{buildroot}%{_bindir}/ldmd
 
@@ -102,6 +102,9 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Thu Aug 26 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-17.20100609hg1655
+- use %%{_libdir} instead %%{_libdir}/d
+
 * Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-16.20100609hg1655
 - fix minor bug in /etc/ldc.conf
 
