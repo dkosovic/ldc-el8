@@ -1,14 +1,14 @@
-%global     alphatag        20100804
-%global     hg_revision     hg1655
+%global     alphatag        20100905
+%global     hg_revision     hg1659
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1655 http://bitbucket.org/lindquist/ldc ldc-20100804hg1655
-# tar -cJvf ldc-20100804hg1655.tar.xz ldc-20100804hg1655
+# hg clone -r 1659 http://bitbucket.org/lindquist/ldc ldc-20100905hg1659
+# tar -cJvf ldc-20100905hg1659.tar.xz ldc-20100905hg1659
 
 Name:           ldc
 Version:        0.9.2
-Release:        17.%{alphatag}%{hg_revision}%{?dist}
+Release:        19.%{alphatag}%{hg_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -102,6 +102,12 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-19.20100905hg1659
+- update to new release 1659
+
+* Sat Sep 04 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-18.20100904hg1657
+- update to new release 1657
+
 * Thu Aug 26 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-17.20100609hg1655
 - use %%{_libdir} instead %%{_libdir}/d
 
