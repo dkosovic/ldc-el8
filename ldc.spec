@@ -8,7 +8,7 @@
 
 Name:           ldc
 Version:        0.9.2
-Release:        21.%{alphatag}%{hg_revision}%{?dist}
+Release:        22.%{alphatag}%{hg_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -102,6 +102,9 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Wed Sep 29 2010 jkeating - 0.9.2-22.20100927hg1664
+- Rebuilt for gcc bug 634757
+
 * Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-21.20100927hg1664
 - update to new release 1664 
 
