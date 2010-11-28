@@ -1,14 +1,14 @@
-%global     alphatag        20101105
-%global     hg_revision     hg1697
+%global     alphatag        20101114
+%global     hg_revision     hg1698
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1697 http://bitbucket.org/lindquist/ldc ldc-20101105hg1697
-# tar -cJvf ldc-20101105hg1697.tar.xz ldc-20101105hg1697
+# hg clone -r 1698 http://bitbucket.org/lindquist/ldc ldc-20101114hg1698
+# tar -cJvf ldc-20101114hg1698.tar.xz ldc-20101114hg1698
 
 Name:           ldc
 Version:        0.9.2
-Release:        23.%{alphatag}%{hg_revision}%{?dist}
+Release:        25.%{alphatag}%{hg_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -57,9 +57,10 @@ implémenter.
 %prep
 %setup -q -n %{name}-%{alphatag}%{hg_revision}
 find . -type f -exec sed -i 's/\r//' {} \;
+#%patch0 -p1
 
 %build
-%cmake . -DCMAKE_CXX_FLAGS:STRING=-DLLVM_REV=101676
+%cmake . -DCMAKE_CXX_FLAGS:STRING=-DLLVM_REV=105825
 
 make %{?_smp_mflags} VERBOSE=2
 
@@ -102,15 +103,18 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
-* Fri Nov 05 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-23.20101105hg1697
-- update to latest revision 1967
+* Sun Nov 14 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-25.20101114hg1698
+- update to latest revision 1698
 - several bug fix
 
-* Wed Sep 29 2010 jkeating - 0.9.2-22.20100927hg1664
-- Rebuilt for gcc bug 634757
+* Wed Oct 20 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-23.20101004hg1666
+- add patch for llvm 2.8
 
-* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-21.20100927hg1664
-- update to new release 1664 
+* Fri Oct 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-22.20101004hg1666
+- update to new release 1666
+
+* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-21.20100928hg1665
+- update to new release 1665 
 
 * Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-20.20100927hg1664
 - update to new release 1664
