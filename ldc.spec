@@ -1,14 +1,15 @@
-%global     alphatag        20100102
-%global     hg_revision     hg1705
+%global     alphatag        20110115
+%global     hg_revision     hg1832
 
 # The source for this package was pulled from upstream's mercurial (hg).
 # Use the following commands to generate the tarball:
-# hg clone -r 1705 http://bitbucket.org/lindquist/ldc ldc-20100102hg1705
-# tar -cJvf ldc-20100102hg1705.tar.xz ldc-20100102hg1705
+# hg clone -r 1832 http://bitbucket.org/lindquist/ldc ldc-20110115hg1832
+# find ldc-20110115hg1832 -name ".hg" | xargs rm -fr
+# tar -cJvf ldc-20110115hg1832.tar.xz ldc-20110115hg1832
 
 Name:           ldc
 Version:        0.9.2
-Release:        27.%{alphatag}%{hg_revision}%{?dist}
+Release:        30.%{alphatag}%{hg_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -103,7 +104,16 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
-* Mon Jun 05 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-27.20100102hg1705
+* Sun Jan 16 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-30.20110115hg1832
+ update to latest revision 1832
+ 
+* Mon Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-29.20110110hg1828
+ update to latest revision 1828
+
+* Fri Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-28.20110105hg1812
+ update to latest revision 1812
+
+* Mon Jan 05 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-27.20110102hg1705
 - update to latest revision 1705
 
 * Sun Nov 14 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-25.20101114hg1698
