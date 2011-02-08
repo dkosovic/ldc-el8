@@ -9,7 +9,7 @@
 
 Name:           ldc
 Version:        0.9.2
-Release:        30.%{alphatag}%{hg_revision}%{?dist}
+Release:        31.%{alphatag}%{hg_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -104,6 +104,9 @@ rm -rf %{buildroot}
 %config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
 
 %changelog
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-31.20110115hg1832
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Sun Jan 16 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-30.20110115hg1832
  update to latest revision 1832
  
