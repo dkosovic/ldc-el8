@@ -1,15 +1,17 @@
-%global     alphatag        20110115
-%global     hg_revision     hg1832
+%global     alphatag        20110901
+%global     git_revision    git58d40d2
 
-# The source for this package was pulled from upstream's mercurial (hg).
+# The source for this package was pulled from upstream's subversion (svn).
 # Use the following commands to generate the tarball:
-# hg clone -r 1832 http://bitbucket.org/lindquist/ldc ldc-20110115hg1832
-# find ldc-20110115hg1832 -name ".hg" | xargs rm -fr
-# tar -cJvf ldc-20110115hg1832.tar.xz ldc-20110115hg1832
+# git rev-parse --short HEAD -> for get hash
+# git clone git://github.com/bioinfornatics/ldc2.git ldc-20110901git58d40d2
+# (cd ldc-20110901git58d40d2; git checkout 161823bef25fa366677d; git submodule init; git submodule update)
+# find ldc-20110901git58d40d2 -name ".git" -print0 | xargs -0 rm -fr
+# tar cJvf ldc-20110901git58d40d2.tar.xz ldc-20110901git58d40d2
 
 Name:           ldc
-Version:        0.9.2
-Release:        31.%{alphatag}%{hg_revision}%{?dist}
+Version:        2
+Release:        2.%{alphatag}%{git_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -17,16 +19,14 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
-Source0:        %{name}-%{alphatag}%{hg_revision}.tar.xz
+Source0:        %{name}-%{alphatag}%{git_revision}.tar.xz
 Source1:        macros.%{name}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  llvm-devel
-BuildRequires:  libconfig
+BuildRequires:  llvm-devel >= 2.9
+BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
-BuildRequires:  libconfig-devel
-BuildRequires:  gc
-Requires:       gcc
+BuildRequires:  gc, gcc-c++, gcc
 Requires:       libconfig
 
 %description
@@ -55,41 +55,91 @@ LDC compile déjà une grande quantité de code D, mais doit encore être consid
 en qualité bêta. Regarder les tickets pour ressentir ce qui doit encore être
 implémenter.
 
+%package        druntime
+Summary:        Runtime lirary for D
+Group:          Development/Tools
+License:        Boost
+Requires:       %{name} =  %{version}-%{release}
+
+%description druntime
+Druntime is the minimum library required to support the D programming
+language. It includes the system code required to support the garbage
+collector, associative arrays, exception handling, array vector operations,
+startup/shutdown, etc.
+
+%description druntime -l fr
+Druntime est la bibliothèque minimal requise pour supporter la programmation en
+D. Est inclut le code système requis pour supporter le ramasse miette, tableau
+associatif, gestion des exceptions, opertation sur des vecteurs,
+démarage/extinction, etc
+
+%package        phobos
+Summary:        Standard Runtime Library
+Group:          Development/Tools
+License:        Boost
+Requires:       %{name} =  %{version}-%{release}
+Requires:       %{name}-druntime
+
+%description phobos
+Each module in Phobos conforms as much as possible to the following design
+goals. These are goals rather than requirements because D is not a religion,
+it's a programming language, and it recognizes that sometimes the goals are
+contradictory and counterproductive in certain situations, and programmers have
+jobs that need to get done
+
+%description phobos -l fr
+Chaque module de Phobos est conforme autant que possible à la conception
+suivante objectifs. Ce sont des objectifs plutôt que des exigences car D n'est
+pas une religion, c'est un langage de programmation, et il reconnaît que,
+parfois, les objectifs sont contradictoire et contre-productive dans certaines
+situations, et les programmeurs doivent implémenter d'une certaines manière.
+
 %prep
-%setup -q -n %{name}-%{alphatag}%{hg_revision}
-find . -type f -exec sed -i 's/\r//' {} \;
+%setup -q -n %{name}-%{alphatag}%{git_revision}
+find . -type f -exec sed -i 's/\r//g' {} \;
 #%patch0 -p1
 
 %build
-%cmake . -DCMAKE_CXX_FLAGS:STRING=-DLLVM_REV=105825
+%cmake -DD_VERSION:STRING=2 -DCONF_INST_DIR:PATH=%{_sysconfdir} -DRUNTIME_DIR=./druntime -DPHOBOS2_DIR=./phobos .
 
-make %{?_smp_mflags} VERBOSE=2
+make %{?_smp_mflags} VERBOSE=2 phobos2
 
 %install
 rm -rf %{buildroot}
-make %{?_smp_mflags} install DESTDIR=%{buildroot}
-
+#make %{?_smp_mflags} install DESTDIR=%{buildroot}
+mkdir -p %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
+mkdir -p %{buildroot}/%{_includedir}/d
+mkdir -p %{buildroot}/%{_libdir}/
+mkdir -p %{buildroot}/%{_includedir}/d/std
+
 # This empty file is removed because it's never used. "lib" is explicitely used
 # instead of %%_libdir because it's always used (not arch dependant)
-rm %{buildroot}%{_prefix}/lib/.empty
+#rm %{buildroot}%{_prefix}/lib/.empty
 
-mv %{buildroot}%{_bindir}/ldc.rebuild.conf  %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
-mv %{buildroot}%{_bindir}/ldc.conf          %{buildroot}%{_sysconfdir}/ldc.conf
-install --mode=0644 %{SOURCE1}              %{buildroot}%{_sysconfdir}/rpm/macros.ldc
+install --mode=0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
-sed -i -e   "s|-I.*/../tango\"|-I /usr/include/d/tango\"|"                             \
-    -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/user.*$/d"           \
-    -e      "/^.*-I.*%{name}-%{alphatag}%{hg_revision}\/..\/tango\/lib\/common.*$/d"    \
-    -e      "s|-I.*/../tango/tango/core/vendor|-I /usr/include/d/tango/core/vendor|"   \
-    -e      "s|-L-L\%\%ldcbinarypath\%\%/../lib|-L-L%{_libdir}|"                      \
-    -e      "s|-defaultlib=tango-user-ldc|-defaultlib=tango|"                           \
-    -e      "s|-debuglib=tango-user-ldc|-debuglib=tango|"                               \
-    -e      "13a \ \ \ \ \ \ \ \ \"-I /usr/include/d/\"," %{buildroot}%{_sysconfdir}/ldc.conf
+sed -i \
+    -e      "10a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\","        \
+    -e      "/^.*-I.*%{name}-%{alphatag}%{git_revision}.*$/d"   \
+    -e      "s/-L-L.*lib/-L-L$(%{_libdir})\/druntime.so/"       bin/ldc2.conf 
 
-sed -i "s|DFLAGS.*|DFLAGS=-I/usr/include/d -L-L %{_libdir} -d-version=Tango -defaultlib=tango -debuglib=tango|" %{buildroot}%{_sysconfdir}/ldc.rebuild.conf
+sed -i "s|DFLAGS.*|DFLAGS=-I%{_includedir}/d -L-L%{_libdir} -d-version=Phobos -defaultlib=phobos2 -debuglib=phobos2|" bin/ldc2.rebuild.conf
 
-chmod 755 %{buildroot}%{_bindir}/ldmd
+# ldc
+cp -rp import/*                 %{buildroot}/%{_includedir}/d
+install bin/ldc2.conf           %{buildroot}%{_sysconfdir}/ldc2.conf
+install bin/ldc2.rebuild.conf   %{buildroot}%{_sysconfdir}/ldc2.rebuild.conf
+install -m0755 bin/ldmd2        %{buildroot}%{_bindir}/ldmd2
+install -m0755 bin/ldc2         %{buildroot}%{_bindir}/ldc2
+
+# druntime
+install lib/libdruntime-ldc.so %{buildroot}/%{_libdir}/libdruntime-ldc.so
+cp -rp druntime/import/* %{buildroot}/%{_includedir}/d/
+
+# phobos
+cp -rp phobos/std %{buildroot}/%{_includedir}/d/
+install lib/liblphobos2.so %{buildroot}/%{_libdir}/liblphobos2.so
 
 %clean
 rm -rf %{buildroot}
@@ -97,13 +147,34 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc LICENSE readme.txt
-%{_bindir}/ldc
-%{_bindir}/ldmd
-%config(noreplace)  %{_sysconfdir}/ldc.rebuild.conf
-%config(noreplace)  %{_sysconfdir}/ldc.conf
-%config(noreplace)  %{_sysconfdir}/rpm/macros.ldc
+%{_bindir}/ldc2
+%{_bindir}/ldmd2
+%{_includedir}/d/core
+%config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
+%config(noreplace)  %{_sysconfdir}/ldc2.conf
+%config             %{_sysconfdir}/rpm/macros.ldc
+
+%files druntime
+%defattr(-,root,root,-)
+%doc druntime/LICENSE_1_0.txt druntime/README.txt
+%{_includedir}/d/ldc
+%{_includedir}/d/object.di
+%{_includedir}/d/std/intrinsic.di
+%{_libdir}/libdruntime-ldc.so
+
+%files phobos
+%defattr(-,root,root,-)
+%doc phobos/LICENSE_1_0.txt
+%{_libdir}/liblphobos2.so
+%{_includedir}/d/std
 
 %changelog
+* Tue Jul 26 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110826hg1991
+- update LDC2 from upstream
+
+* Sun Mar 06 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-1.20110615hg1965
+- update to LDC2
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-31.20110115hg1832
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
