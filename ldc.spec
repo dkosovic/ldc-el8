@@ -1,4 +1,6 @@
-%global     alphatag        20110901
+%global     alphatag        20110801
+# incorrect tarball name
+%global     err_alphatag    20110901
 %global     git_revision    git58d40d2
 
 # The source for this package was pulled from upstream's subversion (svn).
@@ -11,7 +13,7 @@
 
 Name:           ldc
 Version:        2
-Release:        2.%{alphatag}%{git_revision}%{?dist}
+Release:        3.%{alphatag}%{git_revision}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -19,7 +21,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
-Source0:        %{name}-%{alphatag}%{git_revision}.tar.xz
+Source0:        %{name}-%{err_alphatag}%{git_revision}.tar.xz
 Source1:        macros.%{name}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -95,8 +97,11 @@ parfois, les objectifs sont contradictoire et contre-productive dans certaines
 situations, et les programmeurs doivent implémenter d'une certaines manière.
 
 %prep
-%setup -q -n %{name}-%{alphatag}%{git_revision}
+%setup -q -n %{name}-%{err_alphatag}%{git_revision}
 find . -type f -exec sed -i 's/\r//g' {} \;
+# config.h is renamed in Fedora to allow for 32- and 64-bit llvm-devel to
+# coexist; look for the appropriate file
+sed -i.multilib -e 's|config.h|config-%{__isa_bits}.h|' CMakeLists.txt
 #%patch0 -p1
 
 %build
@@ -169,6 +174,12 @@ rm -rf %{buildroot}
 %{_includedir}/d/std
 
 %changelog
+* Wed Aug  3 2011 Michel Salim <salimma@fedoraproject.org> - 2-3.20110801git58d40d2
+- Rebuild against final LLVM 2.9 release
+
+* Mon Aug  1 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110801git58d40d2
+- update LDC2 from upstream
+
 * Tue Jul 26 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110826hg1991
 - update LDC2 from upstream
 
