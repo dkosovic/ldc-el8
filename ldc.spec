@@ -1,17 +1,30 @@
-%global     alphatag        20110901
-%global     git_revision    git58d40d2
+%global     snapdate        20110915
+%global     ldc_rev         423076d
+%global     phobos_rev      a8106d9
+%global     druntime_rev    fba10fa
+%global     alphatag        %{snapdate}git%{ldc_rev}
+%global     phobostag       %{snapdate}git%{phobos_rev}
+%global     druntimetag     %{snapdate}git%{druntime_rev}
 
-# The source for this package was pulled from upstream's subversion (svn).
+# The source for this package was pulled from upstream's git.
 # Use the following commands to generate the tarball:
-# git rev-parse --short HEAD -> for get hash
-# git clone git://github.com/bioinfornatics/ldc2.git ldc-20110901git58d40d2
-# (cd ldc-20110901git58d40d2; git checkout 161823bef25fa366677d; git submodule init; git submodule update)
-# find ldc-20110901git58d40d2 -name ".git" -print0 | xargs -0 rm -fr
-# tar cJvf ldc-20110901git58d40d2.tar.xz ldc-20110901git58d40d2
+# cd ldc; git rev-parse --short HEAD            -> for ldc_rev
+# cd ldc/phobos; git rev-parse --short HEAD     -> for phobos_rev
+# cd ldc/druntime/;  git rev-parse --short HEAD -> for druntime_rev
+# git clone https://github.com/ldc-developers/ldc.git
+# (cd ldc; git checkout 423076d; git submodule init; git submodule update; \
+#  git archive --prefix=ldc-%%{alphatag}/ HEAD \
+# ) | xz > ldc-%%{alphatag}.xz
+# (cd ldc/druntime; \
+#  git archive --prefix=druntime/ HEAD \
+# ) | xz > ldc-druntime-%%{druntimetag}.xz
+# (cd ldc/phobos; \
+#  git archive --prefix=phobos/ HEAD \
+# ) | xz > ldc-phobos-%%{phobostag}.xz
 
 Name:           ldc
 Version:        2
-Release:        2.%{alphatag}%{git_revision}%{?dist}
+Release:        4.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -19,15 +32,19 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
-Source0:        %{name}-%{alphatag}%{git_revision}.tar.xz
-Source1:        macros.%{name}
+Source0:        %{name}-%{alphatag}.tar.xz
+Source1:        %{name}-phobos-%{phobostag}.tar.xz
+Source2:        %{name}-druntime-%{druntimetag}.tar.xz
+Source3:        macros.%{name}
+# fix current build system report to upstream done
+Patch0:         %{name}_fix_build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  llvm-devel >= 2.9
+#BuildRequires:  llvm-devel >= 2.9
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
 BuildRequires:  gc, gcc-c++, gcc
-Requires:       libconfig
+BuildRequires:  llvm-devel
 
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
@@ -56,7 +73,7 @@ en qualité bêta. Regarder les tickets pour ressentir ce qui doit encore être
 implémenter.
 
 %package        druntime
-Summary:        Runtime lirary for D
+Summary:        Runtime library for D
 Group:          Development/Tools
 License:        Boost
 Requires:       %{name} =  %{version}-%{release}
@@ -72,6 +89,21 @@ Druntime est la bibliothèque minimal requise pour supporter la programmation en
 D. Est inclut le code système requis pour supporter le ramasse miette, tableau
 associatif, gestion des exceptions, opertation sur des vecteurs,
 démarage/extinction, etc
+
+
+%package        druntime-devel
+Summary:        Support for developing D application
+Group:          Development/Tools
+Requires:       %{name} =  %{version}-%{release}
+
+
+%description druntime-devel
+The druntime-devel package contains header files for developing D
+applications that use druntime.
+
+%description druntime-devel -l fr
+Le paquet druntime-devel contient les fichiers d'entêtes pour développer
+des applications en D utilisant druntime.
 
 %package        phobos
 Summary:        Standard Runtime Library
@@ -94,81 +126,116 @@ pas une religion, c'est un langage de programmation, et il reconnaît que,
 parfois, les objectifs sont contradictoire et contre-productive dans certaines
 situations, et les programmeurs doivent implémenter d'une certaines manière.
 
+%package        phobos-devel
+Summary:        Support for developing D application
+Group:          Development/Tools
+Requires:       %{name} =  %{version}-%{release}
+
+%description phobos-devel
+The phobos-devel package contains header files for developing D
+applications that use phobos.
+
+%description phobos-devel -l fr
+Le paquet phobos-devel contient les fichiers d'entêtes pour développer
+des applications en D utilisant phobos.
+
 %prep
-%setup -q -n %{name}-%{alphatag}%{git_revision}
+%setup -q -n %{name}-%{alphatag}
+%setup -q -T -D -a 1 -n %{name}-%{alphatag}
+%setup -q -T -D -a 2 -n %{name}-%{alphatag}
+%patch0 -p1 -b .fix
 find . -type f -exec sed -i 's/\r//g' {} \;
-#%patch0 -p1
 
 %build
-%cmake -DD_VERSION:STRING=2 -DCONF_INST_DIR:PATH=%{_sysconfdir} -DRUNTIME_DIR=./druntime -DPHOBOS2_DIR=./phobos .
-
-make %{?_smp_mflags} VERBOSE=2 phobos2
+%cmake  -DD_VERSION:STRING=2                        \
+        -DCONF_INST_DIR:PATH=%{_sysconfdir}         \
+        -DRUNTIME_DIR=./druntime                    \
+        -DPHOBOS2_DIR=./phobos                      \
+        -DD_FLAGS:STRING="-O2;-g;-w;-d;-release"    \
+        -DLLVM_CONFIG_HEADER=config-%{__isa_bits}.h \
+        .
+make  VERBOSE=2 phobos2
 
 %install
 rm -rf %{buildroot}
-#make %{?_smp_mflags} install DESTDIR=%{buildroot}
-mkdir -p %{buildroot}%{_bindir}/
+make %{?_smp_mflags} install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
-mkdir -p %{buildroot}/%{_includedir}/d
-mkdir -p %{buildroot}/%{_libdir}/
-mkdir -p %{buildroot}/%{_includedir}/d/std
-
-# This empty file is removed because it's never used. "lib" is explicitely used
-# instead of %%_libdir because it's always used (not arch dependant)
-#rm %{buildroot}%{_prefix}/lib/.empty
-
-install --mode=0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
+mkdir -p %{buildroot}/%{_includedir}/d/ldc
+install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 
 sed -i \
     -e      "10a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\","        \
+    -e      "11a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\/phobos\","\
     -e      "/^.*-I.*%{name}-%{alphatag}%{git_revision}.*$/d"   \
     -e      "s/-L-L.*lib/-L-L$(%{_libdir})\/druntime.so/"       bin/ldc2.conf 
 
 sed -i "s|DFLAGS.*|DFLAGS=-I%{_includedir}/d -L-L%{_libdir} -d-version=Phobos -defaultlib=phobos2 -debuglib=phobos2|" bin/ldc2.rebuild.conf
 
-# ldc
-cp -rp import/*                 %{buildroot}/%{_includedir}/d
-install bin/ldc2.conf           %{buildroot}%{_sysconfdir}/ldc2.conf
-install bin/ldc2.rebuild.conf   %{buildroot}%{_sysconfdir}/ldc2.rebuild.conf
-install -m0755 bin/ldmd2        %{buildroot}%{_bindir}/ldmd2
-install -m0755 bin/ldc2         %{buildroot}%{_bindir}/ldc2
+ln %{buildroot}%{_bindir}/ldc2	%{buildroot}%{_bindir}/ldc
 
-# druntime
-install lib/libdruntime-ldc.so %{buildroot}/%{_libdir}/libdruntime-ldc.so
-cp -rp druntime/import/* %{buildroot}/%{_includedir}/d/
+# fix install
+    # lib for 64bits
+%ifarch x86_64 sparc64
+    mv %{buildroot}/%{_prefix}/lib %{buildroot}/%{_libdir}/
+%endif
 
-# phobos
-cp -rp phobos/std %{buildroot}/%{_includedir}/d/
-install lib/liblphobos2.so %{buildroot}/%{_libdir}/liblphobos2.so
+    # devel file
+ls  %{buildroot}/%{_prefix}
+mv %{buildroot}/%{_prefix}/src/debug/%{name}-%{alphatag} %{buildroot}/%{_includedir}/d/
+rm -fr %{buildroot}/%{_includedir}/d/runtime
+    # druntime
+mv %{buildroot}/%{_includedir}/d/druntime/src/* %{buildroot}/%{_includedir}/d/druntime:
+rm -fr %{buildroot}/%{_includedir}/d/druntime/src
+    # phobos
 
+    # ldc
+mv %{buildroot}/%{_includedir}/d/dmd2   %{buildroot}/%{_includedir}/d/ldc/dmd2
+mv %{buildroot}/%{_includedir}/d/gen    %{buildroot}/%{_includedir}/d/ldc/gen
+mv %{buildroot}/%{_includedir}/d/ir     %{buildroot}/%{_includedir}/d/ldc/ir
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
 %doc LICENSE readme.txt
-%{_bindir}/ldc2
-%{_bindir}/ldmd2
-%{_includedir}/d/core
 %config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_sysconfdir}/rpm/macros.ldc
+%{_bindir}/ldc
+%{_bindir}/ldc2
+%{_bindir}/ldmd2
+%{_includedir}/d/ldc
 
 %files druntime
 %defattr(-,root,root,-)
 %doc druntime/LICENSE_1_0.txt druntime/README.txt
-%{_includedir}/d/ldc
-%{_includedir}/d/object.di
-%{_includedir}/d/std/intrinsic.di
 %{_libdir}/libdruntime-ldc.so
+
+%files druntime-devel
+%defattr(-,root,root,-)
+%{_includedir}/d/druntime
+%{_includedir}/d/object.di
 
 %files phobos
 %defattr(-,root,root,-)
 %doc phobos/LICENSE_1_0.txt
 %{_libdir}/liblphobos2.so
+
+%files phobos-devel
+%defattr(-,root,root,-)
 %{_includedir}/d/std
+%{_includedir}/d/etc
 
 %changelog
+* Sat Sep 17 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-4.20110915git423076d
+- Update to latest revision
+
+* Wed Aug  3 2011 Michel Salim <salimma@fedoraproject.org> - 2-3.20110801git58d40d2
+- Rebuild against final LLVM 2.9 release
+
+* Mon Aug  1 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110801git58d40d2
+- update LDC2 from upstream
+
 * Tue Jul 26 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110826hg1991
 - update LDC2 from upstream
 

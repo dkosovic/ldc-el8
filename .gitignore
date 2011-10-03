@@ -8,3 +8,8 @@ ldc-20100804hg1655.tar.xz
 /ldc-20100102hg1705.tar.xz
 /ldc-20110115hg1832.tar.xz
 /ldc-20110901git58d40d2.tar.xz
+/ldc_fix_build.patch
+/ldc-20110915git423076d.tar.xz
+/ldc-druntime-20110915gitfba10fa.tar.xz
+/ldc-phobos-20110915gita8106d9.tar.xz
+/macros.ldc
