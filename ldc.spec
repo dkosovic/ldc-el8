@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 %global     snapdate        20110915
 %global     ldc_rev         423076d
 %global     phobos_rev      a8106d9
@@ -8,14 +7,6 @@
 %global     druntimetag     %{snapdate}git%{druntime_rev}
 
 # The source for this package was pulled from upstream's git.
-=======
-%global     alphatag        20110801
-# incorrect tarball name
-%global     err_alphatag    20110901
-%global     git_revision    git58d40d2
-
-# The source for this package was pulled from upstream's subversion (svn).
->>>>>>> 554b45aa5499869ae1e69c821397ac3ff20cda11
 # Use the following commands to generate the tarball:
 # cd ldc; git rev-parse --short HEAD            -> for ldc_rev
 # cd ldc/phobos; git rev-parse --short HEAD     -> for phobos_rev
@@ -33,11 +24,7 @@
 
 Name:           ldc
 Version:        2
-<<<<<<< HEAD
 Release:        4.%{alphatag}%{?dist}
-=======
-Release:        3.%{alphatag}%{git_revision}%{?dist}
->>>>>>> 554b45aa5499869ae1e69c821397ac3ff20cda11
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -45,17 +32,12 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
-<<<<<<< HEAD
 Source0:        %{name}-%{alphatag}.tar.xz
 Source1:        %{name}-phobos-%{phobostag}.tar.xz
 Source2:        %{name}-druntime-%{druntimetag}.tar.xz
 Source3:        macros.%{name}
 # fix current build system report to upstream done
 Patch0:         %{name}_fix_build.patch
-=======
-Source0:        %{name}-%{err_alphatag}%{git_revision}.tar.xz
-Source1:        macros.%{name}
->>>>>>> 554b45aa5499869ae1e69c821397ac3ff20cda11
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #BuildRequires:  llvm-devel >= 2.9
@@ -158,20 +140,11 @@ Le paquet phobos-devel contient les fichiers d'entêtes pour développer
 des applications en D utilisant phobos.
 
 %prep
-<<<<<<< HEAD
 %setup -q -n %{name}-%{alphatag}
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
 %setup -q -T -D -a 2 -n %{name}-%{alphatag}
 %patch0 -p1 -b .fix
 find . -type f -exec sed -i 's/\r//g' {} \;
-=======
-%setup -q -n %{name}-%{err_alphatag}%{git_revision}
-find . -type f -exec sed -i 's/\r//g' {} \;
-# config.h is renamed in Fedora to allow for 32- and 64-bit llvm-devel to
-# coexist; look for the appropriate file
-sed -i.multilib -e 's|config.h|config-%{__isa_bits}.h|' CMakeLists.txt
-#%patch0 -p1
->>>>>>> 554b45aa5499869ae1e69c821397ac3ff20cda11
 
 %build
 %cmake  -DD_VERSION:STRING=2                        \
@@ -254,12 +227,9 @@ rm -rf %{buildroot}
 %{_includedir}/d/etc
 
 %changelog
-<<<<<<< HEAD
 * Sat Sep 17 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-4.20110915git423076d
 - Update to latest revision
 
-=======
->>>>>>> 554b45aa5499869ae1e69c821397ac3ff20cda11
 * Wed Aug  3 2011 Michel Salim <salimma@fedoraproject.org> - 2-3.20110801git58d40d2
 - Rebuild against final LLVM 2.9 release
 
