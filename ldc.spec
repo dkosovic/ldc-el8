@@ -1,3 +1,4 @@
+#%global debug_package %{nil}
 %global     snapdate        20110915
 %global     ldc_rev         423076d
 %global     phobos_rev      a8106d9
@@ -153,6 +154,7 @@ find . -type f -exec sed -i 's/\r//g' {} \;
         -DPHOBOS2_DIR=./phobos                      \
         -DD_FLAGS:STRING="-O2;-g;-w;-d;-release"    \
         -DLLVM_CONFIG_HEADER=config-%{__isa_bits}.h \
+        -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d \
         .
 make  VERBOSE=2 phobos2
 
@@ -166,32 +168,14 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 sed -i \
     -e      "10a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\","        \
     -e      "11a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\/phobos\","\
-    -e      "/^.*-I.*%{name}-%{alphatag}%{git_revision}.*$/d"   \
-    -e      "s/-L-L.*lib/-L-L$(%{_libdir})\/druntime.so/"       bin/ldc2.conf 
+    -e      "12a \ \ \ \ \ \ \ \"-I%{_includedir}\/d\/ldc\","   \
+    -e      "/^.*-I.*%{name}-%{alphatag}.*$/d"                  \
+    -e      "s|-L-L.*lib|-L-L%{_libdir}/druntime.so|"       %{buildroot}/%{_sysconfdir}/ldc2.conf
 
 sed -i "s|DFLAGS.*|DFLAGS=-I%{_includedir}/d -L-L%{_libdir} -d-version=Phobos -defaultlib=phobos2 -debuglib=phobos2|" bin/ldc2.rebuild.conf
 
 ln %{buildroot}%{_bindir}/ldc2	%{buildroot}%{_bindir}/ldc
 
-# fix install
-    # lib for 64bits
-%ifarch x86_64 sparc64
-    mv %{buildroot}/%{_prefix}/lib %{buildroot}/%{_libdir}/
-%endif
-
-    # devel file
-ls  %{buildroot}/%{_prefix}
-mv %{buildroot}/%{_prefix}/src/debug/%{name}-%{alphatag} %{buildroot}/%{_includedir}/d/
-rm -fr %{buildroot}/%{_includedir}/d/runtime
-    # druntime
-mv %{buildroot}/%{_includedir}/d/druntime/src/* %{buildroot}/%{_includedir}/d/druntime:
-rm -fr %{buildroot}/%{_includedir}/d/druntime/src
-    # phobos
-
-    # ldc
-mv %{buildroot}/%{_includedir}/d/dmd2   %{buildroot}/%{_includedir}/d/ldc/dmd2
-mv %{buildroot}/%{_includedir}/d/gen    %{buildroot}/%{_includedir}/d/ldc/gen
-mv %{buildroot}/%{_includedir}/d/ir     %{buildroot}/%{_includedir}/d/ldc/ir
 %clean
 rm -rf %{buildroot}
 
@@ -204,7 +188,7 @@ rm -rf %{buildroot}
 %{_bindir}/ldc
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
-%{_includedir}/d/ldc
+%{_includedir}/d/core
 
 %files druntime
 %defattr(-,root,root,-)
@@ -213,8 +197,7 @@ rm -rf %{buildroot}
 
 %files druntime-devel
 %defattr(-,root,root,-)
-%{_includedir}/d/druntime
-%{_includedir}/d/object.di
+%{_includedir}/d/ldc
 
 %files phobos
 %defattr(-,root,root,-)
@@ -223,8 +206,7 @@ rm -rf %{buildroot}
 
 %files phobos-devel
 %defattr(-,root,root,-)
-%{_includedir}/d/std
-%{_includedir}/d/etc
+%{_includedir}/d/phobos
 
 %changelog
 * Sat Sep 17 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-4.20110915git423076d
