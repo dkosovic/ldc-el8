@@ -35,6 +35,7 @@ Source0:        %{name}-%{alphatag}.xz
 Source1:        %{name}-phobos-%{phobostag}.xz
 Source2:        %{name}-druntime-%{druntimetag}.xz
 Source3:        macros.%{name}
+Source4:        DdocToDevhelp
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  llvm-devel >= 3.0
@@ -152,6 +153,21 @@ Enable autocompletion for phobos library in geany (IDE)
 %description -l fr phobos-geany-tags
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
+%package phobos-devhelp
+Summary:        Phobos user and reference manuals
+Group:          Development/Tools
+Requires:       %{name} =  %{version}-%{release}
+BuildRequires:  python
+Requires:       devhelp
+
+%description phobos-devhelp
+User Manual and Reference, Manual are provided in HTML format. You can use
+devhelp to browse it.
+
+%description -l fr phobos-devhelp
+Manuel et référence, le manuel est fournit au format HTML. Vous pouez utilisez
+devhelp pour le parcourir
+
 %prep
 %setup -q -n %{name}-%{alphatag}
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
@@ -175,10 +191,12 @@ make %{?_smp_mflags} install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 mkdir -p %{buildroot}/%{_includedir}/d/ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
+mkdir -p %{buildroot}/%{_datadir}/devhelp/books/Phobos
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 # geany tags
 install -m0755 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
+%{SOURCE4} -n Phobos -s %{buildroot}/%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
 
 %clean
 rm -rf %{buildroot}
@@ -225,7 +243,14 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_datadir}/geany/tags/phobos.d.tags
 
+%files phobos-devhelp
+%defattr(-,root,root,-)
+%{_datadir}/devhelp/books/Phobos
+
 %changelog
+* Fri Dec 9 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-9.20111206gitfa5fb92
+- Add doc for devhelp
+
 * Wed Dec 6 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-8.20111206gitfa5fb92
 - Put %%{_d_includedir}/core into druntime-devel package
 
