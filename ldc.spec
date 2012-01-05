@@ -23,7 +23,7 @@
 
 Name:           ldc
 Version:        2
-Release:        9.%{alphatag}%{?dist}
+Release:        10.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -157,7 +157,8 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 Summary:        Phobos user and reference manuals
 Group:          Development/Tools
 Requires:       %{name} =  %{version}-%{release}
-BuildRequires:  python
+BuildArch:      noarch
+BuildRequires:  python, python-BeautifulSoup
 Requires:       devhelp
 
 %description phobos-devhelp
@@ -166,7 +167,7 @@ devhelp to browse it.
 
 %description -l fr phobos-devhelp
 Manuel et référence, le manuel est fournit au format HTML. Vous pouez utilisez
-devhelp pour le parcourir
+devhelp pour le parcourir.
 
 %prep
 %setup -q -n %{name}-%{alphatag}
@@ -175,8 +176,6 @@ devhelp pour le parcourir
 find . -type f -exec sed -i 's/\r//g' {} \;
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
-# fix install
-# sed -i "81a \ \ \ \ file(COPY \${RUNTIME_DIR}/src/core/bitop.d DESTINATION \${PROJECT_BINARY_DIR}/import/core/ )" runtime/CMakeLists.txt
 
 %build
 %cmake  -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON  -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d .
@@ -185,21 +184,21 @@ make %{?_smp_mflags} VERBOSE=2 phobos2
 # generate geany tags
 geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 
+find import  -name "*.di" | xargs sed -i "s|%{_buildir}/%{name}-%{alphatag}/runtime/druntime/src|/usr/include/d|g"
+
 %install
 rm -rf %{buildroot}
 make %{?_smp_mflags} install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 mkdir -p %{buildroot}/%{_includedir}/d/ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
-mkdir -p %{buildroot}/%{_datadir}/devhelp/books/Phobos
+
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 # geany tags
 install -m0755 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{SOURCE4} -n Phobos -s %{buildroot}/%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
-
-%clean
-rm -rf %{buildroot}
+find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i "s|%{buildroot}||g" 
 
 %post               -p  /sbin/ldconfig
 %postun             -p  /sbin/ldconfig
@@ -248,6 +247,9 @@ rm -rf %{buildroot}
 %{_datadir}/devhelp/books/Phobos
 
 %changelog
+* Fri Jan 5 2012 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-10.20111206gitfa5fb92
+- fix doc for devhelp
+
 * Fri Dec 9 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-9.20111206gitfa5fb92
 - Add doc for devhelp
 
