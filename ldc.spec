@@ -1,9 +1,8 @@
 # debug info seem not works with D compiler
-%global     debug_package %{nil}
-%global     snapdate        20111206
-%global     ldc_rev         fa5fb92
-%global     phobos_rev      2bebc8f
-%global     druntime_rev    24e79c6
+%global     snapdate        201210207
+%global     ldc_rev         72d510c
+%global     phobos_rev      1f6264e
+%global     druntime_rev    4db79c7
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -23,7 +22,7 @@
 
 Name:           ldc
 Version:        2
-Release:        10.%{alphatag}%{?dist}
+Release:        11.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -36,7 +35,6 @@ Source1:        %{name}-phobos-%{phobostag}.xz
 Source2:        %{name}-druntime-%{druntimetag}.xz
 Source3:        macros.%{name}
 Source4:        DdocToDevhelp
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -187,7 +185,6 @@ geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 find import  -name "*.di" | xargs sed -i "s|%{_buildir}/%{name}-%{alphatag}/runtime/druntime/src|/usr/include/d|g"
 
 %install
-rm -rf %{buildroot}
 make %{?_smp_mflags} install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 mkdir -p %{buildroot}/%{_includedir}/d/ldc
@@ -196,8 +193,8 @@ mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 # geany tags
-install -m0755 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
-%{SOURCE4} -n Phobos -s %{buildroot}/%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
+install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
+python  %{SOURCE4} -n Phobos -s %{buildroot}%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
 find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i "s|%{buildroot}||g" 
 
 %post               -p  /sbin/ldconfig
@@ -208,7 +205,6 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %postun phobos      -p  /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc LICENSE readme.txt
 %config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
@@ -218,35 +214,34 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %{_bindir}/ldmd2
 
 %files druntime
-%defattr(-,root,root,-)
 %doc runtime/druntime/LICENSE_1_0.txt runtime/druntime/README.txt
 %{_libdir}/libdruntime-ldc.so
 
 %files druntime-devel
-%defattr(-,root,root,-)
 %{_includedir}/d/ldc
 %{_includedir}/d/core
 
 %files phobos
-%defattr(-,root,root,-)
 %doc runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libphobos2-ldc.so
 
 %files phobos-devel
-%defattr(-,root,root,-)
 %{_includedir}/d/crc32.d
 %{_includedir}/d/std
 %{_includedir}/d/etc
 
 %files phobos-geany-tags
-%defattr(-,root,root,-)
 %{_datadir}/geany/tags/phobos.d.tags
 
 %files phobos-devhelp
-%defattr(-,root,root,-)
 %{_datadir}/devhelp/books/Phobos
 
 %changelog
+* Mon Feb 13 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-11.201210207git72d510c
+- update to latest revision
+- update dmdfe to 2.057
+- fix tango build for 32 bit
+
 * Fri Jan 5 2012 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-10.20111206gitfa5fb92
 - fix doc for devhelp
 
