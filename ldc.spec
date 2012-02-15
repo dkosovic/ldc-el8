@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        201210207
-%global     ldc_rev         72d510c
-%global     phobos_rev      1f6264e
-%global     druntime_rev    4db79c7
+%global     snapdate        201210215
+%global     ldc_rev         5af48ed
+%global     phobos_rev      2cc90b1
+%global     druntime_rev    3645d7e
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -12,9 +12,10 @@
 # cd ldc; git rev-parse --short HEAD            -> for ldc_rev
 # cd ldc/phobos; git rev-parse --short HEAD     -> for phobos_rev
 # cd ldc/druntime/;  git rev-parse --short HEAD -> for druntime_rev
-# git clone https://github.com/ldc-developers/ldc.git
-# cd ldc; git submodule update -i; git checkout %%ldc_rev  
+# git clone https://github.com/ldc-developers/ldc.git ldc_checkout
+# cd ldc_checkout; git checkout %%ldc_rev 
 # git archive --prefix=ldc-%%{alphatag}/ HEAD | xz > ../ldc-%%{alphatag}.xz
+# git submodule update -i;  
 # cd runtime/druntime
 # git archive --prefix=runtime/druntime/ HEAD | xz > ../../../ldc-druntime-%%{druntimetag}.xz
 # cd ../phobos
@@ -22,7 +23,7 @@
 
 Name:           ldc
 Version:        2
-Release:        11.%{alphatag}%{?dist}
+Release:        12.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -35,6 +36,8 @@ Source1:        %{name}-phobos-%{phobostag}.xz
 Source2:        %{name}-druntime-%{druntimetag}.xz
 Source3:        macros.%{name}
 Source4:        DdocToDevhelp
+# https://github.com/ldc-developers/ldc/pull/80
+Patch0:         ldc_versionned.patch 
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -72,7 +75,7 @@ implémenter.
 Summary:        Runtime library for D
 Group:          Development/Tools
 License:        Boost
-Requires:       %{name} =  %{version}-%{release}
+Requires:       %{name}%{?_isa} =  %{version}-%{release}
 
 %description druntime
 Druntime is the minimum library required to support the D programming
@@ -90,8 +93,8 @@ démarage/extinction, etc
 %package        druntime-devel
 Summary:        Support for developing D application
 Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}
-Requires:       %{name}-druntime
+Requires:       %{name}%{?_isa}  =  %{version}-%{release}
+Requires:       %{name}-druntime = %{version}-%{release}
 
 
 %description druntime-devel
@@ -106,8 +109,8 @@ des applications en D utilisant druntime.
 Summary:        Standard Runtime Library
 Group:          Development/Tools
 License:        Boost
-Requires:       %{name} =  %{version}-%{release}
-Requires:       %{name}-druntime
+Requires:       %{name}%{?_isa} =  %{version}-%{release}
+Requires:       %{name}-druntime = %{version}-%{release}
 
 %description phobos
 Each module in Phobos conforms as much as possible to the following design
@@ -126,8 +129,8 @@ situations, et les programmeurs doivent implémenter d'une certaines manière.
 %package        phobos-devel
 Summary:        Support for developing D application
 Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}
-Requires:       %{name}-phobos
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-phobos  = %{version}-%{release}
 Requires:       %{name}-druntime-devel
 
 %description phobos-devel
@@ -142,6 +145,7 @@ des applications en D utilisant phobos.
 Summary:        Support for enable autocompletion in geany
 Group:          Development/Tools
 Requires:       %{name} =  %{version}-%{release}
+BuildArch:      noarch
 BuildRequires:  geany
 Requires:       geany
 
@@ -154,7 +158,7 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 %package phobos-devhelp
 Summary:        Phobos user and reference manuals
 Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}
+Requires:       %{name} =  %{version}-%{release}	
 BuildArch:      noarch
 BuildRequires:  python, python-BeautifulSoup
 Requires:       devhelp
@@ -171,6 +175,7 @@ devhelp pour le parcourir.
 %setup -q -n %{name}-%{alphatag}
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
 %setup -q -T -D -a 2 -n %{name}-%{alphatag}
+%patch0 -p1
 find . -type f -exec sed -i 's/\r//g' {} \;
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
@@ -197,8 +202,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 python  %{SOURCE4} -n Phobos -s %{buildroot}%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
 find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i "s|%{buildroot}||g" 
 
-%post               -p  /sbin/ldconfig
-%postun             -p  /sbin/ldconfig
 %post   druntime    -p  /sbin/ldconfig
 %postun druntime    -p  /sbin/ldconfig
 %post   phobos      -p  /sbin/ldconfig
@@ -209,26 +212,30 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_sysconfdir}/rpm/macros.ldc
-%{_sysconfdir}/bash_completion.d/ldc
+%config             %{_sysconfdir}/bash_completion.d/ldc
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
 
 %files druntime
 %doc runtime/druntime/LICENSE_1_0.txt runtime/druntime/README.txt
-%{_libdir}/libdruntime-ldc.so
+%{_libdir}/libdruntime-ldc.so.2.0.57
+%{_libdir}/libdruntime-ldc.so.57
 
 %files druntime-devel
 %{_includedir}/d/ldc
 %{_includedir}/d/core
+%{_libdir}/libdruntime-ldc.so
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos2-ldc.so
+%{_libdir}/libphobos-ldc.so.2.0.57
+%{_libdir}/libphobos-ldc.so.57
 
 %files phobos-devel
 %{_includedir}/d/crc32.d
 %{_includedir}/d/std
 %{_includedir}/d/etc
+%{_libdir}/libphobos-ldc.so
 
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
@@ -237,6 +244,13 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %{_datadir}/devhelp/books/Phobos
 
 %changelog
+* Wed Feb 15 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210215git5af48ed
+- Update to latest revision
+- update dmdfe to 2.058
+- ldc has new parameter -soname
+- fix library creation when multiple object files
+- fix phobos and druntime soname
+
 * Mon Feb 13 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-11.201210207git72d510c
 - update to latest revision
 - update dmdfe to 2.057
