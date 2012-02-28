@@ -23,7 +23,7 @@
 
 Name:           ldc
 Version:        2
-Release:        12.%{alphatag}%{?dist}
+Release:        13.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -244,6 +244,9 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %{_datadir}/devhelp/books/Phobos
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-13.201210215git5af48ed
+- Rebuilt for c++ ABI breakage
+
 * Wed Feb 15 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210215git5af48ed
 - Update to latest revision
 - update dmdfe to 2.058
