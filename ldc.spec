@@ -1,6 +1,6 @@
 # debug info seem not works with D compiler
-%global     snapdate        201210215
-%global     ldc_rev         5af48ed
+%global     snapdate        201210307
+%global     ldc_rev         43667e1
 %global     phobos_rev      2cc90b1
 %global     druntime_rev    3645d7e
 %global     alphatag        %{snapdate}git%{ldc_rev}
@@ -15,7 +15,7 @@
 # git clone https://github.com/ldc-developers/ldc.git ldc_checkout
 # cd ldc_checkout; git checkout %%ldc_rev 
 # git archive --prefix=ldc-%%{alphatag}/ HEAD | xz > ../ldc-%%{alphatag}.xz
-# git submodule update -i;  
+# git submodule update -i;
 # cd runtime/druntime
 # git archive --prefix=runtime/druntime/ HEAD | xz > ../../../ldc-druntime-%%{druntimetag}.xz
 # cd ../phobos
@@ -23,7 +23,7 @@
 
 Name:           ldc
 Version:        2
-Release:        13.%{alphatag}%{?dist}
+Release:        14.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -36,8 +36,6 @@ Source1:        %{name}-phobos-%{phobostag}.xz
 Source2:        %{name}-druntime-%{druntimetag}.xz
 Source3:        macros.%{name}
 Source4:        DdocToDevhelp
-# https://github.com/ldc-developers/ldc/pull/80
-Patch0:         ldc_versionned.patch 
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -158,7 +156,7 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 %package phobos-devhelp
 Summary:        Phobos user and reference manuals
 Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}	
+Requires:       %{name} =  %{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  python, python-BeautifulSoup
 Requires:       devhelp
@@ -175,7 +173,6 @@ devhelp pour le parcourir.
 %setup -q -n %{name}-%{alphatag}
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
 %setup -q -T -D -a 2 -n %{name}-%{alphatag}
-%patch0 -p1
 find . -type f -exec sed -i 's/\r//g' {} \;
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
@@ -218,8 +215,8 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 
 %files druntime
 %doc runtime/druntime/LICENSE_1_0.txt runtime/druntime/README.txt
-%{_libdir}/libdruntime-ldc.so.2.0.57
-%{_libdir}/libdruntime-ldc.so.57
+%{_libdir}/libdruntime-ldc.so.2.0.58
+%{_libdir}/libdruntime-ldc.so.58
 
 %files druntime-devel
 %{_includedir}/d/ldc
@@ -228,8 +225,8 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.57
-%{_libdir}/libphobos-ldc.so.57
+%{_libdir}/libphobos-ldc.so.2.0.58
+%{_libdir}/libphobos-ldc.so.58
 
 %files phobos-devel
 %{_includedir}/d/crc32.d
@@ -244,10 +241,13 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %{_datadir}/devhelp/books/Phobos
 
 %changelog
+* Mon Mar 12 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-14.201210307git43667e1
+- update to latest rev
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-13.201210215git5af48ed
 - Rebuilt for c++ ABI breakage
 
-* Wed Feb 15 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210215git5af48ed
+* Wed Feb 18 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210218git53f9964
 - Update to latest revision
 - update dmdfe to 2.058
 - ldc has new parameter -soname
