@@ -1,29 +1,27 @@
 # debug info seem not works with D compiler
-%global     snapdate        201210307
-%global     ldc_rev         43667e1
-%global     phobos_rev      2cc90b1
-%global     druntime_rev    3645d7e
+%global     snapdate        20120720
+%global     ldc_rev         5f15b30
+%global     phobos_rev      52b15ed
+%global     druntime_rev    97ce46c
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
 
 # The source for this package was pulled from upstream's git.
 # Use the following commands to generate the tarball:
-# cd ldc; git rev-parse --short HEAD            -> for ldc_rev
-# cd ldc/phobos; git rev-parse --short HEAD     -> for phobos_rev
-# cd ldc/druntime/;  git rev-parse --short HEAD -> for druntime_rev
-# git clone https://github.com/ldc-developers/ldc.git ldc_checkout
-# cd ldc_checkout; git checkout %%ldc_rev 
+# git clone https://github.com/ldc-developers/ldc.git ldc
+# cd ldc; git co llvm-3.1; git submodule update -i
+# git rev-parse --short HEAD            -> for ldc_rev
+# git checkout %%ldc_rev 
 # git archive --prefix=ldc-%%{alphatag}/ HEAD | xz > ../ldc-%%{alphatag}.xz
-# git submodule update -i;
-# cd runtime/druntime
+# cd runtime/druntime;  git rev-parse --short HEAD -> for druntime_rev
 # git archive --prefix=runtime/druntime/ HEAD | xz > ../../../ldc-druntime-%%{druntimetag}.xz
-# cd ../phobos
+# cd ../phobos; git rev-parse --short HEAD     -> for phobos_rev
 # git archive --prefix=runtime/phobos/ HEAD | xz > ../../../ldc-phobos-%%{phobostag}.xz
 
 Name:           ldc
 Version:        2
-Release:        15.%{alphatag}%{?dist}
+Release:        26.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -35,7 +33,6 @@ Source0:        %{name}-%{alphatag}.xz
 Source1:        %{name}-phobos-%{phobostag}.xz
 Source2:        %{name}-druntime-%{druntimetag}.xz
 Source3:        macros.%{name}
-Source4:        DdocToDevhelp
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -153,22 +150,6 @@ Enable autocompletion for phobos library in geany (IDE)
 %description -l fr phobos-geany-tags
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
-%package phobos-devhelp
-Summary:        Phobos user and reference manuals
-Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}
-BuildArch:      noarch
-BuildRequires:  python, python-BeautifulSoup
-Requires:       devhelp
-
-%description phobos-devhelp
-User Manual and Reference, Manual are provided in HTML format. You can use
-devhelp to browse it.
-
-%description -l fr phobos-devhelp
-Manuel et référence, le manuel est fournit au format HTML. Vous pouez utilisez
-devhelp pour le parcourir.
-
 %prep
 %setup -q -n %{name}-%{alphatag}
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
@@ -187,17 +168,20 @@ geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 find import  -name "*.di" | xargs sed -i "s|%{_buildir}/%{name}-%{alphatag}/runtime/druntime/src|/usr/include/d|g"
 
 %install
-make %{?_smp_mflags} install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_sysconfdir}/rpm
 mkdir -p %{buildroot}/%{_includedir}/d/ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
+
+make %{?_smp_mflags} install DESTDIR=%{buildroot}
+find %{buildroot}/%{_includedir}/d/core -name "*.di" | xargs sed -i "s|\(// D import file generated from \)'/.*/%{name}-%{alphatag}/runtime/druntime/src/\(.*\)'|\1'\2'|"
+
+sed -i "s/D_Ddoc/CoreDDoc/g"  %{buildroot}/%{_includedir}/d/core/atomic.di # fix a bug will be fixed with dmdfe 2.060
+
 
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
 # geany tags
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
-python  %{SOURCE4} -n Phobos -s %{buildroot}%{_includedir}/d/std/ -p %{buildroot}/%{_datadir}
-find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i "s|%{buildroot}||g" 
 
 %post   druntime    -p  /sbin/ldconfig
 %postun druntime    -p  /sbin/ldconfig
@@ -215,8 +199,8 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 
 %files druntime
 %doc runtime/druntime/LICENSE_1_0.txt runtime/druntime/README.txt
-%{_libdir}/libdruntime-ldc.so.2.0.58
-%{_libdir}/libdruntime-ldc.so.58
+%{_libdir}/libdruntime-ldc.so.2.0.59
+%{_libdir}/libdruntime-ldc.so.59
 
 %files druntime-devel
 %{_includedir}/d/ldc
@@ -225,8 +209,8 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.58
-%{_libdir}/libphobos-ldc.so.58
+%{_libdir}/libphobos-ldc.so.2.0.59
+%{_libdir}/libphobos-ldc.so.59
 
 %files phobos-devel
 %{_includedir}/d/crc32.d
@@ -237,12 +221,39 @@ find %{buildroot}/%{_datadir}/devhelp/books/Phobos -name "*.html" | xargs sed -i
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
-%files phobos-devhelp
-%{_datadir}/devhelp/books/Phobos
 
 %changelog
+
+* Sun Jul 22 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-26.20120624gitcef19fb
+- Update to use llvm 3.1
+
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-15.201210307git43667e1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Tue Jun 26 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-24.20120624gitcef19fb
+- Fix doc generation bug
+
+* Mon Jun 25 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-23.20120624gitcef19fb
+- update ldc
+
+* Fri Jun 15 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-22.20120613git3eef7b7
+- update ldc
+
+* Wed Jun 06 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-21.20120606git1c301aa
+- fix imported di file
+
+* Sun Jun 03 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-18.20120602git260faae
+- remove buildroot path into .di file
+
+* Fri Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-17.20120602gitd24592b
+- fix bug to able tango build bis
+
+* Fri Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-16.20120602git509a579
+- fix bug to able tango build
+
+* Fri May 25 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-15.20120525git1805e53
+- update to latest rev dmdfe 2.059
 
 * Mon Mar 12 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-14.201210307git43667e1
 - update to latest rev
