@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        26.%{alphatag}%{?dist}
+Release:        27.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -223,6 +223,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Thu Jul 26 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-27.20120720git5f15b30
+- fix link against libcurl
+
 
 * Sun Jul 22 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-26.20120624gitcef19fb
 - Update to use llvm 3.1
