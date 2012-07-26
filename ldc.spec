@@ -1,5 +1,5 @@
 # debug info seem not works with D compiler
-%global     snapdate        20120720
+%global     snapdate        20120725
 %global     ldc_rev         09b095e
 %global     phobos_rev      52b15ed
 %global     druntime_rev    97ce46c
