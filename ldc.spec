@@ -1,6 +1,6 @@
 # debug info seem not works with D compiler
 %global     snapdate        20120720
-%global     ldc_rev         5f15b30
+%global     ldc_rev         09b095e
 %global     phobos_rev      52b15ed
 %global     druntime_rev    97ce46c
 %global     alphatag        %{snapdate}git%{ldc_rev}
