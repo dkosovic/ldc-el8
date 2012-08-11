@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20120725
-%global     ldc_rev         09b095e
+%global     snapdate        20120811
+%global     ldc_rev         34d595d
 %global     phobos_rev      52b15ed
-%global     druntime_rev    97ce46c
+%global     druntime_rev    675c3e1
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -10,18 +10,18 @@
 # The source for this package was pulled from upstream's git.
 # Use the following commands to generate the tarball:
 # git clone https://github.com/ldc-developers/ldc.git ldc
-# cd ldc; git co llvm-3.1; git submodule update -i
+# cd ldc; git submodule update -i
 # git rev-parse --short HEAD            -> for ldc_rev
 # git checkout %%ldc_rev 
-# git archive --prefix=ldc-%%{alphatag}/ HEAD | xz > ../ldc-%%{alphatag}.xz
+# git archive --prefix=ldc-%%{alphatag}/ HEAD --format=tar | xz > ../ldc-%%{alphatag}.xz
 # cd runtime/druntime;  git rev-parse --short HEAD -> for druntime_rev
-# git archive --prefix=runtime/druntime/ HEAD | xz > ../../../ldc-druntime-%%{druntimetag}.xz
+# git archive --prefix=runtime/druntime/ HEAD --format=tar | xz > ../../../ldc-druntime-%%{druntimetag}.tar.xz
 # cd ../phobos; git rev-parse --short HEAD     -> for phobos_rev
-# git archive --prefix=runtime/phobos/ HEAD | xz > ../../../ldc-phobos-%%{phobostag}.xz
+# git archive --prefix=runtime/phobos/ HEAD --format=tar | xz > ../../../ldc-phobos-%%{phobostag}.tar.xz
 
 Name:           ldc
 Version:        2
-Release:        27.%{alphatag}%{?dist}
+Release:        28.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -29,9 +29,9 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD    
 URL:            http://www.dsource.org/projects/ldc
-Source0:        %{name}-%{alphatag}.xz
-Source1:        %{name}-phobos-%{phobostag}.xz
-Source2:        %{name}-druntime-%{druntimetag}.xz
+Source0:        %{name}-%{alphatag}.tar.xz
+Source1:        %{name}-phobos-%{phobostag}.tar.xz
+Source2:        %{name}-druntime-%{druntimetag}.tar.xz
 Source3:        macros.%{name}
 
 BuildRequires:  llvm-devel >= 3.0
@@ -224,6 +224,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sat Aug 11 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-28.20120811git34d595d
+- Update ldc
+
 * Thu Jul 26 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-27.20120720git5f15b30
 - fix link against libcurl
 
