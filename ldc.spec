@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20121007
-%global     ldc_rev         0777102
-%global     phobos_rev      db08c0c
-%global     druntime_rev    c38aad3
+%global     snapdate        20130510
+%global     ldc_rev         91d653c
+%global     phobos_rev      3d7211f
+%global     druntime_rev    239453f
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -12,7 +12,7 @@
 # git clone https://github.com/ldc-developers/ldc.git ldc
 # cd ldc; git submodule update -i
 # git rev-parse --short HEAD            -> for ldc_rev
-# git checkout %%ldc_rev 
+# git checkout %%ldc_rev
 # git archive --prefix=ldc-%%{alphatag}/ HEAD --format=tar | xz > ../ldc-%%{alphatag}.tar.xz
 # cd runtime/druntime;  git rev-parse --short HEAD -> for druntime_rev
 # git archive --prefix=runtime/druntime/ HEAD --format=tar | xz > ../../../ldc-druntime-%%{druntimetag}.tar.xz
@@ -21,13 +21,13 @@
 
 Name:           ldc
 Version:        2
-Release:        32.%{alphatag}%{?dist}
+Release:        35.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
 # The DMD frontend in dmd/* GPL version 1 or artistic license
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
-License:        BSD    
+License:        BSD
 URL:            http://www.dsource.org/projects/ldc
 Source0:        %{name}-%{alphatag}.tar.xz
 Source1:        %{name}-phobos-%{phobostag}.tar.xz
@@ -161,7 +161,7 @@ mkdir geany_config
 
 %build
 %cmake  -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON  -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d .
-make %{?_smp_mflags} VERBOSE=2 phobos2
+make %{?_smp_mflags} VERBOSE=2
 
 # generate geany tags
 geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
@@ -175,9 +175,6 @@ mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 
 make %{?_smp_mflags} install DESTDIR=%{buildroot}
 find %{buildroot}/%{_includedir}/d/core -name "*.di" | xargs sed -i "s|\(// D import file generated from \)'/.*/%{name}-%{alphatag}/runtime/druntime/src/\(.*\)'|\1'\2'|"
-
-sed -i "s/D_Ddoc/CoreDDoc/g"  %{buildroot}/%{_includedir}/d/core/atomic.di # fix a bug will be fixed with dmdfe 2.060
-
 
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
@@ -200,31 +197,46 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README
-%{_libdir}/libdruntime-ldc.so.2.0.60
-%{_libdir}/libdruntime-ldc.so.60
+%{_libdir}/libdruntime-ldc.so.2.0.62
+%{_libdir}/libdruntime-ldc.so.62
+%{_libdir}/libdruntime-ldc-debug.so.2.0.62
+%{_libdir}/libdruntime-ldc-debug.so.62
 
 %files druntime-devel
 %{_includedir}/d/ldc
 %{_includedir}/d/core
 %{_libdir}/libdruntime-ldc.so
+%{_libdir}/libdruntime-ldc-debug.so
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.60
-%{_libdir}/libphobos-ldc.so.60
+%{_libdir}/libphobos-ldc.so.2.0.62
+%{_libdir}/libphobos-ldc.so.62
+%{_libdir}/libphobos-ldc-debug.so.2.0.62
+%{_libdir}/libphobos-ldc-debug.so.62
 
 %files phobos-devel
-%{_includedir}/d
+%dir %{_includedir}/d
 %{_includedir}/d/crc32.d
 %{_includedir}/d/std
 %{_includedir}/d/etc
 %{_libdir}/libphobos-ldc.so
+%{_libdir}/libphobos-ldc-debug.so
 
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
 
 %changelog
+* Fri May 10 2013 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-35.20130510git91d653c
+- Update to rev 91d653c
+
+* Thu May 09 2013 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-34.20130509git8f26877
+- Update to rev 8f26877
+
+* Thu May 09 2013 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-33.20130506git51e1a6c
+- Update to rev 51e1a6c
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-32.20121007git0777102
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
@@ -337,13 +349,13 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
 * Sun Jan 16 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-30.20110115hg1832
- update to latest revision 1832
- 
+update to latest revision 1832
+
 * Mon Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-29.20110110hg1828
- update to latest revision 1828
+update to latest revision 1828
 
 * Fri Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-28.20110105hg1812
- update to latest revision 1812
+update to latest revision 1812
 
 * Mon Jan 05 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-27.20110102hg1705
 - update to latest revision 1705
@@ -359,7 +371,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - update to new release 1666
 
 * Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-21.20100928hg1665
-- update to new release 1665 
+- update to new release 1665
 
 * Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-20.20100927hg1664
 - update to new release 1664
