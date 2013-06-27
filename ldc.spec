@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20130510
-%global     ldc_rev         91d653c
-%global     phobos_rev      3d7211f
-%global     druntime_rev    239453f
+%global     snapdate        20130623
+%global     ldc_rev         9facd25
+%global     phobos_rev      9fe205f
+%global     druntime_rev    a245e8d
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -21,14 +21,14 @@
 
 Name:           ldc
 Version:        2
-Release:        35.%{alphatag}%{?dist}
+Release:        49.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
 # The DMD frontend in dmd/* GPL version 1 or artistic license
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
-URL:            http://www.dsource.org/projects/ldc
+URL:            https://github.com/ldc-developers/ldc
 Source0:        %{name}-%{alphatag}.tar.xz
 Source1:        %{name}-phobos-%{phobostag}.tar.xz
 Source2:        %{name}-druntime-%{druntimetag}.tar.xz
@@ -38,8 +38,11 @@ BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
 BuildRequires:  gc, gcc-c++, gcc
-BuildRequires:  llvm-devel
+BuildRequires:  llvm-static
 BuildRequires:  libcurl-devel
+BuildRequires:  zlib-devel
+
+Requires:       ldc-druntime-devel ldc-phobos-devel
 
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
@@ -197,10 +200,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README
-%{_libdir}/libdruntime-ldc.so.2.0.62
-%{_libdir}/libdruntime-ldc.so.62
-%{_libdir}/libdruntime-ldc-debug.so.2.0.62
-%{_libdir}/libdruntime-ldc-debug.so.62
+%{_libdir}/libdruntime-ldc.so.2.0.63
+%{_libdir}/libdruntime-ldc.so.63
+%{_libdir}/libdruntime-ldc-debug.so.2.0.63
+%{_libdir}/libdruntime-ldc-debug.so.63
 
 %files druntime-devel
 %{_includedir}/d/ldc
@@ -210,10 +213,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.62
-%{_libdir}/libphobos-ldc.so.62
-%{_libdir}/libphobos-ldc-debug.so.2.0.62
-%{_libdir}/libphobos-ldc-debug.so.62
+%{_libdir}/libphobos-ldc.so.2.0.63
+%{_libdir}/libphobos-ldc.so.63
+%{_libdir}/libphobos-ldc-debug.so.2.0.63
+%{_libdir}/libphobos-ldc-debug.so.63
 
 %files phobos-devel
 %dir %{_includedir}/d
@@ -228,6 +231,48 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Wed Jun 26 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-49.20130623git9facd25
+- Update url  and add macros.ldc into git repo
+
+* Mon Jun 24 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-48.20130623git9facd25
+- Add phobos and druntimeas as ldc's require
+
+* Sun Jun 23 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-47.20130623git9facd25
+- Update to rev 9facd25
+
+* Tue Jun 11 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-46.20130611git39637c8
+- Update to rev 39637c8
+
+* Tue Jun 11 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-45.20130610git354e271
+- Update to rev 354e271
+
+* Mon Jun 10 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-44.20130610gitbf0e03d
+- Update to rev bf0e03d
+
+* Sun Jun 09 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-43.20130607gitf7aac52
+- Update to rev f7aac52
+
+* Fri May 24 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-42.20130519git6e57b6c
+- Update to rev 6e57b6c
+
+* Sat May 18 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-41.20130513git23df06a
+- Fix zlib require
+
+* Sat May 18 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-40.20130513git23df06a
+- Fix bogus date
+
+* Fri May 17 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-39.20130513git23df06a
+- add zlib as build require
+
+* Fri May 17 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-38.20130513git23df06a
+- bump
+
+* Fri May 17 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-37.20130513git23df06a
+- bump
+
+* Wed May 15 2013  <bioinfornatics at fedoraproject dot org> - 2-36.20130513git23df06a
+- Update to rev 23df06a
+
 * Fri May 10 2013 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-35.20130510git91d653c
 - Update to rev 91d653c
 
@@ -256,10 +301,8 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Thu Jul 26 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-27.20120720git5f15b30
 - fix link against libcurl
 
-
 * Sun Jul 22 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-26.20120624gitcef19fb
 - Update to use llvm 3.1
-
 
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-15.201210307git43667e1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
@@ -279,10 +322,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Sun Jun 03 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-18.20120602git260faae
 - remove buildroot path into .di file
 
-* Fri Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-17.20120602gitd24592b
+* Sat Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-17.20120602gitd24592b
 - fix bug to able tango build bis
 
-* Fri Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-16.20120602git509a579
+* Sat Jun 02 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-16.20120602git509a579
 - fix bug to able tango build
 
 * Fri May 25 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-15.20120525git1805e53
@@ -294,7 +337,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-13.201210215git5af48ed
 - Rebuilt for c++ ABI breakage
 
-* Wed Feb 18 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210218git53f9964
+* Sat Feb 18 2012 Jonathan MERCIER <bioinfornatics at gmail.com> - 2-12.201210218git53f9964
 - Update to latest revision
 - update dmdfe to 2.058
 - ldc has new parameter -soname
@@ -306,37 +349,37 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - update dmdfe to 2.057
 - fix tango build for 32 bit
 
-* Fri Jan 5 2012 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-10.20111206gitfa5fb92
+* Thu Jan 05 2012 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-10.20111206gitfa5fb92
 - fix doc for devhelp
 
-* Fri Dec 9 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-9.20111206gitfa5fb92
+* Fri Dec 09 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-9.20111206gitfa5fb92
 - Add doc for devhelp
 
-* Wed Dec 6 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-8.20111206gitfa5fb92
+* Tue Dec 06 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-8.20111206gitfa5fb92
 - Put %%{_d_includedir}/core into druntime-devel package
 
-* Wed Dec 6 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-8.20111206git641cc85
+* Tue Dec 06 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-8.20111206git641cc85
 - Update compiler to latest revision
 - Update runtime to latest revision
 - Update phobos to latest revision
 
-* Thu Dec 1 2011  Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-7.20111117git4add11b
+* Thu Dec 01 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-7.20111117git4add11b
 - Update to latest revision
 - fix dependencies
 
-* Sat Nov 9 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-6.20111112gitd9da872
+* Wed Nov 09 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-6.20111112gitd9da872
 - Update to latest revision
 
-* Thu Nov 9 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-5.20110911git3cf958ad
+* Wed Nov 09 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-5.20110911git3cf958ad
 - Update to latest revision
 
 * Sat Sep 17 2011 Jonathan MERCIER <bioinfornatics@fedoraproject.org> - 2-4.20110915git423076d
 - Update to latest revision
 
-* Wed Aug  3 2011 Michel Salim <salimma@fedoraproject.org> - 2-3.20110801git58d40d2
+* Wed Aug  03 2011 Michel Salim <salimma@fedoraproject.org> - 2-3.20110801git58d40d2
 - Rebuild against final LLVM 2.9 release
 
-* Mon Aug  1 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110801git58d40d2
+* Mon Aug  01 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110801git58d40d2
 - update LDC2 from upstream
 
 * Tue Jul 26 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 2-2.20110826hg1991
@@ -348,93 +391,93 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-31.20110115hg1832
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
-* Sun Jan 16 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-30.20110115hg1832
+* Sun Jan 16 2011 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-30.20110115hg1832
 update to latest revision 1832
 
-* Mon Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-29.20110110hg1828
+* Fri Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-29.20110110hg1828
 update to latest revision 1828
 
-* Fri Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-28.20110105hg1812
+* Fri Jan 07 2011 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-28.20110105hg1812
 update to latest revision 1812
 
-* Mon Jan 05 2011 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-27.20110102hg1705
+* Wed Jan 05 2011 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-27.20110102hg1705
 - update to latest revision 1705
 
-* Sun Nov 14 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-25.20101114hg1698
+* Sun Nov 14 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-25.20101114hg1698
 - update to latest revision 1698
 - several bug fix
 
-* Wed Oct 20 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-23.20101004hg1666
+* Wed Oct 20 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-23.20101004hg1666
 - add patch for llvm 2.8
 
-* Fri Oct 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-22.20101004hg1666
+* Fri Oct 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-22.20101004hg1666
 - update to new release 1666
 
-* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-21.20100928hg1665
+* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-21.20100928hg1665
 - update to new release 1665
 
-* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-20.20100927hg1664
+* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-20.20100927hg1664
 - update to new release 1664
 
-* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-19.20100905hg1659
+* Sat Sep 18 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-19.20100905hg1659
 - update to new release 1659
 
-* Sat Sep 04 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-18.20100904hg1657
+* Sat Sep 04 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-18.20100904hg1657
 - update to new release 1657
 
-* Thu Aug 26 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-17.20100609hg1655
+* Thu Aug 26 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-17.20100609hg1655
 - use %%{_libdir} instead %%{_libdir}/d
 
-* Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-16.20100609hg1655
+* Thu Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-16.20100609hg1655
 - fix minor bug in /etc/ldc.conf
 
-* Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-15.20100609hg1655
+* Thu Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-15.20100609hg1655
 - fix minor bug in /etc/ldc.conf
 
-* Fri Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-14.20100609hg1655
+* Thu Aug 12 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-14.20100609hg1655
 - fix critical bug in /etc/ldc.conf
 
-* Wed Aug 11 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-13.20100609hg1655
+* Wed Aug 11 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-13.20100609hg1655
 - fix critical bug in /etc/ldc.conf
 
-* Sun Aug 07 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-12.20100609hg1655
+* Sat Aug 07 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-12.20100609hg1655
 - Update to revision 1655
 
-* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-12.20100609hg1654
+* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-12.20100609hg1654
 - Add patch
 
-* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-11.20100609hg1654
+* Mon Aug 02 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-11.20100609hg1654
 - Add %%{?_smp_mflags} macro for makefile
 - Add flag -O2 for good optimizations in %%{_d_optflags} macro
 
-* Sun Aug 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-10.20100609hg1654
+* Sun Aug 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-10.20100609hg1654
 - Update to revision 1654
 
-* Fri Jul 29 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-9.20100609hg1653
+* Thu Jul 29 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-9.20100609hg1653
 - add %%{_d_libdir} macro in macros.ldc
 - fix lib path in ldc.conf
 
-* Wed Jul 28  2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-8.20100609hg1653
+* Wed Jul 28  2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-8.20100609hg1653
 - Using macro for D package
 
-* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-7.20100609hg1653
+* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-7.20100609hg1653
 - Fix macros.ldc name
 
-* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-6.20100609hg1653
+* Tue Jul 27 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-6.20100609hg1653
 - Add %%{_sysconfdir}/rpm/maco.ldc file for new macro
 - Fix alphatag to YYYYMMDD instead YYYYDDMM
 
-* Sun Jul 25 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-5.20100706hg1653
+* Sun Jul 25 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-5.20100706hg1653
 - Fix ldc.rebuild.conf file
 
-* Fri Jul 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-4.20100706hg1653
+* Thu Jul 15 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-4.20100706hg1653
 - Add gcc in require
 
-* Thu Jul 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-3.20100706hg1653
+* Thu Jul 01 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-3.20100706hg1653
 - Perform french description
 
-* Sat Jun 24 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-2.20100706hg1653
+* Thu Jun 24 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-2.20100706hg1653
 - Explain why .emty file is removed
 
-* Wed Jun 23 2010 Jonathan MERCIER <bioinfornatics at gmail.com> 0.9.2-1.20100706hg1653
+* Wed Jun 23 2010 Jonathan MERCIER <bioinfornatics at gmail.com> - 0.9.2-1.20100706hg1653
 - Initial release
