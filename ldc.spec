@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        49.%{alphatag}%{?dist}
+Release:        50.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -231,6 +231,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-50.20130623git9facd25
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Wed Jun 26 2013 Jonathan MERCIER <bioinfornatics at fedoraproject dot org> - 2-49.20130623git9facd25
 - Update url  and add macros.ldc into git repo
 
