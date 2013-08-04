@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20130623
-%global     ldc_rev         9facd25
-%global     phobos_rev      9fe205f
-%global     druntime_rev    a245e8d
+%global     snapdate        20130730
+%global     ldc_rev         07cb4cc
+%global     phobos_rev      89a2295
+%global     druntime_rev    6c6a4a1
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        50.%{alphatag}%{?dist}
+Release:        51.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -231,6 +231,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sun Aug 04 2013 "Jonathan Mercier" <"Jonathan Mercier at gmail dot org"> - 2-51.20130730git07cb4cc
+- Update to rev 07cb4cc
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2-50.20130623git9facd25
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
