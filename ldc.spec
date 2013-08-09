@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        52.%{alphatag}%{?dist}
+Release:        53.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -33,6 +33,8 @@ Source0:        %{name}-%{alphatag}.tar.xz
 Source1:        %{name}-phobos-%{phobostag}.tar.xz
 Source2:        %{name}-druntime-%{druntimetag}.tar.xz
 Source3:        macros.%{name}
+
+ExcludeArch:    arm
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -231,6 +233,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Fri Aug 09 2013 Jonathan MERCIER <bioinfornatics@gmail.com> - 2-53.20130805git967b986
+- Add ExcludeArch arm
+
 * Mon Aug 05 2013 "Jonathan Mercier" <"Jonathan Mercier at gmail dot org"> - 2-52.20130805git967b986
 - Update to rev 967b986
 
