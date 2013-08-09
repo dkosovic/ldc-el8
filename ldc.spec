@@ -34,7 +34,7 @@ Source1:        %{name}-phobos-%{phobostag}.tar.xz
 Source2:        %{name}-druntime-%{druntimetag}.tar.xz
 Source3:        macros.%{name}
 
-ExcludeArch:    arm
+ExcludeArch:    %{arm}
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
