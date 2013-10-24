@@ -1,8 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20130805
-%global     ldc_rev         967b986
+%global     snapdate        20131023
+%global     ldc_rev         287e089
 %global     phobos_rev      89a2295
-%global     druntime_rev    6c6a4a1
+%global     druntime_rev    822720b
 %global     alphatag        %{snapdate}git%{ldc_rev}
 %global     phobostag       %{snapdate}git%{phobos_rev}
 %global     druntimetag     %{snapdate}git%{druntime_rev}
@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        53.%{alphatag}%{?dist}
+Release:        54.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -234,6 +234,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Thu Oct 24 2013 Jonathan MERCIER <bioinfornatics@gmail.com> - 2-54.20131023git287e089
+- Update to rev 287e089
+
 * Fri Aug 09 2013 Jonathan MERCIER <bioinfornatics@gmail.com> - 2-53.20130805git967b986
 - Add ExcludeArch arm
 
