@@ -162,6 +162,7 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 %setup -q -T -D -a 1 -n %{name}-%{alphatag}
 %setup -q -T -D -a 2 -n %{name}-%{alphatag}
 find . -type f -exec sed -i 's/\r//g' {} \;
+ sed -i 's/string(REPLACE "-Werror" "" LLVM_CXXFLAGS ${LLVM_CXXFLAGS})/#&/' CMakeLists.txt
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
