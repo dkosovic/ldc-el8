@@ -1,5 +1,5 @@
 # debug info seem not works with D compiler
-%global     snapdate        20130305
+%global     snapdate        20140305
 %global     ldc_rev         6e908ff
 %global     phobos_rev      32fc550
 %global     druntime_rev    b20422e
@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        55.%{alphatag}%{?dist}
+Release:        57.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -45,7 +45,7 @@ BuildRequires:  llvm-static
 BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
 
-Requires:       ldc-druntime-devel ldc-phobos-devel
+Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config
 
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
@@ -72,6 +72,24 @@ des personnes pour aider au test et amélioré LDC pour ces plateformes.
 LDC compile déjà une grande quantité de code D, mais doit encore être considéré
 en qualité bêta. Regarder les tickets pour ressentir ce qui doit encore être
 implémenter.
+
+%package        config
+Summary:        Config file for ldc
+Group:          Development/Tools
+License:        Boost
+Requires:       %{name} =  %{version}-%{release}
+BuildArch:      noarch
+
+%description config
+Provide configuration file to customize ldc. As:
+- default search path for lib and include files
+- default ldc flag …
+
+
+%description config -l fr
+Fournit les fichiers de configuration pour personaliser ldc. Comme:
+- Le chemin par défaut pour rechercher lib et les fichier d'inclusion
+- les paramètres par défaut utilisé par ldc …
 
 %package        druntime
 Summary:        Runtime library for D
@@ -176,7 +194,8 @@ geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 find import  -name "*.di" | xargs sed -i "s|%{_buildir}/%{name}-%{alphatag}/runtime/druntime/src|/usr/include/d|g"
 
 %install
-mkdir -p %{buildroot}/%{_sysconfdir}/rpm
+mkdir -p %{buildroot}/%{_sysconfdir}/
+mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
 mkdir -p %{buildroot}/%{_includedir}/d/ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 
@@ -184,7 +203,7 @@ make %{?_smp_mflags} install DESTDIR=%{buildroot}
 find %{buildroot}/%{_includedir}/d/core -name "*.di" | xargs sed -i "s|\(// D import file generated from \)'/.*/%{name}-%{alphatag}/runtime/druntime/src/\(.*\)'|\1'\2'|"
 
 # macros for D package
-install --mode=0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.ldc
+install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 # geany tags
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
@@ -195,12 +214,15 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files
 %doc LICENSE README
-%config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
-%config(noreplace)  %{_sysconfdir}/ldc2.conf
-%config             %{_sysconfdir}/rpm/macros.ldc
-%config             %{_sysconfdir}/bash_completion.d/ldc
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
+
+%files config
+%config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
+%config(noreplace)  %{_sysconfdir}/ldc2.conf
+%config             %{_rpmconfigdir}/macros.d/macros.ldc
+%config             %{_sysconfdir}/bash_completion.d/ldc
+
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README
@@ -235,6 +257,13 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Mon Mar 10 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-57.20140305git6e908ff
+- Add config sub-package
+- put rpm macro into %%{_rpmconfigdir}/macros.d
+
+* Sun Mar 09 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-56.20140305git6e908ff
+- Fix alphatag
+
 * Sat Mar 08 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-55.20131023git287e089
 - Update to rev 6e908ff
 
