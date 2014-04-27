@@ -1,6 +1,6 @@
 # debug info seem not works with D compiler
-%global     snapdate        20140305
-%global     ldc_rev         6e908ff
+%global     snapdate        20140325
+%global     ldc_rev         7492d06
 %global     phobos_rev      32fc550
 %global     druntime_rev    b20422e
 %global     alphatag        %{snapdate}git%{ldc_rev}
@@ -11,7 +11,7 @@
 # Use the following commands to generate the tarball:
 # git clone https://github.com/ldc-developers/ldc.git ldc
 # cd ldc; git submodule update -i
-# git rev-parse --short HEAD            -> for ldc_rev
+# git rev-parse --short HEAD		            -> for ldc_rev
 # git checkout %%ldc_rev
 # git archive --prefix=ldc-%%{alphatag}/ HEAD --format=tar | xz > ../ldc-%%{alphatag}.tar.xz
 # cd runtime/druntime;  git rev-parse --short HEAD -> for druntime_rev
@@ -21,7 +21,7 @@
 
 Name:           ldc
 Version:        2
-Release:        57.%{alphatag}%{?dist}
+Release:        58.%{alphatag}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -213,7 +213,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %postun phobos      -p  /sbin/ldconfig
 
 %files
-%doc LICENSE README
+%doc LICENSE README.md
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
 
@@ -257,6 +257,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sun Apr 27 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-58.20140325git7492d06
+- update to latest rev
+
 * Mon Mar 10 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-57.20140305git6e908ff
 - Add config sub-package
 - put rpm macro into %%{_rpmconfigdir}/macros.d
