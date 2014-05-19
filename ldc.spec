@@ -13,6 +13,9 @@ URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v0.13.0-beta1/%{name}-%{version}-beta1-src.tar.gz
 Source3:        macros.%{name}
 
+# https://github.com/ldc-developers/ldc/issues/613
+ExcludeArch:    %{arm}
+
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
