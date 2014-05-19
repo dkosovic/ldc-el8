@@ -1,27 +1,8 @@
 # debug info seem not works with D compiler
-%global     snapdate        20140325
-%global     ldc_rev         7492d06
-%global     phobos_rev      32fc550
-%global     druntime_rev    b20422e
-%global     alphatag        %{snapdate}git%{ldc_rev}
-%global     phobostag       %{snapdate}git%{phobos_rev}
-%global     druntimetag     %{snapdate}git%{druntime_rev}
-
-# The source for this package was pulled from upstream's git.
-# Use the following commands to generate the tarball:
-# git clone https://github.com/ldc-developers/ldc.git ldc
-# cd ldc; git submodule update -i
-# git rev-parse --short HEAD		            -> for ldc_rev
-# git checkout %%ldc_rev
-# git archive --prefix=ldc-%%{alphatag}/ HEAD --format=tar | xz > ../ldc-%%{alphatag}.tar.xz
-# cd runtime/druntime;  git rev-parse --short HEAD -> for druntime_rev
-# git archive --prefix=runtime/druntime/ HEAD --format=tar | xz > ../../../ldc-druntime-%%{druntimetag}.tar.xz
-# cd ../phobos; git rev-parse --short HEAD     -> for phobos_rev
-# git archive --prefix=runtime/phobos/ HEAD --format=tar | xz > ../../../ldc-phobos-%%{phobostag}.tar.xz
 
 Name:           ldc
-Version:        2
-Release:        58.%{alphatag}%{?dist}
+Version:        0.13.0
+Release:        59%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -29,13 +10,8 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        %{name}-%{alphatag}.tar.xz
-Source1:        %{name}-phobos-%{phobostag}.tar.xz
-Source2:        %{name}-druntime-%{druntimetag}.tar.xz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v0.13.0-beta1/%{name}-%{version}-beta1-src.tar.gz
 Source3:        macros.%{name}
-
-# https://github.com/ldc-developers/ldc/issues/116
-ExcludeArch:    %{arm}
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -143,8 +119,8 @@ jobs that need to get done
 Chaque module de Phobos est conforme autant que possible à la conception
 suivante objectifs. Ce sont des objectifs plutôt que des exigences car D n'est
 pas une religion, c'est un langage de programmation, et il reconnaît que,
-parfois, les objectifs sont contradictoire et contre-productive dans certaines
-situations, et les programmeurs doivent implémenter d'une certaines manière.
+parfois, les objectifs sont contradictoires et contre-productif dans certaines
+situations, et les programmeurs ont travail qui doit être effectué.
 
 %package        phobos-devel
 Summary:        Support for developing D application
@@ -176,31 +152,31 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{alphatag}
-%setup -q -T -D -a 1 -n %{name}-%{alphatag}
-%setup -q -T -D -a 2 -n %{name}-%{alphatag}
+%setup -q -n %{name}-%{version}-beta1-src
 find . -type f -exec sed -i 's/\r//g' {} \;
  sed -i 's/string(REPLACE "-Werror" "" LLVM_CXXFLAGS ${LLVM_CXXFLAGS})/#&/' CMakeLists.txt
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
 %build
-%cmake  -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON  -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d .
-make %{?_smp_mflags} VERBOSE=2
-
+mkdir build
+pushd build
+    %cmake    -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
+              -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
+              -DSYSCONF_INSTALL_DIR=%{_sysconfdir}                  \
+              -DCMAKE_INSTALL_PREFIX=%{_prefix} ..
+    make %{?_smp_mflags} VERBOSE=2
+popd
 # generate geany tags
 geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 
-find import  -name "*.di" | xargs sed -i "s|%{_buildir}/%{name}-%{alphatag}/runtime/druntime/src|/usr/include/d|g"
-
 %install
-mkdir -p %{buildroot}/%{_sysconfdir}/
 mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
-mkdir -p %{buildroot}/%{_includedir}/d/ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 
-make %{?_smp_mflags} install DESTDIR=%{buildroot}
-find %{buildroot}/%{_includedir}/d/core -name "*.di" | xargs sed -i "s|\(// D import file generated from \)'/.*/%{name}-%{alphatag}/runtime/druntime/src/\(.*\)'|\1'\2'|"
+pushd build
+    %make_install
+popd
 
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
@@ -226,10 +202,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README
-%{_libdir}/libdruntime-ldc.so.2.0.63
-%{_libdir}/libdruntime-ldc.so.63
-%{_libdir}/libdruntime-ldc-debug.so.2.0.63
-%{_libdir}/libdruntime-ldc-debug.so.63
+%{_libdir}/libdruntime-ldc.so.2.0.64
+%{_libdir}/libdruntime-ldc.so.64
+%{_libdir}/libdruntime-ldc-debug.so.2.0.64
+%{_libdir}/libdruntime-ldc-debug.so.64
 
 %files druntime-devel
 %{_includedir}/d/ldc
@@ -239,10 +215,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.63
-%{_libdir}/libphobos-ldc.so.63
-%{_libdir}/libphobos-ldc-debug.so.2.0.63
-%{_libdir}/libphobos-ldc-debug.so.63
+%{_libdir}/libphobos-ldc.so.2.0.64
+%{_libdir}/libphobos-ldc.so.64
+%{_libdir}/libphobos-ldc-debug.so.2.0.64
+%{_libdir}/libphobos-ldc-debug.so.64
 
 %files phobos-devel
 %dir %{_includedir}/d
@@ -257,6 +233,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Mon May 19 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 0.13.0-59
+- update to latest rev
+
 * Sun Apr 27 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 2-58.20140325git7492d06
 - update to latest rev
 
