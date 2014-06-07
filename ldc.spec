@@ -2,7 +2,7 @@
 
 Name:           ldc
 Version:        0.13.0
-Release:        59%{?dist}
+Release:        60%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -236,6 +236,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.0-60
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon May 19 2014 jonathan MERCIER <bioinfornatics@gmail.com> - 0.13.0-59
 - update to latest rev
 
