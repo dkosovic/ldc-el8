@@ -1,8 +1,12 @@
-# debug info seem not works with D compiler
+%global dmdfe_major 2
+%global dmdfe_minor 0
+%global dmdfe_bump  66
+%global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 Name:           ldc
-Version:        0.13.0
-Release:        61%{?dist}
+Version:        0.15.0
+Release:        63%{?dist}
+Epoch:          1
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -10,7 +14,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v0.13.0-beta1/%{name}-%{version}-beta1-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}-%{version}/%{name}-%{version}-alpha1-src.tar.gz
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
@@ -56,7 +60,7 @@ implémenter.
 Summary:        Config file for ldc
 Group:          Development/Tools
 License:        Boost
-Requires:       %{name} =  %{version}-%{release}
+Requires:       %{name} =  %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 
 %description config
@@ -74,7 +78,7 @@ Fournit les fichiers de configuration pour personaliser ldc. Comme:
 Summary:        Runtime library for D
 Group:          Development/Tools
 License:        Boost
-Requires:       %{name}%{?_isa} =  %{version}-%{release}
+Requires:       %{name}%{?_isa} =  %{epoch}:%{version}-%{release}
 
 %description druntime
 Druntime is the minimum library required to support the D programming
@@ -92,8 +96,8 @@ démarage/extinction, etc
 %package        druntime-devel
 Summary:        Support for developing D application
 Group:          Development/Tools
-Requires:       %{name}%{?_isa}  =  %{version}-%{release}
-Requires:       %{name}-druntime = %{version}-%{release}
+Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
 
 
 %description druntime-devel
@@ -108,8 +112,8 @@ des applications en D utilisant druntime.
 Summary:        Standard Runtime Library
 Group:          Development/Tools
 License:        Boost
-Requires:       %{name}%{?_isa} =  %{version}-%{release}
-Requires:       %{name}-druntime = %{version}-%{release}
+Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
 
 %description phobos
 Each module in Phobos conforms as much as possible to the following design
@@ -128,8 +132,8 @@ situations, et les programmeurs ont travail qui doit être effectué.
 %package        phobos-devel
 Summary:        Support for developing D application
 Group:          Development/Tools
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{name}-phobos  = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-phobos  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime-devel
 
 %description phobos-devel
@@ -143,7 +147,7 @@ des applications en D utilisant phobos.
 %package phobos-geany-tags
 Summary:        Support for enable autocompletion in geany
 Group:          Development/Tools
-Requires:       %{name} =  %{version}-%{release}
+Requires:       %{name} =  %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  geany
 Requires:       geany
@@ -155,9 +159,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}-beta1-src
-find . -type f -exec sed -i 's/\r//g' {} \;
- sed -i 's/string(REPLACE "-Werror" "" LLVM_CXXFLAGS ${LLVM_CXXFLAGS})/#&/' CMakeLists.txt
+%setup -q -n %{name}-%{version}-alpha1-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -166,8 +168,10 @@ mkdir build
 pushd build
     %cmake    -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
-              -DSYSCONF_INSTALL_DIR=%{_sysconfdir}                  \
-              -DCMAKE_INSTALL_PREFIX=%{_prefix} ..
+              -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
+              -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
+              -DCMAKE_BUILD_TYPE=Debug                 \
+              --enable-optimized ..
     make %{?_smp_mflags} VERBOSE=2
 popd
 # generate geany tags
@@ -197,18 +201,17 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldmd2
 
 %files config
-%config(noreplace)  %{_sysconfdir}/ldc2.rebuild.conf
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_rpmconfigdir}/macros.d/macros.ldc
 %config             %{_sysconfdir}/bash_completion.d/ldc
 
 
 %files druntime
-%doc runtime/druntime/LICENSE runtime/druntime/README
-%{_libdir}/libdruntime-ldc.so.2.0.64
-%{_libdir}/libdruntime-ldc.so.64
-%{_libdir}/libdruntime-ldc-debug.so.2.0.64
-%{_libdir}/libdruntime-ldc-debug.so.64
+%doc runtime/druntime/LICENSE runtime/druntime/README.md runtime/README
+%{_libdir}/libdruntime-ldc.so.%dmdfe
+%{_libdir}/libdruntime-ldc.so.%dmdfe_bump
+%{_libdir}/libdruntime-ldc-debug.so.%dmdfe
+%{_libdir}/libdruntime-ldc-debug.so.%dmdfe_bump
 
 %files druntime-devel
 %{_includedir}/d/ldc
@@ -218,24 +221,30 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files phobos
 %doc runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos-ldc.so.2.0.64
-%{_libdir}/libphobos-ldc.so.64
-%{_libdir}/libphobos-ldc-debug.so.2.0.64
-%{_libdir}/libphobos-ldc-debug.so.64
+%{_libdir}/libphobos2-ldc.so.%dmdfe
+%{_libdir}/libphobos2-ldc.so.%dmdfe_bump
+%{_libdir}/libphobos2-ldc-debug.so.%dmdfe
+%{_libdir}/libphobos2-ldc-debug.so.%dmdfe_bump
 
 %files phobos-devel
 %dir %{_includedir}/d
-%{_includedir}/d/crc32.d
 %{_includedir}/d/std
 %{_includedir}/d/etc
-%{_libdir}/libphobos-ldc.so
-%{_libdir}/libphobos-ldc-debug.so
+%{_libdir}/libphobos2-ldc.so
+%{_libdir}/libphobos2-ldc-debug.so
 
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
 
 %changelog
+* Thu Oct 30 2014 Jonathan MERCIER <bioinfornatics@gmail.com> - 0.15.0-alpha1-63
+- update to 0.15 alpaha 1 release
+- enable epoch to follow upstream version number 2 become 0.15
+
+* Sun Sep 14 2014 bioinfornatics - 0.14.0-62
+- Update LDC to release 0.14
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.0-61
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
