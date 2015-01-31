@@ -30,6 +30,8 @@ BuildRequires:  zlib-devel
 
 Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config
 
+ExcludeArch:    %{arm}
+
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
 frontend and uses LLVM as backend. LLVM provides a fast and modern backend for
