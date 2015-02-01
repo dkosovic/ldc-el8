@@ -5,7 +5,7 @@
 
 Name:           ldc
 Version:        0.15.0
-Release:        63%{?dist}
+Release:        64%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -27,8 +27,9 @@ BuildRequires:  gc, gcc-c++, gcc
 BuildRequires:  llvm-static
 BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
+BuildRequires:  libedit-devel
 
-Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config
+Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit
 
 ExcludeArch:    %{arm}
 
@@ -240,6 +241,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sun Feb 01 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.0-64
+- fix spec missing libedit
+
 * Thu Oct 30 2014 Jonathan MERCIER <bioinfornatics@gmail.com> - 0.15.0-alpha1-63
 - update to 0.15 alpaha 1 release
 - enable epoch to follow upstream version number 2 become 0.15
