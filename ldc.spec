@@ -162,7 +162,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}-alpha1-src
+%setup -q -n %{name}-%{version}-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
