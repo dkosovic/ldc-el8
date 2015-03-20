@@ -2,10 +2,11 @@
 %global dmdfe_minor 0
 %global dmdfe_bump  66
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
+%global ldc_version  0.15.2
 
 Name:           ldc
-Version:        0.15.1
-Release:        65%{?dist}
+Version:        %ldc_version.beta1
+Release:        66%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -14,7 +15,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}-%{version}/%{name}-%{version}-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}-%{version}/%{name}-%ldc_version-beta1-src.tar.gz
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
@@ -31,7 +32,7 @@ BuildRequires:  libedit-devel
 
 Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit
 
-ExcludeArch:    %{arm}
+# ExcludeArch:    %{arm}
 
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
@@ -162,7 +163,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}-src
+%setup -q -n %{name}-%ldc_version-beta1-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -206,7 +207,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %files config
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_rpmconfigdir}/macros.d/macros.ldc
-%config             %{_sysconfdir}/bash_completion.d/ldc
+%config             %{_sysconfdir}/bash_completion.d/ldc2
 
 
 %files druntime
@@ -241,6 +242,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Fri Mar 20 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta1-66
+- update to beta release 0.15.2
+
 * Sun Feb 01 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.1-65
 - update to version 0.15.1
 
