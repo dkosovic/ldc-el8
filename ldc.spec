@@ -19,7 +19,7 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
-#ExcludeArch:    %{arm}
+ExcludeArch:    %{arm}
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -239,9 +239,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
-* Fri Mar 20 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta1-67
-- Add arm arch
-
 * Fri Mar 20 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta1-66
 - update to beta release 0.15.2
 
