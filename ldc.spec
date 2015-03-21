@@ -6,7 +6,7 @@
 
 Name:           ldc
 Version:        %ldc_version.beta1
-Release:        66%{?dist}
+Release:        67%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -19,7 +19,7 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
-ExcludeArch:    %{arm}
+#ExcludeArch:    %{arm}
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -31,9 +31,6 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 
 Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit
-
-# ExcludeArch:    %{arm}
-
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
 frontend and uses LLVM as backend. LLVM provides a fast and modern backend for
@@ -242,6 +239,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Fri Mar 20 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta1-67
+- Add arm arch
+
 * Fri Mar 20 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta1-66
 - update to beta release 0.15.2
 
