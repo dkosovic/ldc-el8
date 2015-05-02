@@ -6,7 +6,7 @@
 
 Name:           ldc
 Version:        %ldc_version.beta1
-Release:        68%{?dist}
+Release:        69%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -239,6 +239,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1:0.15.2.beta1-69
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Tue Mar 31 2015 bioinfornatics@gmail.com - 1:0.15.2.beta1-68
 - rebuild
 
