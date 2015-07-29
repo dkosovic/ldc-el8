@@ -5,8 +5,8 @@
 %global ldc_version  0.15.2
 
 Name:           ldc
-Version:        %ldc_version.beta1
-Release:        70%{?dist}
+Version:        %ldc_version.beta2
+Release:        71%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -15,7 +15,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}-%{version}/%{name}-%ldc_version-beta1-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{name}-%{version}/%{name}-%ldc_version-beta2-src.tar.gz
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
@@ -30,7 +30,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 
-Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit
+Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit clang-libs
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
 frontend and uses LLVM as backend. LLVM provides a fast and modern backend for
@@ -160,7 +160,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%ldc_version-beta1-src
+%setup -q -n %{name}-%ldc_version-beta2-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -204,7 +204,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %files config
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_rpmconfigdir}/macros.d/macros.ldc
-%config             %{_sysconfdir}/bash_completion.d/ldc2
+%config             %{_datadir}/bash-completion/completions/ldc2
 
 
 %files druntime
@@ -239,6 +239,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Wed Jul 29 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.15.2.beta2-71
+- update to beta release 0.15.2-beta2
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.15.2.beta1-70
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
