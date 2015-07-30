@@ -171,7 +171,6 @@ pushd build
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
-              -DCMAKE_BUILD_TYPE=Debug                 \
               --enable-optimized ..
     make %{?_smp_mflags} VERBOSE=2
 popd
