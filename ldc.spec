@@ -29,6 +29,7 @@ BuildRequires:  llvm-static
 BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
+BuildRequires:  bash-completion
 
 Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit clang-libs bash-completion
 %description
