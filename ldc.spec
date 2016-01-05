@@ -2,11 +2,12 @@
 %global dmdfe_minor 0
 %global dmdfe_bump  67
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-%global ldc_version  0.16.0
+%global ldc_version 0.16.1
+%global root        %{name}-%ldc_version-src
 
 Name:           ldc
-Version:        %ldc_version.alpha3
-Release:        76%{?dist}
+Version:        %ldc_version
+Release:        77%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -15,7 +16,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version-alpha2/%{name}-%ldc_version-alpha3-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version/%{name}-%ldc_version-src.tar.gz
 Source3:        macros.%{name}
 
 # https://github.com/ldc-developers/ldc/issues/613
@@ -161,9 +162,10 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%ldc_version-alpha3-src
+%setup -q -n %root
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
+rm -fr %root/runtime/phobos/etc/c/zlib
 
 %build
 mkdir build
@@ -239,6 +241,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Tue Jan 05 2016 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.16.1-77
+- Update ldc to latest stable release
+
 * Fri Sep 18 2015 Jonathan MERCIER <bioinfornatics@gmail.com> - 1:0.16.0.alpha2-76
 - update to beta release 0.16.0-alpha3
 
