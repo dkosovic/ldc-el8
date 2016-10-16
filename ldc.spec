@@ -19,9 +19,6 @@ URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version/%{name}-%ldc_version-src.tar.gz
 Source3:        macros.%{name}
 
-# https://github.com/ldc-developers/ldc/issues/613
-ExcludeArch:    %{arm}
-
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
@@ -243,6 +240,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Sun Oct 16 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-1
 - Update to 0.17.2
+- Enable arm architecture
 
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.16.1-78
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
