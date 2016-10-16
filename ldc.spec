@@ -1,13 +1,15 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  68
+%global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-%global ldc_version 0.17.2
-%global root        %{name}-%ldc_version-src
+%global ldc_version 1.1.0
+%global root        %{name}-%ldc_version-beta3-src
+
+%undefine _hardened_build
 
 Name:           ldc
 Version:        %ldc_version
-Release:        3%{?dist}
+Release:        0.1.beta3%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -16,11 +18,12 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version/%{name}-%ldc_version-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version-beta3/%{name}-%ldc_version-beta3-src.tar.gz
 Source3:        macros.%{name}
 
 ExclusiveArch:  %{ldc_arches}
 
+BuildRequires:  ldc
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
@@ -201,12 +204,14 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %doc LICENSE README.md
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
+%{_bindir}/ldc-profdata
+%{_bindir}/ldc-prune-cache
+%{_libdir}/libldc-profile-rt.a
 
 %files config
 %config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_rpmconfigdir}/macros.d/macros.ldc
 %config             %{_datadir}/bash-completion/completions/ldc2
-
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README.md runtime/README
@@ -238,8 +243,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
-
 %changelog
+* Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.1.beta3
+- Update to 1.1.0 beta3
+
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-3
 - Move ldc_arches macro to redhat-rpm-config
 
