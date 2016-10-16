@@ -1,13 +1,13 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  67
+%global dmdfe_bump  68
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-%global ldc_version 0.16.1
+%global ldc_version 0.17.2
 %global root        %{name}-%ldc_version-src
 
 Name:           ldc
 Version:        %ldc_version
-Release:        78%{?dist}
+Release:        1%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -241,6 +241,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Sun Oct 16 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-1
+- Update to 0.17.2
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.16.1-78
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
