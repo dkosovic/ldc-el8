@@ -7,3 +7,5 @@
 %_d_optflags -release -w -g -O3
 # Lib directory path
 %_d_libdir %{_libdir}/d/
+# ldc is available on the following architectures
+%ldc_arches %{ix86} x86_64 %{arm} ppc64 ppc64le
