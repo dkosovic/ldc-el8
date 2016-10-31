@@ -7,7 +7,7 @@
 
 Name:           ldc
 Version:        %ldc_version
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -19,8 +19,7 @@ URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version/%{name}-%ldc_version-src.tar.gz
 Source3:        macros.%{name}
 
-# Keep in sync with the ldc_arches macro in macros.ldc
-ExclusiveArch:  %{ix86} x86_64 %{arm} ppc64 ppc64le
+ExclusiveArch:  %{ldc_arches}
 
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
@@ -241,6 +240,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 
 %changelog
+* Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-3
+- Move ldc_arches macro to redhat-rpm-config
+
 * Sun Oct 30 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-2
 - Add ldc_arches macro that other packages can use
 - Enable ppc64 and ppc64le architectures
