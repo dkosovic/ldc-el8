@@ -12,7 +12,7 @@
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.1.beta3%{?dist}
+Release:        0.2.beta3%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -176,8 +176,6 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 %setup -q -n %{name}-%{version}-beta3-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
-# Remove bundled zlib
-rm -fr runtime/phobos/etc/c/zlib
 
 %build
 %if 0%{?bootstrap}
@@ -266,6 +264,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Nov 01 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.2.beta3
+- Revert bundled zlib removal as this broke libphobos2-ldc (#1102856)
+
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.1.beta3
 - Update to 1.1.0 beta3
 - Add a bootstrap build option; enable bootstrap
