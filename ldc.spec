@@ -35,7 +35,7 @@ ExclusiveArch:  %{ldc_arches}
 BuildRequires:  ldc
 %endif
 BuildRequires:  llvm-devel >= 3.0
-BuildRequires:  libconfig, libconfig-devel
+BuildRequires:  libconfig-devel
 BuildRequires:  cmake
 BuildRequires:  gc, gcc-c++, gcc
 BuildRequires:  llvm-static
@@ -44,7 +44,8 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
-Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit clang-libs bash-completion
+Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit bash-completion
+
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
 frontend and uses LLVM as backend. LLVM provides a fast and modern backend for
