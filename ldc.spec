@@ -2,7 +2,6 @@
 %global dmdfe_minor 0
 %global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-%global root        %{name}-%{version}-beta3-src
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -174,7 +173,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %root
+%setup -q -n %{name}-%{version}-beta3-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 # Remove bundled zlib
