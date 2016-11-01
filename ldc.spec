@@ -5,14 +5,14 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 1
+%global bootstrap 0
 %global bootstrap_version 0.17.2
 
 %undefine _hardened_build
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.2.beta3%{?dist}
+Release:        0.3.beta3%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -264,6 +264,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Nov 01 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.3.beta3
+- Disable bootstrap
+
 * Tue Nov 01 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.2.beta3
 - Revert bundled zlib removal as this broke libphobos2-ldc (#1102856)
 
