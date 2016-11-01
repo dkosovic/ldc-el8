@@ -2,8 +2,7 @@
 %global dmdfe_minor 0
 %global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-%global ldc_version 1.1.0
-%global root        %{name}-%ldc_version-beta3-src
+%global root        %{name}-%{version}-beta3-src
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -13,7 +12,7 @@
 %undefine _hardened_build
 
 Name:           ldc
-Version:        %ldc_version
+Version:        1.1.0
 Release:        0.1.beta3%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
@@ -23,7 +22,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version-beta3/%{name}-%ldc_version-beta3-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}-beta3/%{name}-%{version}-beta3-src.tar.gz
 %if 0%{?bootstrap}
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
