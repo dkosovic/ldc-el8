@@ -177,7 +177,8 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 %setup -q -n %root
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
-rm -fr %root/runtime/phobos/etc/c/zlib
+# Remove bundled zlib
+rm -fr runtime/phobos/etc/c/zlib
 
 %build
 %if 0%{?bootstrap}
@@ -269,6 +270,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.1.beta3
 - Update to 1.1.0 beta3
 - Add a bootstrap build option; enable bootstrap
+- Remove bundled zlib (#1102856)
 
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-3
 - Move ldc_arches macro to redhat-rpm-config
