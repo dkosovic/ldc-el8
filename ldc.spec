@@ -5,6 +5,11 @@
 %global ldc_version 1.1.0
 %global root        %{name}-%ldc_version-beta3-src
 
+# Enable this for bootstrapping with an older version that doesn't require a
+# working D compiler to build itself
+%global bootstrap 1
+%global bootstrap_version 0.17.2
+
 %undefine _hardened_build
 
 Name:           ldc
@@ -19,11 +24,16 @@ Group:          Development/Languages
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%ldc_version-beta3/%{name}-%ldc_version-beta3-src.tar.gz
+%if 0%{?bootstrap}
+Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
+%endif
 Source3:        macros.%{name}
 
 ExclusiveArch:  %{ldc_arches}
 
+%if ! 0%{?bootstrap}
 BuildRequires:  ldc
+%endif
 BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig, libconfig-devel
 BuildRequires:  cmake
@@ -170,12 +180,24 @@ mkdir geany_config
 rm -fr %root/runtime/phobos/etc/c/zlib
 
 %build
+%if 0%{?bootstrap}
+tar xf %{SOURCE1}
+mkdir build-bootstrap
+pushd build-bootstrap
+cmake ../%{name}-%{bootstrap_version}-src
+make %{?_smp_mflags}
+popd
+%endif
+
 mkdir build
 pushd build
     %cmake    -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
+%if 0%{?bootstrap}
+              -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
+%endif
               --enable-optimized ..
     make %{?_smp_mflags} VERBOSE=2
 popd
@@ -246,6 +268,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.1.beta3
 - Update to 1.1.0 beta3
+- Add a bootstrap build option; enable bootstrap
 
 * Mon Oct 31 2016 Kalev Lember <klember@redhat.com> - 1:0.17.2-3
 - Move ldc_arches macro to redhat-rpm-config
