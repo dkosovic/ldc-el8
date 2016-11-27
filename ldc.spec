@@ -5,14 +5,14 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.2
 
 %undefine _hardened_build
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.3.beta3%{?dist}
+Release:        0.4.beta4%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -21,7 +21,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}-beta3/%{name}-%{version}-beta3-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}-beta4/%{name}-%{version}-beta4-src.tar.gz
 %if 0%{?bootstrap}
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
@@ -173,7 +173,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}-beta3-src
+%setup -q -n %{name}-%{version}-beta4-src
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -214,6 +214,9 @@ popd
 install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 # geany tags
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
+
+# https://github.com/ldc-developers/ldc/issues/1897
+rm -f %{buildroot}%{_prefix}/lib/LLVMgold.so
 
 %post   druntime    -p  /sbin/ldconfig
 %postun druntime    -p  /sbin/ldconfig
@@ -264,6 +267,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sun Nov 27 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.4.beta4
+- Update to 1.1.0 beta4
+- Enable bootstrap
+
 * Tue Nov 01 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.3.beta3
 - Disable bootstrap
 
