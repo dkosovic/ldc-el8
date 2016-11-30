@@ -5,14 +5,14 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 1
+%global bootstrap 0
 %global bootstrap_version 0.17.2
 
 %undefine _hardened_build
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.5.beta4%{?dist}
+Release:        0.6.beta4%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -272,6 +272,9 @@ rm -f %{buildroot}%{_prefix}/lib/LLVMgold.so
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Wed Nov 30 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.6.beta4
+- Disable bootstrap
+
 * Wed Nov 30 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.5.beta4
 - Backport a patch to fix PPC/PPC64 ABI issues
 
