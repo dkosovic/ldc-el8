@@ -3,6 +3,8 @@
 %global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
+%global pre beta4
+
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 0
@@ -12,7 +14,7 @@
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.6.beta4%{?dist}
+Release:        0.6.%{pre}%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -21,7 +23,7 @@ Group:          Development/Languages
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}-beta4/%{name}-%{version}-beta4-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}%{?pre:-%{pre}}/%{name}-%{version}%{?pre:-%{pre}}-src.tar.gz
 %if 0%{?bootstrap}
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
@@ -177,7 +179,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}-beta4-src
+%setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
 %patch0 -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
