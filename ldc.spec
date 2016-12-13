@@ -3,7 +3,7 @@
 %global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta4
+%global pre beta6
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -14,7 +14,7 @@
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.6.%{pre}%{?dist}
+Release:        0.7.%{pre}%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -28,10 +28,6 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
-
-# Attempt to fix PPC/PPC64 ABI issues
-# https://github.com/ldc-developers/ldc/pull/1905
-Patch0:         1905.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -180,7 +176,6 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
-%patch0 -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -274,6 +269,9 @@ rm -f %{buildroot}%{_prefix}/lib/LLVMgold.so
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
+- Update to 1.1.0 beta6
+
 * Wed Nov 30 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.6.beta4
 - Disable bootstrap
 
