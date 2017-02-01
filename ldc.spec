@@ -207,7 +207,8 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %postun phobos      -p  /sbin/ldconfig
 
 %files
-%doc LICENSE README.md
+%license LICENSE
+%doc README.md
 %config(noreplace) %{_sysconfdir}/ldc2.conf
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
@@ -220,7 +221,8 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/bash-completion/completions/ldc2
 
 %files druntime
-%doc runtime/druntime/LICENSE runtime/druntime/README.md runtime/README
+%license runtime/druntime/LICENSE
+%doc runtime/druntime/README.md runtime/README
 %{_libdir}/libdruntime-ldc.so.%dmdfe
 %{_libdir}/libdruntime-ldc.so.%dmdfe_bump
 %{_libdir}/libdruntime-ldc-debug.so.%dmdfe
@@ -233,7 +235,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libdruntime-ldc-debug.so
 
 %files phobos
-%doc runtime/phobos/LICENSE_1_0.txt
+%license runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libphobos2-ldc.so.%dmdfe
 %{_libdir}/libphobos2-ldc.so.%dmdfe_bump
 %{_libdir}/libphobos2-ldc-debug.so.%dmdfe
@@ -256,6 +258,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Merge -config subpackage into the main ldc package
 - Don't mark the rpm macros file and bash completion file as config
 - Avoid depending on bash-completion
+- Use license macro for license files
 
 * Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
 - Update to 1.1.0 beta6
