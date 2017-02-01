@@ -44,7 +44,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
-Requires:       ldc-druntime-devel ldc-phobos-devel libedit
+Requires:       ldc-druntime-devel ldc-phobos-devel
 
 Obsoletes:      ldc-config < 1:1.1.0
 
