@@ -44,7 +44,9 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
-Requires:       ldc-druntime-devel ldc-phobos-devel ldc-config libedit bash-completion
+Requires:       ldc-druntime-devel ldc-phobos-devel libedit bash-completion
+
+Obsoletes:      ldc-config < 1:1.1.0
 
 %description
 LDC is a compiler for the D programming Language. It is based on the latest DMD
@@ -71,24 +73,6 @@ des personnes pour aider au test et amélioré LDC pour ces plateformes.
 LDC compile déjà une grande quantité de code D, mais doit encore être considéré
 en qualité bêta. Regarder les tickets pour ressentir ce qui doit encore être
 implémenter.
-
-%package        config
-Summary:        Config file for ldc
-Group:          Development/Tools
-License:        Boost
-Requires:       %{name} =  %{epoch}:%{version}-%{release}
-BuildArch:      noarch
-
-%description config
-Provide configuration file to customize ldc. As:
-- default search path for lib and include files
-- default ldc flag …
-
-
-%description config -l fr
-Fournit les fichiers de configuration pour personaliser ldc. Comme:
-- Le chemin par défaut pour rechercher lib et les fichier d'inclusion
-- les paramètres par défaut utilisé par ldc …
 
 %package        druntime
 Summary:        Runtime library for D
@@ -224,14 +208,12 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files
 %doc LICENSE README.md
+%config(noreplace) %{_sysconfdir}/ldc2.conf
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_libdir}/libldc-profile-rt.a
-
-%files config
-%config(noreplace)  %{_sysconfdir}/ldc2.conf
 %config             %{_rpmconfigdir}/macros.d/macros.ldc
 %config             %{_datadir}/bash-completion/completions/ldc2
 
@@ -269,6 +251,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Fri Jan 27 2017 Kalev Lember <klember@redhat.com> - 1:1.1.0-1
 - Update to 1.1.0
 - Enable bootstrap
+- Merge -config subpackage into the main ldc package
 
 * Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
 - Update to 1.1.0 beta6
