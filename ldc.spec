@@ -3,18 +3,18 @@
 %global dmdfe_bump  71
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta6
+#global pre beta6
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.2
 
 %undefine _hardened_build
 
 Name:           ldc
 Version:        1.1.0
-Release:        0.7.%{pre}%{?dist}
+Release:        1%{?pre:.%{pre}}%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -217,9 +217,6 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 # geany tags
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
-# https://github.com/ldc-developers/ldc/issues/1897
-rm -f %{buildroot}%{_prefix}/lib/LLVMgold.so
-
 %post   druntime    -p  /sbin/ldconfig
 %postun druntime    -p  /sbin/ldconfig
 %post   phobos      -p  /sbin/ldconfig
@@ -269,6 +266,10 @@ rm -f %{buildroot}%{_prefix}/lib/LLVMgold.so
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Jan 27 2017 Kalev Lember <klember@redhat.com> - 1:1.1.0-1
+- Update to 1.1.0
+- Enable bootstrap
+
 * Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
 - Update to 1.1.0 beta6
 
