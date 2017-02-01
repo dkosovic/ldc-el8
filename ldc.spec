@@ -44,7 +44,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
-Requires:       ldc-druntime-devel ldc-phobos-devel libedit bash-completion
+Requires:       ldc-druntime-devel ldc-phobos-devel libedit
 
 Obsoletes:      ldc-config < 1:1.1.0
 
@@ -215,6 +215,8 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-prune-cache
 %{_libdir}/libldc-profile-rt.a
 %{_rpmconfigdir}/macros.d/macros.ldc
+%dir %{_datadir}/bash-completion
+%dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
 
 %files druntime
@@ -253,6 +255,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Enable bootstrap
 - Merge -config subpackage into the main ldc package
 - Don't mark the rpm macros file and bash completion file as config
+- Avoid depending on bash-completion
 
 * Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
 - Update to 1.1.0 beta6
