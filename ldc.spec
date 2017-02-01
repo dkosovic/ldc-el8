@@ -214,8 +214,8 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_libdir}/libldc-profile-rt.a
-%config             %{_rpmconfigdir}/macros.d/macros.ldc
-%config             %{_datadir}/bash-completion/completions/ldc2
+%{_rpmconfigdir}/macros.d/macros.ldc
+%{_datadir}/bash-completion/completions/ldc2
 
 %files druntime
 %doc runtime/druntime/LICENSE runtime/druntime/README.md runtime/README
@@ -252,6 +252,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Update to 1.1.0
 - Enable bootstrap
 - Merge -config subpackage into the main ldc package
+- Don't mark the rpm macros file and bash completion file as config
 
 * Tue Dec 13 2016 Kalev Lember <klember@redhat.com> - 1:1.1.0-0.7.beta6
 - Update to 1.1.0 beta6
