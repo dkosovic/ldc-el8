@@ -8,7 +8,7 @@
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 0
-%global bootstrap_version 0.17.2
+%global bootstrap_version 0.17.3
 
 %undefine _hardened_build
 
