@@ -14,7 +14,7 @@
 
 Name:           ldc
 Version:        1.1.0
-Release:        2%{?pre:.%{pre}}%{?dist}
+Release:        3%{?pre:.%{pre}}%{?dist}
 Epoch:          1
 Summary:        A compiler for the D programming language
 
@@ -252,6 +252,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Wed Feb 01 2017 Kalev Lember <klember@redhat.com> - 1:1.1.0-2
 - Disable bootstrap
 
