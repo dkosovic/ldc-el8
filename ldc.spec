@@ -13,9 +13,9 @@
 %undefine _hardened_build
 
 Name:           ldc
-Version:        1.1.0
-Release:        3%{?pre:.%{pre}}%{?dist}
 Epoch:          1
+Version:        1.1.1
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -252,6 +252,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Mar 03 2017 Kalev Lember <klember@redhat.com> - 1:1.1.1-1
+- Update to 1.1.1
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.1.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
