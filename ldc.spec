@@ -28,6 +28,8 @@ Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{boots
 %endif
 Source3:        macros.%{name}
 
+ExclusiveArch:  %{ldc_arches}
+
 %if ! 0%{?bootstrap}
 BuildRequires:  ldc
 %endif
