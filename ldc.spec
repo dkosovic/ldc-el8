@@ -8,7 +8,7 @@
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 1
-%global bootstrap_version 0.17.3
+%global bootstrap_version 0.17.4
 
 %undefine _hardened_build
 
@@ -253,6 +253,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.1.beta2
 - Update to 1.3.0 beta2
 - Enable bootstrap
+- Update bootstrap compiler to ldc 0.17.4
 
 * Thu May 25 2017 Peter Robinson <pbrobinson@fedoraproject.org> 1:1.1.1-4
 - Rebuild llvm-4
