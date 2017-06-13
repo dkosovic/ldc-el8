@@ -1,21 +1,21 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  71
+%global dmdfe_bump  73
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-#global pre beta6
+%global pre beta2
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.3
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
-Version:        1.1.1
-Release:        4%{?pre:.%{pre}}%{?dist}
+Version:        1.3.0
+Release:        0.1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 Group:          Development/Languages
@@ -28,8 +28,6 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
-
-ExclusiveArch:  %{ldc_arches}
 
 %if ! 0%{?bootstrap}
 BuildRequires:  ldc
@@ -252,6 +250,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.1.beta2
+- Update to 1.3.0 beta2
+- Enable bootstrap
+
 * Thu May 25 2017 Peter Robinson <pbrobinson@fedoraproject.org> 1:1.1.1-4
 - Rebuild llvm-4
 
