@@ -7,7 +7,7 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 1
+%global bootstrap 0
 %global bootstrap_version 0.17.4
 
 %undefine _hardened_build
@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        0.1%{?pre:.%{pre}}%{?dist}
+Release:        0.2%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -246,6 +246,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.2.beta2
+- Disable bootstrap
+
 * Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.1.beta2
 - Update to 1.3.0 beta2
 - Enable bootstrap
