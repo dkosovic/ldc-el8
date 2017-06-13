@@ -18,7 +18,6 @@ Version:        1.3.0
 Release:        0.1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
-Group:          Development/Languages
 # The DMD frontend in dmd/* GPL version 1 or artistic license
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
@@ -74,7 +73,6 @@ implémenter.
 
 %package        druntime
 Summary:        Runtime library for D
-Group:          Development/Tools
 License:        Boost
 Requires:       %{name}%{?_isa} =  %{epoch}:%{version}-%{release}
 
@@ -93,7 +91,6 @@ démarage/extinction, etc
 
 %package        druntime-devel
 Summary:        Support for developing D application
-Group:          Development/Tools
 Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
 
@@ -108,7 +105,6 @@ des applications en D utilisant druntime.
 
 %package        phobos
 Summary:        Standard Runtime Library
-Group:          Development/Tools
 License:        Boost
 Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
@@ -129,7 +125,6 @@ situations, et les programmeurs ont travail qui doit être effectué.
 
 %package        phobos-devel
 Summary:        Support for developing D application
-Group:          Development/Tools
 Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime-devel
@@ -144,7 +139,6 @@ des applications en D utilisant phobos.
 
 %package phobos-geany-tags
 Summary:        Support for enable autocompletion in geany
-Group:          Development/Tools
 Requires:       %{name} =  %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  geany
