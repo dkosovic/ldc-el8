@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        0.2%{?pre:.%{pre}}%{?dist}
+Release:        0.3%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -246,6 +246,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.3.beta2
+- Reduce optimization level from -O3 to work around ldc crashes
+
 * Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.2.beta2
 - Disable bootstrap
 
