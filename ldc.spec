@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        0.3%{?pre:.%{pre}}%{?dist}
+Release:        0.4%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -76,7 +76,6 @@ implémenter.
 %package        druntime
 Summary:        Runtime library for D
 License:        Boost
-Requires:       %{name}%{?_isa} =  %{epoch}:%{version}-%{release}
 
 %description druntime
 Druntime is the minimum library required to support the D programming
@@ -93,7 +92,6 @@ démarage/extinction, etc
 
 %package        druntime-devel
 Summary:        Support for developing D application
-Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
 
 
@@ -108,7 +106,6 @@ des applications en D utilisant druntime.
 %package        phobos
 Summary:        Standard Runtime Library
 License:        Boost
-Requires:       %{name}%{?_isa}  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
 
 %description phobos
@@ -127,7 +124,6 @@ situations, et les programmeurs ont travail qui doit être effectué.
 
 %package        phobos-devel
 Summary:        Support for developing D application
-Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos  = %{epoch}:%{version}-%{release}
 Requires:       %{name}-druntime-devel
 
@@ -246,6 +242,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Wed Jun 14 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.4.beta2
+- Don't require base ldc package for ldc-druntime and ldc-phobos
+
 * Tue Jun 13 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.3.beta2
 - Reduce optimization level from -O3 to work around ldc crashes
 
