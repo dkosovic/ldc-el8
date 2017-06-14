@@ -124,8 +124,8 @@ situations, et les programmeurs ont travail qui doit être effectué.
 
 %package        phobos-devel
 Summary:        Support for developing D application
-Requires:       %{name}-phobos  = %{epoch}:%{version}-%{release}
-Requires:       %{name}-druntime-devel
+Requires:       %{name}-phobos = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime-devel = %{epoch}:%{version}-%{release}
 
 %description phobos-devel
 The phobos-devel package contains header files for developing D
@@ -137,7 +137,7 @@ des applications en D utilisant phobos.
 
 %package phobos-geany-tags
 Summary:        Support for enable autocompletion in geany
-Requires:       %{name} =  %{epoch}:%{version}-%{release}
+Requires:       %{name} = %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  geany
 Requires:       geany
