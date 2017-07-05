@@ -3,7 +3,7 @@
 %global dmdfe_bump  73
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta2
+#global pre beta2
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        0.4%{?pre:.%{pre}}%{?dist}
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -242,6 +242,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Jul 07 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-1
+- Update to 1.3.0
+
 * Wed Jun 14 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-0.4.beta2
 - Don't require base ldc package for ldc-druntime and ldc-phobos
 
