@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        2%{?pre:.%{pre}}%{?dist}
+Release:        3%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -242,6 +242,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.3.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.3.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
