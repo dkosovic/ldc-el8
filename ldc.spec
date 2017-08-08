@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.3.0
-Release:        3%{?pre:.%{pre}}%{?dist}
+Release:        4%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -43,7 +43,8 @@ BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
-Requires:       ldc-druntime-devel ldc-phobos-devel
+Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 Obsoletes:      ldc-config < 1:1.1.0
 
@@ -92,7 +93,7 @@ démarage/extinction, etc
 
 %package        druntime-devel
 Summary:        Support for developing D application
-Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime%{?_isa} = %{epoch}:%{version}-%{release}
 
 
 %description druntime-devel
@@ -106,7 +107,7 @@ des applications en D utilisant druntime.
 %package        phobos
 Summary:        Standard Runtime Library
 License:        Boost
-Requires:       %{name}-druntime = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description phobos
 Each module in Phobos conforms as much as possible to the following design
@@ -124,8 +125,8 @@ situations, et les programmeurs ont travail qui doit être effectué.
 
 %package        phobos-devel
 Summary:        Support for developing D application
-Requires:       %{name}-phobos = %{epoch}:%{version}-%{release}
-Requires:       %{name}-druntime-devel = %{epoch}:%{version}-%{release}
+Requires:       %{name}-phobos%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description phobos-devel
 The phobos-devel package contains header files for developing D
@@ -242,6 +243,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Aug 08 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-4
+- Tighten subpackage deps
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.3.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
