@@ -1,21 +1,21 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  73
+%global dmdfe_bump  74
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta2
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.4
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
-Version:        1.3.0
-Release:        4%{?pre:.%{pre}}%{?dist}
+Version:        1.4.0
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -203,6 +203,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %config(noreplace) %{_sysconfdir}/ldc2.conf
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
+%{_bindir}/ldc-build-runtime
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_libdir}/libldc-profile-rt.a
@@ -243,6 +244,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Sep 12 2017 Kalev Lember <klember@redhat.com> - 1:1.4.0-1
+- Update to 1.4.0
+- Enable bootstrap
+
 * Tue Aug 08 2017 Kalev Lember <klember@redhat.com> - 1:1.3.0-4
 - Tighten subpackage deps
 
