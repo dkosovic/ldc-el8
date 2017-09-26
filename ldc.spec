@@ -15,7 +15,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.4.0
-Release:        2%{?pre:.%{pre}}%{?dist}
+Release:        3%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -27,6 +27,8 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
+
+Patch0:		0001-Adapt-embedded-llvm-ar-to-LLVM-5.0-final-2349.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -151,6 +153,7 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
+%patch0 -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -244,6 +247,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Sep 26 2017 Tom Stellard <tstellard@redhat.com> - 1:1.4.0-3
+- Fix build with LLVM 5.0
+
 * Wed Sep 13 2017 Kalev Lember <klember@redhat.com> - 1:1.4.0-2
 - Disable bootstrap
 
