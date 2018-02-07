@@ -8,7 +8,7 @@
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 1
-%global bootstrap_version 0.17.5
+%global bootstrap_version 0.17.4
 
 %undefine _hardened_build
 
@@ -247,7 +247,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Mon Oct 30 2017 Kalev Lember <klember@redhat.com> - 1:1.5.0-1
 - Update to 1.5.0
 - Enable bootstrap
-- Update bootstrap compiler to ldc 0.17.5
 
 * Tue Sep 26 2017 Tom Stellard <tstellard@redhat.com> - 1:1.4.0-3
 - Fix build with LLVM 5.0
