@@ -1,21 +1,21 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  75
+%global dmdfe_bump  74
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta2
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 1
+%global bootstrap 0
 %global bootstrap_version 0.17.4
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
-Version:        1.5.0
-Release:        1%{?pre:.%{pre}}%{?dist}
+Version:        1.4.0
+Release:        3%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -27,6 +27,8 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
+
+Patch0:		0001-Adapt-embedded-llvm-ar-to-LLVM-5.0-final-2349.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -151,6 +153,7 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
+%patch0 -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -244,10 +247,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
-* Mon Oct 30 2017 Kalev Lember <klember@redhat.com> - 1:1.5.0-1
-- Update to 1.5.0
-- Enable bootstrap
-
 * Tue Sep 26 2017 Tom Stellard <tstellard@redhat.com> - 1:1.4.0-3
 - Fix build with LLVM 5.0
 
