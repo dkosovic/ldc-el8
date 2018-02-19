@@ -171,6 +171,8 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 mkdir geany_config
 
 %build
+%global optflags %{optflags} -fno-strict-aliasing
+
 %if 0%{?bootstrap}
 tar xf %{SOURCE1}
 mkdir build-bootstrap
@@ -275,6 +277,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Package new JIT libraries in ldc-jit subpackage
 - Enable bootstrap
 - Build against llvm 4.0
+- Disable strict aliasing
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
