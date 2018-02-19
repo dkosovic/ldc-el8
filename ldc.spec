@@ -46,7 +46,6 @@ BuildRequires:  llvm%{llvm_version}-devel
 BuildRequires:  llvm%{llvm_version}-static
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 Obsoletes:      ldc-config < 1:1.1.0
@@ -104,21 +103,6 @@ applications that use druntime.
 %description druntime-devel -l fr
 Le paquet druntime-devel contient les fichiers d'entêtes pour développer
 des applications en D utilisant druntime.
-
-%package        jit
-Summary:        LDC JIT library
-License:        Boost
-
-%description jit
-JIT library for the LDC compiler.
-
-%package        jit-devel
-Summary:        Development files for LDC JIT library
-Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description jit-devel
-The %{name}-jit-devel package contains development files for the LDC JIT
-library.
 
 %package        phobos
 Summary:        Standard Runtime Library
@@ -213,7 +197,6 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %ldconfig_scriptlets druntime
-%ldconfig_scriptlets jit
 %ldconfig_scriptlets phobos
 
 %files
@@ -229,15 +212,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
-
-%files jit
-%license runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libldc-jit.so.%dmdfe
-%{_libdir}/libldc-jit.so.%dmdfe_bump
-
-%files jit-devel
-%{_libdir}/libldc-jit-rt.a
-%{_libdir}/libldc-jit.so
 
 %files druntime
 %license runtime/druntime/LICENSE
@@ -273,7 +247,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Mon Feb 19 2018 Kalev Lember <klember@redhat.com> - 1:1.8.0-0.1.beta1
 - Update to 1.8.0 beta1
-- Package new JIT libraries in ldc-jit subpackage
 - Enable bootstrap
 - Build against llvm 4.0
 - Disable strict aliasing
