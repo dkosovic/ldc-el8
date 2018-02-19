@@ -212,10 +212,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 # geany tags
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
-%post   druntime    -p  /sbin/ldconfig
-%postun druntime    -p  /sbin/ldconfig
-%post   phobos      -p  /sbin/ldconfig
-%postun phobos      -p  /sbin/ldconfig
+%ldconfig_scriptlets druntime
+%ldconfig_scriptlets jit
+%ldconfig_scriptlets phobos
 
 %files
 %license LICENSE
@@ -278,6 +277,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Enable bootstrap
 - Build against llvm 4.0
 - Disable strict aliasing
+- Use ldconfig_scriptlets macro
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
