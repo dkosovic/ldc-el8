@@ -1,9 +1,9 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  74
+%global dmdfe_bump  78
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-#global pre beta2
+%global pre beta1
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -14,8 +14,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.4.0
-Release:        4%{?pre:.%{pre}}%{?dist}
+Version:        1.8.0
+Release:        0.1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -27,8 +27,6 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
-
-Patch0:		0001-Adapt-embedded-llvm-ar-to-LLVM-5.0-final-2349.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -46,6 +44,7 @@ BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 Obsoletes:      ldc-config < 1:1.1.0
@@ -92,11 +91,9 @@ D. Est inclut le code système requis pour supporter le ramasse miette, tableau
 associatif, gestion des exceptions, opertation sur des vecteurs,
 démarage/extinction, etc
 
-
 %package        druntime-devel
 Summary:        Support for developing D application
 Requires:       %{name}-druntime%{?_isa} = %{epoch}:%{version}-%{release}
-
 
 %description druntime-devel
 The druntime-devel package contains header files for developing D
@@ -105,6 +102,21 @@ applications that use druntime.
 %description druntime-devel -l fr
 Le paquet druntime-devel contient les fichiers d'entêtes pour développer
 des applications en D utilisant druntime.
+
+%package        jit
+Summary:        LDC JIT library
+License:        Boost
+
+%description jit
+JIT library for the LDC compiler.
+
+%package        jit-devel
+Summary:        Development files for LDC JIT library
+Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
+
+%description jit-devel
+The %{name}-jit-devel package contains development files for the LDC JIT
+library.
 
 %package        phobos
 Summary:        Standard Runtime Library
@@ -153,7 +165,6 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
-%patch0 -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -209,44 +220,56 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-build-runtime
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
-%{_libdir}/libldc-profile-rt.a
 %{_rpmconfigdir}/macros.d/macros.ldc
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
 
+%files jit
+%license runtime/phobos/LICENSE_1_0.txt
+%{_libdir}/libldc-jit.so.%dmdfe
+%{_libdir}/libldc-jit.so.%dmdfe_bump
+
+%files jit-devel
+%{_libdir}/libldc-jit-rt.a
+%{_libdir}/libldc-jit.so
+
 %files druntime
 %license runtime/druntime/LICENSE
 %doc runtime/druntime/README.md runtime/README
-%{_libdir}/libdruntime-ldc.so.%dmdfe
-%{_libdir}/libdruntime-ldc.so.%dmdfe_bump
-%{_libdir}/libdruntime-ldc-debug.so.%dmdfe
-%{_libdir}/libdruntime-ldc-debug.so.%dmdfe_bump
+%{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe
+%{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe_bump
+%{_libdir}/libdruntime-ldc-shared.so.%dmdfe
+%{_libdir}/libdruntime-ldc-shared.so.%dmdfe_bump
 
 %files druntime-devel
 %{_includedir}/d/ldc
 %{_includedir}/d/core
-%{_libdir}/libdruntime-ldc.so
-%{_libdir}/libdruntime-ldc-debug.so
+%{_libdir}/libdruntime-ldc-debug-shared.so
+%{_libdir}/libdruntime-ldc-shared.so
 
 %files phobos
 %license runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libphobos2-ldc.so.%dmdfe
-%{_libdir}/libphobos2-ldc.so.%dmdfe_bump
-%{_libdir}/libphobos2-ldc-debug.so.%dmdfe
-%{_libdir}/libphobos2-ldc-debug.so.%dmdfe_bump
+%{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe
+%{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe_bump
+%{_libdir}/libphobos2-ldc-shared.so.%dmdfe
+%{_libdir}/libphobos2-ldc-shared.so.%dmdfe_bump
 
 %files phobos-devel
 %dir %{_includedir}/d
 %{_includedir}/d/std
 %{_includedir}/d/etc
-%{_libdir}/libphobos2-ldc.so
-%{_libdir}/libphobos2-ldc-debug.so
+%{_libdir}/libphobos2-ldc-debug-shared.so
+%{_libdir}/libphobos2-ldc-shared.so
 
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Feb 19 2018 Kalev Lember <klember@redhat.com> - 1:1.8.0-0.1.beta1
+- Update to 1.8.0 beta1
+- Package new JIT libraries in ldc-jit subpackage
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
