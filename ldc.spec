@@ -5,6 +5,8 @@
 
 %global pre beta1
 
+%global llvm_version 4.0
+
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 1
@@ -33,15 +35,15 @@ ExclusiveArch:  %{ldc_arches}
 %if ! 0%{?bootstrap}
 BuildRequires:  ldc
 %endif
-BuildRequires:  llvm-devel >= 3.0
 BuildRequires:  libconfig-devel
 BuildRequires:  cmake
 BuildRequires:  gc, gcc-c++, gcc
-BuildRequires:  llvm-static
 BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
+BuildRequires:  llvm%{llvm_version}-devel
+BuildRequires:  llvm%{llvm_version}-static
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
@@ -173,7 +175,8 @@ mkdir geany_config
 tar xf %{SOURCE1}
 mkdir build-bootstrap
 pushd build-bootstrap
-cmake ../%{name}-%{bootstrap_version}-src
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+      ../%{name}-%{bootstrap_version}-src
 make %{?_smp_mflags}
 popd
 %endif
@@ -184,6 +187,7 @@ pushd build
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
+              -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
@@ -270,6 +274,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Update to 1.8.0 beta1
 - Package new JIT libraries in ldc-jit subpackage
 - Enable bootstrap
+- Build against llvm 4.0
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
