@@ -5,7 +5,7 @@
 
 #global pre beta1
 
-%global llvm_version 4.0
+%global llvm_version %{nil}
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.8.0
-Release:        1%{?pre:.%{pre}}%{?dist}
+Release:        2%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -46,6 +46,7 @@ BuildRequires:  llvm%{llvm_version}-devel
 BuildRequires:  llvm%{llvm_version}-static
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 Obsoletes:      ldc-config < 1:1.1.0
@@ -104,6 +105,21 @@ applications that use druntime.
 Le paquet druntime-devel contient les fichiers d'entêtes pour développer
 des applications en D utilisant druntime.
 
+%package        jit
+Summary:        LDC JIT library
+License:        Boost
+
+%description jit
+JIT library for the LDC compiler.
+
+%package        jit-devel
+Summary:        Development files for LDC JIT library
+Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
+
+%description jit-devel
+The %{name}-jit-devel package contains development files for the LDC JIT
+library.
+
 %package        phobos
 Summary:        Standard Runtime Library
 License:        Boost
@@ -161,7 +177,7 @@ mkdir geany_config
 tar xf %{SOURCE1}
 mkdir build-bootstrap
 pushd build-bootstrap
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
       ../%{name}-%{bootstrap_version}-src
 make %{?_smp_mflags}
 popd
@@ -173,7 +189,7 @@ pushd build
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
-              -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+              -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
@@ -197,6 +213,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %ldconfig_scriptlets druntime
+%ldconfig_scriptlets jit
 %ldconfig_scriptlets phobos
 
 %files
@@ -212,6 +229,15 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
+
+%files jit
+%license runtime/phobos/LICENSE_1_0.txt
+%{_libdir}/libldc-jit.so.%dmdfe
+%{_libdir}/libldc-jit.so.%dmdfe_bump
+
+%files jit-devel
+%{_libdir}/libldc-jit-rt.a
+%{_libdir}/libldc-jit.so
 
 %files druntime
 %license runtime/druntime/LICENSE
@@ -245,6 +271,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Mar 19 2018 Tom Stellard <tstellar@redhat.com> - 1:1.8.0-2
+- Rebuild for LLVM 6.0.0 and re-enable JIT libraries.
+
 * Sun Mar 04 2018 Kalev Lember <klember@redhat.com> - 1:1.8.0-1
 - Update to 1.8.0
 
