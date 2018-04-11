@@ -46,7 +46,7 @@ BuildRequires:  llvm%{llvm_version}-devel
 BuildRequires:  llvm%{llvm_version}-static
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
+Requires:       %{name}-jit-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 
 Obsoletes:      ldc-config < 1:1.1.0
