@@ -30,6 +30,9 @@ Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{boots
 %endif
 Source3:        macros.%{name}
 
+# https://github.com/ldc-developers/ldc/pull/2608
+Patch0:         0001-LLVM-6-Default-to-Dwarf-debuginfos-v3.patch
+
 ExclusiveArch:  %{ldc_arches}
 
 %if ! 0%{?bootstrap}
@@ -166,7 +169,7 @@ Enable autocompletion for phobos library in geany (IDE)
 Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 
 %prep
-%setup -q -n %{name}-%{version}%{?pre:-%{pre}}-src
+%autosetup -n %{name}-%{version}%{?pre:-%{pre}}-src -p1
 # temp geany config directory for allow geany to generate tags
 mkdir geany_config
 
@@ -190,6 +193,7 @@ pushd build
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
               -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
+              -DLDC_WITH_LLD:BOOL=OFF                               \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
