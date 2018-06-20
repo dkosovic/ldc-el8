@@ -1,6 +1,6 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  78
+%global dmdfe_bump  80
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta1
@@ -9,15 +9,15 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.4
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
-Version:        1.8.0
-Release:        2%{?pre:.%{pre}}%{?dist}
+Version:        1.10.0
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -29,9 +29,6 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
-
-# https://github.com/ldc-developers/ldc/pull/2608
-Patch0:         0001-LLVM-6-Default-to-Dwarf-debuginfos-v3.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -193,7 +190,6 @@ pushd build
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
               -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
-              -DLDC_WITH_LLD:BOOL=OFF                               \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
@@ -244,7 +240,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libldc-jit.so
 
 %files druntime
-%license runtime/druntime/LICENSE
+%license runtime/druntime/LICENSE.txt
 %doc runtime/druntime/README.md runtime/README
 %{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe
 %{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe_bump
@@ -275,6 +271,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Wed Jun 20 2018 Kalev Lember <klember@redhat.com> - 1:1.10.0-1
+- Update to 1.10.0
+- Enable bootstrap
+
 * Mon Mar 19 2018 Tom Stellard <tstellar@redhat.com> - 1:1.8.0-2
 - Rebuild for LLVM 6.0.0 and re-enable JIT libraries.
 
