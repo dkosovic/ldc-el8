@@ -10,7 +10,7 @@
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
 %global bootstrap 1
-%global bootstrap_version 0.17.4
+%global bootstrap_version 0.17.6
 
 %undefine _hardened_build
 
@@ -26,7 +26,11 @@ License:        BSD
 URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}%{?pre:-%{pre}}/%{name}-%{version}%{?pre:-%{pre}}-src.tar.gz
 %if 0%{?bootstrap}
-Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
+#Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
+# Git snapshot, generated with:
+# git clone git@github.com:ldc-developers/ldc.git project; pushd project; git checkout ltsmaster; git reset --hard a1a8a84; git submodule update --init; popd
+# tar -czf ldc-0.17.6-gita1a8a84-src.tar.gz --exclude-vcs --transform=s/project/ldc-0.17.6-src/ project
+Source1:        ldc-0.17.6-gita1a8a84-src.tar.gz
 %endif
 Source3:        macros.%{name}
 
@@ -274,6 +278,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Wed Jun 20 2018 Kalev Lember <klember@redhat.com> - 1:1.10.0-1
 - Update to 1.10.0
 - Enable bootstrap
+- Update bootstrap compiler to ldc 0.17.6 git snapshot
 
 * Mon Mar 19 2018 Tom Stellard <tstellar@redhat.com> - 1:1.8.0-2
 - Rebuild for LLVM 6.0.0 and re-enable JIT libraries.
