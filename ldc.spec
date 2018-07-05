@@ -34,6 +34,10 @@ Source1:        ldc-0.17.6-gita1a8a84-src.tar.gz
 %endif
 Source3:        macros.%{name}
 
+# Backported from upstream
+Patch0:         0001-Fix-compilability-on-non-x86-archs-with-64-bit-reals.patch
+Patch1:         0002-Fix-missing-newline-upstream-regression-in-v-predefs.patch
+
 ExclusiveArch:  %{ldc_arches}
 
 %if ! 0%{?bootstrap}

@@ -1,0 +1,26 @@
+From 9f5c3897e6657b8cb8bfc04b1bd55f1ec5d7446e Mon Sep 17 00:00:00 2001
+From: Martin Kinkelin <noone@nowhere.com>
+Date: Thu, 5 Jul 2018 22:04:18 +0200
+Subject: [PATCH 2/2] Fix missing newline (upstream) regression in -v predefs
+ output
+
+---
+ dmd/mars.d | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dmd/mars.d b/dmd/mars.d
+index 031782b..8056c04 100644
+--- a/dmd/mars.d
++++ b/dmd/mars.d
+@@ -1627,7 +1627,7 @@ private void printPredefinedVersions(FILE* stream)
+             buf.writeByte(' ');
+             buf.writestring(str.toChars());
+         }
+-        stream.fprintf("predefs  %s", buf.peekString());
++        stream.fprintf("predefs  %s\n", buf.peekString());
+     }
+ }
+ 
+-- 
+2.17.1
+
