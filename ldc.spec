@@ -1,9 +1,9 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  80
+%global dmdfe_bump  81
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-#global pre beta1
+%global pre beta1
 
 %global llvm_version %{nil}
 
@@ -16,8 +16,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.10.0
-Release:        1%{?pre:.%{pre}}%{?dist}
+Version:        1.11.0
+Release:        0.1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -275,6 +275,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Thu Jul 05 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.1.beta1
+- Update to 1.11.0 beta1
+
 * Wed Jun 20 2018 Kalev Lember <klember@redhat.com> - 1:1.10.0-1
 - Update to 1.10.0
 - Enable bootstrap
