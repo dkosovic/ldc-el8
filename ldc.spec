@@ -3,7 +3,7 @@
 %global dmdfe_bump  81
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta1
+%global pre beta2
 
 %global llvm_version %{nil}
 
@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.11.0
-Release:        0.2%{?pre:.%{pre}}%{?dist}
+Release:        0.3%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -33,10 +33,6 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source1:        ldc-0.17.6-gita1a8a84-src.tar.gz
 %endif
 Source3:        macros.%{name}
-
-# Backported from upstream
-Patch0:         0001-Fix-compilability-on-non-x86-archs-with-64-bit-reals.patch
-Patch1:         0002-Fix-missing-newline-upstream-regression-in-v-predefs.patch
 
 ExclusiveArch:  %{ldc_arches}
 
@@ -279,6 +275,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.3.beta2
+- Update to 1.11.0 beta2
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.11.0-0.2.beta1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
