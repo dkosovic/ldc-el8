@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.11.0
-Release:        0.3%{?pre:.%{pre}}%{?dist}
+Release:        0.4%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -52,6 +52,8 @@ BuildRequires:  llvm%{llvm_version}-static
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-jit-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
+# Require gcc for linking
+Requires:       gcc
 
 Obsoletes:      ldc-config < 1:1.1.0
 
@@ -275,6 +277,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.4.beta2
+- Require gcc for linking
+
 * Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.3.beta2
 - Update to 1.11.0 beta2
 - Disable bootstrap
