@@ -3,7 +3,7 @@
 %global dmdfe_bump  81
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta2
+#global pre beta2
 
 %global llvm_version %{nil}
 
@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.11.0
-Release:        0.4%{?pre:.%{pre}}%{?dist}
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        A compiler for the D programming language
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -277,6 +277,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sun Aug 19 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-1
+- Update to 1.11.0
+
 * Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.4.beta2
 - Require gcc for linking
 
