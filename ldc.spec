@@ -5,7 +5,7 @@
 
 #global pre beta2
 
-%global llvm_version %{nil}
+%global llvm_version 6.0
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -183,7 +183,7 @@ mkdir geany_config
 tar xf %{SOURCE1}
 mkdir build-bootstrap
 pushd build-bootstrap
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
       ../%{name}-%{bootstrap_version}-src
 make %{?_smp_mflags}
 popd
@@ -195,7 +195,7 @@ pushd build
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
-              -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{__isa_bits} \
+              -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
@@ -280,6 +280,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Sun Aug 19 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-1
 - Update to 1.11.0
 - Update bootstrap compiler to latest git snapshot
+- Build with llvm 6.0
 
 * Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.4.beta2
 - Require gcc for linking
