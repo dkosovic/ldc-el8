@@ -9,7 +9,7 @@
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
-%global bootstrap 0
+%global bootstrap 1
 %global bootstrap_version 0.17.6
 
 %undefine _hardened_build
@@ -34,7 +34,7 @@ Source1:        ldc-0.17.6-git79d2284-src.tar.gz
 %endif
 Source3:        macros.%{name}
 
-ExclusiveArch:  %{ldc_arches}
+ExclusiveArch:  %{ldc_arches} aarch64
 
 %if ! 0%{?bootstrap}
 BuildRequires:  ldc
@@ -281,6 +281,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 - Update to 1.11.0
 - Update bootstrap compiler to latest git snapshot
 - Build with llvm 6.0
+- Bootstrap on aarch64
 
 * Mon Jul 16 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-0.4.beta2
 - Require gcc for linking
