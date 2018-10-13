@@ -26,11 +26,7 @@ License:        BSD
 URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}%{?pre:-%{pre}}/%{name}-%{version}%{?pre:-%{pre}}-src.tar.gz
 %if 0%{?bootstrap}
-#Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
-# Git snapshot, generated with:
-# git clone git@github.com:ldc-developers/ldc.git project; pushd project; git checkout ltsmaster; git reset --hard 79d2284; git submodule update --init; popd
-# tar -czf ldc-0.17.6-git79d2284-src.tar.gz --exclude-vcs --transform=s/project/ldc-0.17.6-src/ project
-Source1:        ldc-0.17.6-git79d2284-src.tar.gz
+Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
 
@@ -280,6 +276,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Sat Oct 13 2018 Kalev Lember <klember@redhat.com> - 1:1.12.0-1
 - Update to 1.12.0
 - Enable bootstrap
+- Update bootstrap compiler to ldc 0.17.6
 
 * Mon Aug 20 2018 Kalev Lember <klember@redhat.com> - 1:1.11.0-2
 - Disable bootstrap
