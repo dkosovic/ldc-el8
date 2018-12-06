@@ -18,7 +18,7 @@ Name:           ldc
 Epoch:          1
 Version:        1.12.0
 Release:        2%{?pre:.%{pre}}%{?dist}
-Summary:        A compiler for the D programming language
+Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
@@ -54,30 +54,11 @@ Requires:       gcc
 Obsoletes:      ldc-config < 1:1.1.0
 
 %description
-LDC is a compiler for the D programming Language. It is based on the latest DMD
-frontend and uses LLVM as backend. LLVM provides a fast and modern backend for
-high quality code generation. LDC is released under a BSD license with
-exceptions for the DMD frontend and code from GDC.
-The development takes place mostly on x86-32 and x86-64 Linux and that is where
-LDC works best. Support for other platforms and architectures is under
-development, but we are still looking for people to help test and adjust LDC
-for those platforms!
-LDC already compiles a lot of D code, but should still be considered beta
-quality. Take a look at the tickets to get a better impression on what still
-needs to be implemented.
+LDC is a portable compiler for the D programming language with modern
+optimization and code generation capabilities.
 
-%description -l fr_FR
-LDC est un compiler pour le langage de programmation D. Il est basé sur la
-dernière, interface de DMD et utilise LLVM comme moteur. LLVM est un moteur
-rapide pour la génération de code de haute qualité. LDC est publié sous licence
-BSD avec des exception pour l'interfaces DMD et le code provenant de GDC.
-Le développement se concentre surtout pour les architectures x86 et x86_64
-sur Linux et c'est pour cela que LDC travaille bien. le support pour les autres
-architectures et plateformes sont en développement, mais nous recherchons
-des personnes pour aider au test et amélioré LDC pour ces plateformes.
-LDC compile déjà une grande quantité de code D, mais doit encore être considéré
-en qualité bêta. Regarder les tickets pour ressentir ce qui doit encore être
-implémenter.
+It uses the official DMD compiler frontend to support the latest version
+of D, and relies on the LLVM Core libraries for code generation.
 
 %package        druntime
 Summary:        Runtime library for D
