@@ -172,6 +172,7 @@ pushd build
               -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
+              -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
               -DLLVM_CONFIG:PATH=llvm-config-%{llvm_version}-%{__isa_bits} \
 %if 0%{?bootstrap}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
