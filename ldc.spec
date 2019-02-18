@@ -1,6 +1,6 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  82
+%global dmdfe_bump  84
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta2
@@ -16,8 +16,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.12.0
-Release:        3%{?pre:.%{pre}}%{?dist}
+Version:        1.14.0
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -234,6 +234,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %files druntime-devel
 %{_includedir}/d/ldc
 %{_includedir}/d/core
+%{_includedir}/d/object.d
 %{_libdir}/libdruntime-ldc-debug-shared.so
 %{_libdir}/libdruntime-ldc-shared.so
 
@@ -255,6 +256,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-1
+- Update to 1.14.0
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.12.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
