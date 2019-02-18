@@ -12,14 +12,14 @@
 %global bootstrap 0
 %global bootstrap_version 0.17.6
 
-%global bootstrap_stage2 0
+%global bootstrap_stage2 1
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
 Version:        1.14.0
-Release:        1%{?pre:.%{pre}}%{?dist}
+Release:        2%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -271,6 +271,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-2
+- Enable bootstrap
+
 * Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-1
 - Update to 1.14.0
 - Add stage2 bootstrap for doing stage2 build with the same compiler
