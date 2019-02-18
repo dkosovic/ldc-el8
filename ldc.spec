@@ -12,6 +12,8 @@
 %global bootstrap 0
 %global bootstrap_version 0.17.6
 
+%global bootstrap_stage2 0
+
 %undefine _hardened_build
 
 Name:           ldc
@@ -166,6 +168,19 @@ make %{?_smp_mflags}
 popd
 %endif
 
+%if 0%{?bootstrap_stage2}
+tar xf %{SOURCE0}
+mkdir build-bootstrap2
+pushd build-bootstrap2
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+%if 0%{?bootstrap}
+      -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
+%endif
+      ../%{name}-%{version}-src
+make %{?_smp_mflags}
+popd
+%endif
+
 mkdir build
 pushd build
     %cmake    -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
@@ -174,8 +189,8 @@ pushd build
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
               -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
               -DLLVM_CONFIG:PATH=llvm-config-%{llvm_version}-%{__isa_bits} \
-%if 0%{?bootstrap}
-              -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
+%if 0%{?bootstrap_stage2}
+              -DD_COMPILER:PATH=`pwd`/../build-bootstrap2/bin/ldmd2  \
 %endif
               --enable-optimized ..
     make %{?_smp_mflags} VERBOSE=2
@@ -258,6 +273,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-1
 - Update to 1.14.0
+- Add stage2 bootstrap for doing stage2 build with the same compiler
 
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.12.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
