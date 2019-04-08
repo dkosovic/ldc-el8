@@ -5,7 +5,7 @@
 
 #global pre beta2
 
-%global llvm_version 6.0
+#global llvm_version 6.0
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -44,8 +44,8 @@ BuildRequires:  libcurl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
 BuildRequires:  bash-completion
-BuildRequires:  llvm%{llvm_version}-devel
-BuildRequires:  llvm%{llvm_version}-static
+BuildRequires:  llvm%{?llvm_version}-devel
+BuildRequires:  llvm%{?llvm_version}-static
 
 Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-jit-devel%{?_isa} = %{epoch}:%{version}-%{release}
@@ -162,7 +162,7 @@ mkdir geany_config
 tar xf %{SOURCE1}
 mkdir build-bootstrap
 pushd build-bootstrap
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
       ../%{name}-%{bootstrap_version}-src
 make %{?_smp_mflags}
 popd
@@ -172,7 +172,7 @@ popd
 tar xf %{SOURCE0}
 mkdir build-bootstrap2
 pushd build-bootstrap2
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{llvm_version}-%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap}
       -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
@@ -188,7 +188,7 @@ pushd build
               -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
               -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
               -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
-              -DLLVM_CONFIG:PATH=llvm-config-%{llvm_version}-%{__isa_bits} \
+              -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap_stage2}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap2/bin/ldmd2  \
 %endif
@@ -273,6 +273,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Mon Apr 08 2019 Kalev Lember <klember@redhat.com> - 1:1.15.0-1
 - Update to 1.15.0
+- Build with llvm 8.0
 
 * Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-3
 - Disable bootstrap
