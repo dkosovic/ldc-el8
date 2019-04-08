@@ -1,6 +1,6 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  84
+%global dmdfe_bump  85
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta2
@@ -18,8 +18,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.14.0
-Release:        3%{?pre:.%{pre}}%{?dist}
+Version:        1.15.0
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -271,6 +271,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Apr 08 2019 Kalev Lember <klember@redhat.com> - 1:1.15.0-1
+- Update to 1.15.0
+
 * Mon Feb 18 2019 Kalev Lember <klember@redhat.com> - 1:1.14.0-3
 - Disable bootstrap
 
