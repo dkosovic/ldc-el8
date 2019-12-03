@@ -5,7 +5,7 @@
 
 #global pre beta2
 
-#global llvm_version 6.0
+%global llvm_version 8.0
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
