@@ -176,7 +176,7 @@ cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-
 %if 0%{?bootstrap}
       -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
 %endif
-      ../%{name}-%{version}-src
+      ../%{name}-%{version}%{?pre:-%{pre}}-src
 make %{?_smp_mflags}
 popd
 %endif
