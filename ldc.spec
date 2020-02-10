@@ -1,11 +1,11 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  85
+%global dmdfe_bump  89
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta2
 
-%global llvm_version 8.0
+#global llvm_version 9.0
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -18,8 +18,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.15.0
-Release:        3%{?pre:.%{pre}}%{?dist}
+Version:        1.19.0
+Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -271,6 +271,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Mon Feb 10 2020 Kalev Lember <klember@redhat.com> - 1:1.19.0-1
+- Update to 1.19.0
+- Build with llvm 9.0
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.15.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
