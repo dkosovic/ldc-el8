@@ -1,9 +1,9 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  89
+%global dmdfe_bump  90
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-#global pre beta2
+%global pre beta1
 
 #global llvm_version 9.0
 
@@ -18,7 +18,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.19.0
+Version:        1.20.0
 Release:        1%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
