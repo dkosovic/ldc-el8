@@ -271,6 +271,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Feb 11 2020 Kalev Lember <klember@redhat.com> - 1:1.20.0-1.beta1
+- Update to 1.20.0 beta1
+
 * Mon Feb 10 2020 Kalev Lember <klember@redhat.com> - 1:1.19.0-1
 - Update to 1.19.0
 - Build with llvm 9.0
