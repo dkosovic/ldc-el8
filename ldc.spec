@@ -18,8 +18,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.20.0
-Release:        2%{?pre:.%{pre}}%{?dist}
+Version:        1.20.0%{?pre:~%{pre}}
+Release:        2%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
