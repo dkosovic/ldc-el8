@@ -3,9 +3,9 @@
 %global dmdfe_bump  90
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
-%global pre beta1
+#global pre beta1
 
-#global llvm_version 9.0
+#global llvm_version 10.0
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -19,7 +19,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.20.0
-Release:        1%{?pre:.%{pre}}%{?dist}
+Release:        2%{?pre:.%{pre}}%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -271,6 +271,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sat Feb 15 2020 Kalev Lember <klember@redhat.com> - 1:1.20.0-2
+- Update to 1.20.0 final release
+- Build with llvm 10.0
+
 * Tue Feb 11 2020 Kalev Lember <klember@redhat.com> - 1:1.20.0-1.beta1
 - Update to 1.20.0 beta1
 
