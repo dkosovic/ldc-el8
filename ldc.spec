@@ -18,8 +18,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.20.0%{?pre:~%{pre}}
-Release:        2%{?dist}
+Version:        1.20.1%{?pre:~%{pre}}
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -271,6 +271,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sat Mar 07 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-1
+- Update to 1.20.1
+
 * Sat Feb 15 2020 Kalev Lember <klember@redhat.com> - 1:1.20.0-2
 - Update to 1.20.0 final release
 - Build with llvm 10.0
