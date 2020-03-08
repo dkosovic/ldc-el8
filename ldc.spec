@@ -12,14 +12,14 @@
 %global bootstrap 0
 %global bootstrap_version 0.17.6
 
-%global bootstrap_stage2 1
+%global bootstrap_stage2 0
 
 %undefine _hardened_build
 
 Name:           ldc
 Epoch:          1
 Version:        1.20.1%{?pre:~%{pre}}
-Release:        1%{?dist}~bootstrap
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
