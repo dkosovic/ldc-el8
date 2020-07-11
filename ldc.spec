@@ -19,7 +19,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.20.1%{?pre:~%{pre}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -156,6 +156,11 @@ Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
 mkdir geany_config
 
 %build
+# This package appears to be failing because links to the LLVM plugins
+# are not installed which results in the tools not being able to
+# interpret the .o/.a files.  Disable LTO for now
+%define _lto_cflags %{nil}
+
 %global optflags %{optflags} -fno-strict-aliasing
 
 %if 0%{?bootstrap}
@@ -271,6 +276,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sat Mar 07 2020 Jeff Law <law@redhat.com> - 1:1.20.1-2
+- Disable LTO
+
 * Sat Mar 07 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-1
 - Update to 1.20.1
 
