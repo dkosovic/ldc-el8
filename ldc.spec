@@ -186,20 +186,19 @@ make %{?_smp_mflags}
 popd
 %endif
 
-mkdir build
-pushd build
-    %cmake    -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
-              -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
-              -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
-              -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
-              -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
-              -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
+%cmake -DMULTILIB:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=ON       \
+       -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
+       -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir}             \
+       -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}                \
+       -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
+       -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap_stage2}
-              -DD_COMPILER:PATH=`pwd`/../build-bootstrap2/bin/ldmd2  \
+       -DD_COMPILER:PATH=`pwd`/build-bootstrap2/bin/ldmd2 \
 %endif
-              ..
-    make %{?_smp_mflags} VERBOSE=2
-popd
+       %{nil}
+
+%cmake_build
+
 # generate geany tags
 geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 
@@ -207,9 +206,7 @@ geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 
-pushd build
-    %make_install
-popd
+%cmake_install
 
 # macros for D package
 install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
@@ -278,6 +275,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-5
 - Explicitly build against llvm10 compat package
+- Fix FTBFS with new cmake macros on F33 (#1863964)
 
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.20.1-4
 - Second attempt - Rebuilt for
