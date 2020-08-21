@@ -179,7 +179,7 @@ mkdir build-bootstrap2
 pushd build-bootstrap2
 cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap}
-      -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2  \
+      -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2 \
 %endif
       ../%{name}-%{version}%{?pre:-%{pre}}-src
 make %{?_smp_mflags}
@@ -203,14 +203,14 @@ popd
 geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 
 %install
-mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
-mkdir -p %{buildroot}/%{_datadir}/geany/tags/
-
 %cmake_install
 
 # macros for D package
+mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
 install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
+
 # geany tags
+mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %ldconfig_scriptlets druntime
