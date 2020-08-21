@@ -190,7 +190,6 @@ popd
 
 %cmake -DMULTILIB:BOOL=OFF \
        -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
-       -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
        -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap_stage2}
        -DD_COMPILER:PATH=`pwd`/build-bootstrap2/bin/ldmd2 \
