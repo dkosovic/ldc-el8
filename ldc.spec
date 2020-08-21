@@ -1,6 +1,6 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  90
+%global dmdfe_bump  93
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta1
@@ -22,8 +22,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.20.1%{?pre:~%{pre}}
-Release:        5%{?dist}
+Version:        1.23.0%{?pre:~%{pre}}
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -275,6 +275,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.23.0-1
+- Update to 1.23.0
+
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-5
 - Explicitly build against llvm10 compat package
 - Fix FTBFS with new cmake macros on F33 (#1863964)
