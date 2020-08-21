@@ -7,11 +7,15 @@
 
 %global llvm_version 10
 
-# Enable this for bootstrapping with an older version that doesn't require a
-# working D compiler to build itself
-%global bootstrap 0
-%global bootstrap_version 0.17.6
+# bootstrap_stage1 is for bringing up a D compiler for the very first time,
+# without having a working D compiler in the build root.
+%global bootstrap_stage1 0
+%global bootstrap_stage1_ldc_version 0.17.6
 
+# bootstrap_stage2 is for updating LDC to a newer version: it relies on an
+# older, working LDC compiler in the buildroot, which is then used to build a
+# new intermediate LDC version, and finally this in turn is used to build the
+# final compiler that gets installed in the rpm.
 %global bootstrap_stage2 0
 
 %undefine _hardened_build
@@ -27,14 +31,14 @@ Summary:        LLVM D Compiler
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
 Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}%{?pre:-%{pre}}/%{name}-%{version}%{?pre:-%{pre}}-src.tar.gz
-%if 0%{?bootstrap}
-Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_version}/%{name}-%{bootstrap_version}-src.tar.gz
+%if 0%{?bootstrap_stage1}
+Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{bootstrap_stage1_ldc_version}/%{name}-%{bootstrap_stage1_ldc_version}-src.tar.gz
 %endif
 Source3:        macros.%{name}
 
 ExclusiveArch:  %{ldc_arches}
 
-%if ! 0%{?bootstrap}
+%if ! 0%{?bootstrap_stage1}
 BuildRequires:  ldc
 %endif
 BuildRequires:  libconfig-devel
@@ -163,12 +167,12 @@ mkdir geany_config
 
 %global optflags %{optflags} -fno-strict-aliasing
 
-%if 0%{?bootstrap}
+%if 0%{?bootstrap_stage1}
 tar xf %{SOURCE1}
-mkdir build-bootstrap
-pushd build-bootstrap
+mkdir build-bootstrap1
+pushd build-bootstrap1
 cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
-      ../%{name}-%{bootstrap_version}-src
+      ../%{name}-%{bootstrap_stage1_ldc_version}-src
 make %{?_smp_mflags}
 popd
 %endif
@@ -178,8 +182,8 @@ tar xf %{SOURCE0}
 mkdir build-bootstrap2
 pushd build-bootstrap2
 cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
-%if 0%{?bootstrap}
-      -DD_COMPILER:PATH=`pwd`/../build-bootstrap/bin/ldmd2 \
+%if 0%{?bootstrap_stage1}
+      -DD_COMPILER:PATH=`pwd`/../build-bootstrap1/bin/ldmd2 \
 %endif
       ../%{name}-%{version}%{?pre:-%{pre}}-src
 make %{?_smp_mflags}
