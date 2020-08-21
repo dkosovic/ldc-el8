@@ -51,11 +51,13 @@ BuildRequires:  bash-completion
 BuildRequires:  llvm%{?llvm_version}-devel
 BuildRequires:  llvm%{?llvm_version}-static
 
-Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:       %{name}-jit-devel%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 # Require gcc for linking
 Requires:       gcc
+
+# Removed in F33
+Obsoletes:      ldc-druntime-devel < 1:1.23.0
+Obsoletes:      ldc-jit-devel < 1:1.23.0
+Obsoletes:      ldc-phobos-devel < 1:1.23.0
 
 %description
 LDC is a portable compiler for the D programming language with modern
@@ -80,32 +82,12 @@ D. Est inclut le code système requis pour supporter le ramasse miette, tableau
 associatif, gestion des exceptions, opertation sur des vecteurs,
 démarage/extinction, etc
 
-%package        druntime-devel
-Summary:        Support for developing D application
-Requires:       %{name}-druntime%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description druntime-devel
-The druntime-devel package contains header files for developing D
-applications that use druntime.
-
-%description druntime-devel -l fr
-Le paquet druntime-devel contient les fichiers d'entêtes pour développer
-des applications en D utilisant druntime.
-
 %package        jit
 Summary:        LDC JIT library
 License:        Boost
 
 %description jit
 JIT library for the LDC compiler.
-
-%package        jit-devel
-Summary:        Development files for LDC JIT library
-Requires:       %{name}-jit%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description jit-devel
-The %{name}-jit-devel package contains development files for the LDC JIT
-library.
 
 %package        phobos
 Summary:        Standard Runtime Library
@@ -125,19 +107,6 @@ suivante objectifs. Ce sont des objectifs plutôt que des exigences car D n'est
 pas une religion, c'est un language de programmation, et il reconnaît que,
 parfois, les objectifs sont contradictoires et contre-productif dans certaines
 situations, et les programmeurs ont travail qui doit être effectué.
-
-%package        phobos-devel
-Summary:        Support for developing D application
-Requires:       %{name}-phobos%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:       %{name}-druntime-devel%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description phobos-devel
-The phobos-devel package contains header files for developing D
-applications that use phobos.
-
-%description phobos-devel -l fr
-Le paquet phobos-devel contient les fichiers d'entêtes pour développer
-des applications en D utilisant phobos.
 
 %package phobos-geany-tags
 Summary:        Support for enable autocompletion in geany
@@ -226,6 +195,18 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_rpmconfigdir}/macros.d/macros.ldc
+%dir %{_includedir}/d
+%{_includedir}/d/core
+%{_includedir}/d/etc
+%{_includedir}/d/ldc
+%{_includedir}/d/object.d
+%{_includedir}/d/std
+%{_libdir}/libdruntime-ldc-debug-shared.so
+%{_libdir}/libdruntime-ldc-shared.so
+%{_libdir}/libldc-jit-rt.a
+%{_libdir}/libldc-jit.so
+%{_libdir}/libphobos2-ldc-debug-shared.so
+%{_libdir}/libphobos2-ldc-shared.so
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
@@ -235,10 +216,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libldc-jit.so.%dmdfe
 %{_libdir}/libldc-jit.so.%dmdfe_bump
 
-%files jit-devel
-%{_libdir}/libldc-jit-rt.a
-%{_libdir}/libldc-jit.so
-
 %files druntime
 %license runtime/druntime/LICENSE.txt
 %doc runtime/druntime/README.md runtime/README
@@ -247,13 +224,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libdruntime-ldc-shared.so.%dmdfe
 %{_libdir}/libdruntime-ldc-shared.so.%dmdfe_bump
 
-%files druntime-devel
-%{_includedir}/d/ldc
-%{_includedir}/d/core
-%{_includedir}/d/object.d
-%{_libdir}/libdruntime-ldc-debug-shared.so
-%{_libdir}/libdruntime-ldc-shared.so
-
 %files phobos
 %license runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe
@@ -261,19 +231,13 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libphobos2-ldc-shared.so.%dmdfe
 %{_libdir}/libphobos2-ldc-shared.so.%dmdfe_bump
 
-%files phobos-devel
-%dir %{_includedir}/d
-%{_includedir}/d/std
-%{_includedir}/d/etc
-%{_libdir}/libphobos2-ldc-debug-shared.so
-%{_libdir}/libphobos2-ldc-shared.so
-
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.23.0-1
 - Update to 1.23.0
+- Merge -devel subpackages into the main ldc package
 
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-5
 - Explicitly build against llvm10 compat package
