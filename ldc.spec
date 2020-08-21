@@ -197,7 +197,7 @@ pushd build
 %if 0%{?bootstrap_stage2}
               -DD_COMPILER:PATH=`pwd`/../build-bootstrap2/bin/ldmd2  \
 %endif
-              --enable-optimized ..
+              ..
     make %{?_smp_mflags} VERBOSE=2
 popd
 # generate geany tags
