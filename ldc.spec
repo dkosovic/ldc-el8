@@ -186,10 +186,6 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 mkdir -p %{buildroot}/%{_datadir}/geany/tags/
 install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
-%ldconfig_scriptlets druntime
-%ldconfig_scriptlets jit
-%ldconfig_scriptlets phobos
-
 %files
 %license LICENSE
 %doc README.md
