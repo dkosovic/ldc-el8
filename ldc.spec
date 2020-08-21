@@ -36,6 +36,9 @@ Source1:        https://github.com/ldc-developers/ldc/releases/download/v%{boots
 %endif
 Source3:        macros.%{name}
 
+# Make sure /usr/include/d is in the include search path
+Patch0:         ldc-include-path.patch
+
 ExclusiveArch:  %{ldc_arches}
 
 %if ! 0%{?bootstrap_stage1}
@@ -158,7 +161,7 @@ popd
 %endif
 
 %cmake -DMULTILIB:BOOL=OFF \
-       -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/d           \
+       -DINCLUDE_INSTALL_DIR:PATH=%{_prefix}/lib/ldc/%{_target_platform}/include/d \
        -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
 %if 0%{?bootstrap_stage2}
        -DD_COMPILER:PATH=`pwd`/build-bootstrap2/bin/ldmd2 \
@@ -195,12 +198,15 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_rpmconfigdir}/macros.d/macros.ldc
-%dir %{_includedir}/d
-%{_includedir}/d/core
-%{_includedir}/d/etc
-%{_includedir}/d/ldc
-%{_includedir}/d/object.d
-%{_includedir}/d/std
+%dir %{_prefix}/lib/ldc
+%dir %{_prefix}/lib/ldc/%{_target_platform}
+%dir %{_prefix}/lib/ldc/%{_target_platform}/include
+%dir %{_prefix}/lib/ldc/%{_target_platform}/include/d
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/core
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/etc
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/ldc
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/object.d
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/std
 %{_libdir}/libdruntime-ldc-debug-shared.so
 %{_libdir}/libdruntime-ldc-shared.so
 %{_libdir}/libldc-jit-rt.a
@@ -238,6 +244,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.23.0-1
 - Update to 1.23.0
 - Merge -devel subpackages into the main ldc package
+- Move ldc internal headers to /usr/lib/ldc to avoid conflicting with gdc (#1781685)
 
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-5
 - Explicitly build against llvm10 compat package
