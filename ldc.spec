@@ -57,8 +57,6 @@ Requires:       %{name}-phobos-devel%{?_isa} = %{epoch}:%{version}-%{release}
 # Require gcc for linking
 Requires:       gcc
 
-Obsoletes:      ldc-config < 1:1.1.0
-
 %description
 LDC is a portable compiler for the D programming language with modern
 optimization and code generation capabilities.
