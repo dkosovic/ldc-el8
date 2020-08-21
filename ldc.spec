@@ -41,18 +41,20 @@ Patch0:         ldc-include-path.patch
 
 ExclusiveArch:  %{ldc_arches}
 
+BuildRequires:  bash-completion
+BuildRequires:  cmake
+BuildRequires:  gc
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 %if ! 0%{?bootstrap_stage1}
 BuildRequires:  ldc
 %endif
 BuildRequires:  libconfig-devel
-BuildRequires:  cmake
-BuildRequires:  gc, gcc-c++, gcc
 BuildRequires:  libcurl-devel
-BuildRequires:  zlib-devel
 BuildRequires:  libedit-devel
-BuildRequires:  bash-completion
 BuildRequires:  llvm%{?llvm_version}-devel
 BuildRequires:  llvm%{?llvm_version}-static
+BuildRequires:  zlib-devel
 
 # Require gcc for linking
 Requires:       gcc
