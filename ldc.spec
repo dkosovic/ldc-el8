@@ -5,7 +5,7 @@
 
 #global pre beta1
 
-#global llvm_version 10.0
+%global llvm_version 10
 
 # Enable this for bootstrapping with an older version that doesn't require a
 # working D compiler to build itself
@@ -19,7 +19,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.20.1%{?pre:~%{pre}}
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -276,6 +276,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.20.1-5
+- Explicitly build against llvm10 compat package
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.20.1-4
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
