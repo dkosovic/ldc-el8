@@ -118,6 +118,7 @@ Summary:        Support for enable autocompletion in geany
 Requires:       %{name} = %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  geany
+BuildRequires: make
 Requires:       geany
 
 %description phobos-geany-tags
