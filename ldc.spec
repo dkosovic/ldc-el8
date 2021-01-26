@@ -23,7 +23,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.23.0%{?pre:~%{pre}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -241,6 +241,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.23.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Aug 21 2020 Kalev Lember <klember@redhat.com> - 1:1.23.0-1
 - Update to 1.23.0
 - Merge -devel subpackages into the main ldc package
