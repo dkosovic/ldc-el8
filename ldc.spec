@@ -54,6 +54,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  libedit-devel
 BuildRequires:  llvm%{?llvm_version}-devel
 BuildRequires:  llvm%{?llvm_version}-static
+BuildRequires:  make
 BuildRequires:  zlib-devel
 
 # Require gcc for linking
@@ -118,7 +119,6 @@ Summary:        Support for enable autocompletion in geany
 Requires:       %{name} = %{epoch}:%{version}-%{release}
 BuildArch:      noarch
 BuildRequires:  geany
-BuildRequires: make
 Requires:       geany
 
 %description phobos-geany-tags
