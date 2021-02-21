@@ -5,7 +5,7 @@
 
 #global pre beta1
 
-%global llvm_version 10
+#global llvm_version 11
 
 # bootstrap_stage1 is for bringing up a D compiler for the very first time,
 # without having a working D compiler in the build root.
@@ -195,7 +195,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
 %{_bindir}/ldc-build-runtime
-%{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_rpmconfigdir}/macros.d/macros.ldc
 %dir %{_prefix}/lib/ldc
@@ -243,6 +242,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Sun Feb 21 2021 Kalev Lember <klember@redhat.com> - 1:1.25.0-1
 - Update to 1.25.0
+- Build with llvm 11
 
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.23.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
