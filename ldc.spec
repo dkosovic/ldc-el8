@@ -1,6 +1,6 @@
 %global dmdfe_major 2
 %global dmdfe_minor 0
-%global dmdfe_bump  93
+%global dmdfe_bump  95
 %global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
 
 #global pre beta1
@@ -22,8 +22,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.23.0%{?pre:~%{pre}}
-Release:        2%{?dist}
+Version:        1.25.0%{?pre:~%{pre}}
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -241,6 +241,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sun Feb 21 2021 Kalev Lember <klember@redhat.com> - 1:1.25.0-1
+- Update to 1.25.0
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.23.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
