@@ -22,7 +22,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.25.0%{?pre:~%{pre}}
+Version:        1.25.1%{?pre:~%{pre}}
 Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
@@ -240,6 +240,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Sun Feb 28 2021 Kalev Lember <klember@redhat.com> - 1:1.25.1-1
+- Update to 1.25.1
+
 * Sun Feb 21 2021 Kalev Lember <klember@redhat.com> - 1:1.25.0-1
 - Update to 1.25.0
 - Build with llvm 11
