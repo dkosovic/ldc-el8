@@ -5,7 +5,7 @@
 
 #global pre beta1
 
-#global llvm_version 11
+%global llvm_version 11
 
 # bootstrap_stage1 is for bringing up a D compiler for the very first time,
 # without having a working D compiler in the build root.
