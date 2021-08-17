@@ -144,7 +144,7 @@ mkdir geany_config
 tar xf %{SOURCE1}
 mkdir build-bootstrap1
 pushd build-bootstrap1
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
       ../%{name}-%{bootstrap_stage1_ldc_version}-src
 make %{?_smp_mflags}
 popd
@@ -154,7 +154,7 @@ popd
 tar xf %{SOURCE0}
 mkdir build-bootstrap2
 pushd build-bootstrap2
-cmake -DLLVM_CONFIG:PATH=%{_bindir}/llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
+cmake -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
 %if 0%{?bootstrap_stage1}
       -DD_COMPILER:PATH=`pwd`/../build-bootstrap1/bin/ldmd2 \
 %endif
@@ -166,7 +166,7 @@ popd
 %cmake -DMULTILIB:BOOL=OFF \
        -DINCLUDE_INSTALL_DIR:PATH=%{_prefix}/lib/ldc/%{_target_platform}/include/d \
        -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
-       -DLLVM_CONFIG:PATH=llvm-config-%{?llvm_version:%{llvm_version}-}%{__isa_bits} \
+       -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
 %if 0%{?bootstrap_stage2}
        -DD_COMPILER:PATH=`pwd`/build-bootstrap2/bin/ldmd2 \
 %endif
