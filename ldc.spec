@@ -11,7 +11,7 @@
 # older, working LDC compiler in the buildroot, which is then used to build a
 # new intermediate LDC version, and finally this in turn is used to build the
 # final compiler that gets installed in the rpm.
-%global bootstrap_stage2 0
+%bcond_with bootstrap
 
 %undefine _hardened_build
 
@@ -128,7 +128,7 @@ mkdir geany_config
 
 %global optflags %{optflags} -fno-strict-aliasing
 
-%if 0%{?bootstrap_stage2}
+%if %{with bootstrap}
 tar xf %{SOURCE0}
 mkdir build-bootstrap
 pushd build-bootstrap
@@ -142,7 +142,7 @@ popd
        -DINCLUDE_INSTALL_DIR:PATH=%{_prefix}/lib/ldc/%{_target_platform}/include/d \
        -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
        -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
-%if 0%{?bootstrap_stage2}
+%if %{with bootstrap}
        -DD_COMPILER:PATH=`pwd`/build-bootstrap/bin/ldmd2 \
 %endif
        %{nil}
