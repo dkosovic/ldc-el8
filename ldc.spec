@@ -212,6 +212,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 * Mon Aug 16 2021 Kalev Lember <klember@redhat.com> - 1:1.27.1-1
 - Update to 1.27.1
 - Build with llvm 12
+- Don't use -w (treat warnings as errors) in default _d_optflags
 
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.25.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
