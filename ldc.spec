@@ -5,7 +5,7 @@
 
 #global pre beta1
 
-%global llvm_version 11
+%global llvm_version 12
 
 # bootstrap_stage1 is for bringing up a D compiler for the very first time,
 # without having a working D compiler in the build root.
@@ -66,6 +66,9 @@ Obsoletes:      ldc-druntime-devel < 1:1.23.0
 Obsoletes:      ldc-jit-devel < 1:1.23.0
 Obsoletes:      ldc-phobos-devel < 1:1.23.0
 
+# Removed in F35
+Obsoletes:      ldc-jit < 1:1.27.1
+
 %description
 LDC is a portable compiler for the D programming language with modern
 optimization and code generation capabilities.
@@ -88,13 +91,6 @@ Druntime est la bibliothèque minimal requise pour supporter la programmation en
 D. Est inclut le code système requis pour supporter le ramasse miette, tableau
 associatif, gestion des exceptions, opertation sur des vecteurs,
 démarage/extinction, etc
-
-%package        jit
-Summary:        LDC JIT library
-License:        Boost
-
-%description jit
-JIT library for the LDC compiler.
 
 %package        phobos
 Summary:        Standard Runtime Library
@@ -202,6 +198,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc2
 %{_bindir}/ldmd2
 %{_bindir}/ldc-build-runtime
+%{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
 %{_rpmconfigdir}/macros.d/macros.ldc
 %dir %{_prefix}/lib/ldc
@@ -215,18 +212,11 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_prefix}/lib/ldc/%{_target_platform}/include/d/std
 %{_libdir}/libdruntime-ldc-debug-shared.so
 %{_libdir}/libdruntime-ldc-shared.so
-%{_libdir}/libldc-jit-rt.a
-%{_libdir}/libldc-jit.so
 %{_libdir}/libphobos2-ldc-debug-shared.so
 %{_libdir}/libphobos2-ldc-shared.so
 %dir %{_datadir}/bash-completion
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
-
-%files jit
-%license runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libldc-jit.so.%dmdfe
-%{_libdir}/libldc-jit.so.%dmdfe_bump
 
 %files druntime
 %license runtime/druntime/LICENSE.txt
@@ -249,6 +239,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Mon Aug 16 2021 Kalev Lember <klember@redhat.com> - 1:1.27.1-1
 - Update to 1.27.1
+- Build with llvm 12
 
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.25.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
