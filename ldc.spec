@@ -38,11 +38,12 @@ Source3:        macros.%{name}
 
 # Make sure /usr/include/d is in the include search path
 Patch0:         ldc-include-path.patch
+# Don't add rpath to standard libdir
+Patch1:         ldc-no-default-rpath.patch
 
 ExclusiveArch:  %{ldc_arches}
 
 BuildRequires:  bash-completion
-BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gc
 BuildRequires:  gcc
@@ -176,12 +177,6 @@ geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
 
 %install
 %cmake_install
-
-# Remove lib64 rpaths
-chrpath --delete %{buildroot}%{_bindir}/ldc-prune-cache
-chrpath --delete %{buildroot}%{_bindir}/ldc2
-chrpath --delete %{buildroot}%{_bindir}/ldmd2
-chrpath --delete %{buildroot}%{_bindir}/ldc-build-runtime
 
 # macros for D package
 mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
