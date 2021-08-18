@@ -90,9 +90,6 @@ Requires:       geany
 %description phobos-geany-tags
 Enable autocompletion for phobos library in geany (IDE)
 
-%description -l fr phobos-geany-tags
-Active l'autocompletion pour pour la bibliothèque phobos dans geany (IDE)
-
 %prep
 %autosetup -n %{name}-%{version}%{?pre:-%{pre}}-src -p1
 # temp geany config directory for allow geany to generate tags
