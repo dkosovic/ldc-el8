@@ -18,7 +18,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.27.1%{?pre:~%{pre}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -49,6 +49,7 @@ BuildRequires:  llvm%{?llvm_version}-static
 BuildRequires:  make
 BuildRequires:  zlib-devel
 
+Requires:       %{name}-libs = %{epoch}:%{version}-%{release}
 # Require gcc for linking
 Requires:       gcc
 
@@ -57,9 +58,6 @@ Obsoletes:      ldc-druntime-devel < 1:1.23.0
 Obsoletes:      ldc-jit-devel < 1:1.23.0
 Obsoletes:      ldc-phobos-devel < 1:1.23.0
 
-# Removed in F35
-Obsoletes:      ldc-jit < 1:1.27.1
-
 %description
 LDC is a portable compiler for the D programming language with modern
 optimization and code generation capabilities.
@@ -67,40 +65,20 @@ optimization and code generation capabilities.
 It uses the official DMD compiler frontend to support the latest version
 of D, and relies on the LLVM Core libraries for code generation.
 
-%package        druntime
-Summary:        Runtime library for D
+%package        libs
+Summary:        LLVM D Compiler libraries
 License:        Boost
+# Removed in F35
+Obsoletes:      ldc-jit < 1:1.27.1
+# Merged into -libs in F35
+Obsoletes:      ldc-druntime < 1:1.27.1-2
+Obsoletes:      ldc-phobos < 1:1.27.1-2
 
-%description druntime
-Druntime is the minimum library required to support the D programming
-language. It includes the system code required to support the garbage
-collector, associative arrays, exception handling, array vector operations,
-startup/shutdown, etc.
+%description    libs
+LDC is a portable compiler for the D programming language with modern
+optimization and code generation capabilities.
 
-%description druntime -l fr
-Druntime est la bibliothèque minimal requise pour supporter la programmation en
-D. Est inclut le code système requis pour supporter le ramasse miette, tableau
-associatif, gestion des exceptions, opertation sur des vecteurs,
-démarage/extinction, etc
-
-%package        phobos
-Summary:        Standard Runtime Library
-License:        Boost
-Requires:       %{name}-druntime%{?_isa} = %{epoch}:%{version}-%{release}
-
-%description phobos
-Each module in Phobos conforms as much as possible to the following design
-goals. These are goals rather than requirements because D is not a religion,
-it's a programming language, and it recognizes that sometimes the goals are
-contradictory and counterproductive in certain situations, and programmers have
-jobs that need to get done
-
-%description phobos -l fr
-Chaque module de Phobos est conforme autant que possible à la conception
-suivante objectifs. Ce sont des objectifs plutôt que des exigences car D n'est
-pas une religion, c'est un language de programmation, et il reconnaît que,
-parfois, les objectifs sont contradictoires et contre-productif dans certaines
-situations, et les programmeurs ont travail qui doit être effectué.
+This package contains the Phobos D standard library and the D runtime library.
 
 %package phobos-geany-tags
 Summary:        Support for enable autocompletion in geany
@@ -190,16 +168,13 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/ldc2
 
-%files druntime
+%files libs
 %license runtime/druntime/LICENSE.txt
-%doc runtime/druntime/README.md runtime/README
+%license runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe
 %{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe_bump
 %{_libdir}/libdruntime-ldc-shared.so.%dmdfe
 %{_libdir}/libdruntime-ldc-shared.so.%dmdfe_bump
-
-%files phobos
-%license runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe
 %{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe_bump
 %{_libdir}/libphobos2-ldc-shared.so.%dmdfe
@@ -209,6 +184,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Wed Aug 18 2021 Kalev Lember <klember@redhat.com> - 1:1.27.1-2
+- Merge -druntime and -phobos subpackages into -libs subpackage
+
 * Mon Aug 16 2021 Kalev Lember <klember@redhat.com> - 1:1.27.1-1
 - Update to 1.27.1
 - Build with llvm 12
