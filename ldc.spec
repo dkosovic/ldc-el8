@@ -14,6 +14,7 @@
 %bcond_with bootstrap
 
 %undefine _hardened_build
+%undefine _package_note_file
 
 Name:           ldc
 Epoch:          1
