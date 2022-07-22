@@ -152,12 +152,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %dir %{_prefix}/lib/ldc
 %dir %{_prefix}/lib/ldc/%{_target_platform}
 %dir %{_prefix}/lib/ldc/%{_target_platform}/include
-%dir %{_prefix}/lib/ldc/%{_target_platform}/include/d
-%{_prefix}/lib/ldc/%{_target_platform}/include/d/core
-%{_prefix}/lib/ldc/%{_target_platform}/include/d/etc
-%{_prefix}/lib/ldc/%{_target_platform}/include/d/ldc
-%{_prefix}/lib/ldc/%{_target_platform}/include/d/object.d
-%{_prefix}/lib/ldc/%{_target_platform}/include/d/std
+%{_prefix}/lib/ldc/%{_target_platform}/include/d/
 %{_libdir}/libdruntime-ldc-debug-shared.so
 %{_libdir}/libdruntime-ldc-shared.so
 %{_libdir}/libphobos2-ldc-debug-shared.so
