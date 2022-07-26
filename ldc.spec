@@ -1,4 +1,4 @@
-%global llvm_version 12
+#global llvm_version 14
 %global soversion 100
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
@@ -170,6 +170,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %changelog
 * Tue Jul 26 2022 Kalev Lember <klember@redhat.com> - 1:1.30.0-1
 - Update to 1.30.0
+- Build with llvm 14
 
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.27.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
