@@ -1,11 +1,5 @@
-%global dmdfe_major 2
-%global dmdfe_minor 0
-%global dmdfe_bump  97
-%global dmdfe       %dmdfe_major.%dmdfe_minor.%dmdfe_bump
-
-#global pre beta1
-
 %global llvm_version 12
+%global soversion 100
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
 # older, working LDC compiler in the buildroot, which is then used to build a
@@ -18,8 +12,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.27.1%{?pre:~%{pre}}
-Release:        4%{?dist}
+Version:        1.30.0%{?pre:~%{pre}}
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -153,6 +147,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %dir %{_prefix}/lib/ldc/%{_target_platform}
 %dir %{_prefix}/lib/ldc/%{_target_platform}/include
 %{_prefix}/lib/ldc/%{_target_platform}/include/d/
+%{_libdir}/ldc_rt.dso.o
 %{_libdir}/libdruntime-ldc-debug-shared.so
 %{_libdir}/libdruntime-ldc-shared.so
 %{_libdir}/libphobos2-ldc-debug-shared.so
@@ -164,19 +159,18 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %files libs
 %license runtime/druntime/LICENSE.txt
 %license runtime/phobos/LICENSE_1_0.txt
-%{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe
-%{_libdir}/libdruntime-ldc-debug-shared.so.%dmdfe_bump
-%{_libdir}/libdruntime-ldc-shared.so.%dmdfe
-%{_libdir}/libdruntime-ldc-shared.so.%dmdfe_bump
-%{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe
-%{_libdir}/libphobos2-ldc-debug-shared.so.%dmdfe_bump
-%{_libdir}/libphobos2-ldc-shared.so.%dmdfe
-%{_libdir}/libphobos2-ldc-shared.so.%dmdfe_bump
+%{_libdir}/libdruntime-ldc-debug-shared.so.%{soversion}*
+%{_libdir}/libdruntime-ldc-shared.so.%{soversion}*
+%{_libdir}/libphobos2-ldc-debug-shared.so.%{soversion}*
+%{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %files phobos-geany-tags
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Tue Jul 26 2022 Kalev Lember <klember@redhat.com> - 1:1.30.0-1
+- Update to 1.30.0
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.27.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
