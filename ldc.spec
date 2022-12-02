@@ -1,4 +1,4 @@
-#global llvm_version 14
+%global llvm_version 14
 %global soversion 100
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
