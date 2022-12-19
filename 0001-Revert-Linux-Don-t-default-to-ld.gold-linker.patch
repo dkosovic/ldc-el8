@@ -1,0 +1,50 @@
+From f3e10a9aee4db798b5ac4a8b5cba9c037dff3faa Mon Sep 17 00:00:00 2001
+From: Kalev Lember <klember@redhat.com>
+Date: Mon, 19 Dec 2022 13:58:03 +0100
+Subject: [PATCH] Revert "Linux: Don't default to ld.gold linker"
+
+Keep on using ld.gold on RHEL 8 and 9 where using ldc with ld.bfd breaks
+gtkd and leads to crashing tilix.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2134875
+
+This reverts commit e125411e988679dfa8cbfc9dcfc05524a37589f7.
+---
+ driver/linker-gcc.cpp | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/driver/linker-gcc.cpp b/driver/linker-gcc.cpp
+index a53936a9aa..5ae90ce650 100644
+--- a/driver/linker-gcc.cpp
++++ b/driver/linker-gcc.cpp
+@@ -599,12 +599,22 @@ void ArgsBuilder::build(llvm::StringRef outputPath,
+ void ArgsBuilder::addLinker() {
+   llvm::StringRef linker = opts::linker;
+ 
+-  // Default to ld.bfd for Android (placing .tdata and .tbss sections adjacent
+-  // to each other as required by druntime's rt.sections_android, contrary to
+-  // gold and lld as of Android NDK r21d).
+-  if (global.params.targetTriple->getEnvironment() == llvm::Triple::Android &&
++  // We have a default linker preference for Linux targets. It can be disabled
++  // via `-linker=` (explicitly empty).
++  if (global.params.targetTriple->isOSLinux() &&
+       opts::linker.getNumOccurrences() == 0) {
+-    linker = "bfd";
++    // Default to ld.bfd for Android (placing .tdata and .tbss sections adjacent
++    // to each other as required by druntime's rt.sections_android, contrary to
++    // gold and lld as of Android NDK r21d).
++    if (global.params.targetTriple->getEnvironment() == llvm::Triple::Android) {
++      linker = "bfd";
++    }
++    // Otherwise default to ld.gold for Linux due to ld.bfd issues with ThinLTO
++    // (see #2278) and older bfd versions stripping llvm.used symbols (e.g.,
++    // ModuleInfo refs) with --gc-sections (see #2870).
++    else {
++      linker = "gold";
++    }
+   }
+ 
+   if (!linker.empty())
+-- 
+2.39.0
+
