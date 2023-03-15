@@ -3,7 +3,7 @@
 %else
 %global llvm_version 14
 %endif
-%global soversion 100
+%global soversion 102
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
 # older, working LDC compiler in the buildroot, which is then used to build a
@@ -16,8 +16,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.30.0%{?pre:~%{pre}}
-Release:        5%{?dist}
+Version:        1.32.0%{?pre:~%{pre}}
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -152,6 +152,7 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_bindir}/ldc-build-runtime
 %{_bindir}/ldc-profdata
 %{_bindir}/ldc-prune-cache
+%{_bindir}/timetrace2txt
 %{_rpmconfigdir}/macros.d/macros.ldc
 %dir %{_prefix}/lib/ldc
 %dir %{_prefix}/lib/ldc/%{_target_platform}
@@ -167,7 +168,6 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/bash-completion/completions/ldc2
 
 %files libs
-%license runtime/druntime/LICENSE.txt
 %license runtime/phobos/LICENSE_1_0.txt
 %{_libdir}/libdruntime-ldc-debug-shared.so.%{soversion}*
 %{_libdir}/libdruntime-ldc-shared.so.%{soversion}*
@@ -178,6 +178,9 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_datadir}/geany/tags/phobos.d.tags
 
 %changelog
+* Wed Mar 15 2023 Kalev Lember <klember@redhat.com> - 1:1.32.0-1
+- Update to 1.32.0
+
 * Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.30.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
 
