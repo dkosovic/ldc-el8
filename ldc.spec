@@ -62,6 +62,8 @@ Requires:       gcc
 Obsoletes:      ldc-druntime-devel < 1:1.23.0
 Obsoletes:      ldc-jit-devel < 1:1.23.0
 Obsoletes:      ldc-phobos-devel < 1:1.23.0
+# Removed in F38
+Obsoletes:      ldc-phobos-geany-tags < 1:1.32.0
 
 %description
 LDC is a portable compiler for the D programming language with modern
@@ -85,20 +87,8 @@ optimization and code generation capabilities.
 
 This package contains the Phobos D standard library and the D runtime library.
 
-%package phobos-geany-tags
-Summary:        Support for enable autocompletion in geany
-Requires:       %{name} = %{epoch}:%{version}-%{release}
-BuildArch:      noarch
-BuildRequires:  geany
-Requires:       geany
-
-%description phobos-geany-tags
-Enable autocompletion for phobos library in geany (IDE)
-
 %prep
 %autosetup -n %{name}-%{version}%{?pre:-%{pre}}-src -p1
-# temp geany config directory for allow geany to generate tags
-mkdir geany_config
 
 %build
 # This package appears to be failing because links to the LLVM plugins
@@ -129,19 +119,12 @@ popd
 
 %cmake_build
 
-# generate geany tags
-geany -c geany_config -g phobos.d.tags $(find runtime/phobos/std -name "*.d")
-
 %install
 %cmake_install
 
 # macros for D package
 mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
 install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
-
-# geany tags
-mkdir -p %{buildroot}/%{_datadir}/geany/tags/
-install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 
 %files
 %license LICENSE
@@ -174,12 +157,10 @@ install -m0644 phobos.d.tags %{buildroot}/%{_datadir}/geany/tags/
 %{_libdir}/libphobos2-ldc-debug-shared.so.%{soversion}*
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
-%files phobos-geany-tags
-%{_datadir}/geany/tags/phobos.d.tags
-
 %changelog
 * Wed Mar 15 2023 Kalev Lember <klember@redhat.com> - 1:1.32.0-1
 - Update to 1.32.0
+- Remove geany tags subpackage
 
 * Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.30.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
