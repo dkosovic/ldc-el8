@@ -1,7 +1,7 @@
 %if 0%{?rhel}
-#global llvm_version 14
+#global llvm_version 15
 %else
-%global llvm_version 14
+%global llvm_version 15
 %endif
 %global soversion 102
 
@@ -160,6 +160,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %changelog
 * Mon Apr 17 2023 Kalev Lember <klember@redhat.com> - 1:1.32.1-1
 - Update to 1.32.1
+- Build with llvm 15
 
 * Wed Mar 15 2023 Kalev Lember <klember@redhat.com> - 1:1.32.0-1
 - Update to 1.32.0
