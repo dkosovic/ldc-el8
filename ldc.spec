@@ -16,7 +16,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.32.0%{?pre:~%{pre}}
+Version:        1.32.1%{?pre:~%{pre}}
 Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
@@ -158,6 +158,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Mon Apr 17 2023 Kalev Lember <klember@redhat.com> - 1:1.32.1-1
+- Update to 1.32.1
+
 * Wed Mar 15 2023 Kalev Lember <klember@redhat.com> - 1:1.32.0-1
 - Update to 1.32.0
 - Remove geany tags subpackage
