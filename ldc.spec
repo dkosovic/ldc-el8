@@ -9,7 +9,7 @@
 # older, working LDC compiler in the buildroot, which is then used to build a
 # new intermediate LDC version, and finally this in turn is used to build the
 # final compiler that gets installed in the rpm.
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 %undefine _hardened_build
 %undefine _package_note_file
