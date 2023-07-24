@@ -16,7 +16,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.33.0%{?pre:~%{pre}}
+Version:        1.33.0
 Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
@@ -24,7 +24,7 @@ Summary:        LLVM D Compiler
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}%{?pre:-%{pre}}/%{name}-%{version}%{?pre:-%{pre}}-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}-src.tar.gz
 Source3:        macros.%{name}
 
 # Make sure /usr/include/d is in the include search path
@@ -88,7 +88,7 @@ optimization and code generation capabilities.
 This package contains the Phobos D standard library and the D runtime library.
 
 %prep
-%autosetup -n %{name}-%{version}%{?pre:-%{pre}}-src -p1
+%autosetup -n %{name}-%{version_no_tilde}-src -p1
 
 %build
 # This package appears to be failing because links to the LLVM plugins
@@ -103,7 +103,7 @@ tar xf %{SOURCE0}
 mkdir build-bootstrap
 pushd build-bootstrap
 cmake -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
-      ../%{name}-%{version}%{?pre:-%{pre}}-src
+      ../%{name}-%{version_no_tilde}-src
 make %{?_smp_mflags}
 popd
 %endif
