@@ -99,11 +99,10 @@ This package contains the Phobos D standard library and the D runtime library.
 %global optflags %{optflags} -fno-strict-aliasing
 
 %if %{with bootstrap}
-tar xf %{SOURCE0}
 mkdir build-bootstrap
 pushd build-bootstrap
 cmake -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
-      ../%{name}-%{version_no_tilde}-src
+      ..
 make %{?_smp_mflags}
 popd
 %endif
