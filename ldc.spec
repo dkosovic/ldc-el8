@@ -28,14 +28,14 @@ Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{versi
 Source3:        macros.%{name}
 
 # Make sure /usr/include/d is in the include search path
-Patch0:         ldc-include-path.patch
+Patch:          ldc-include-path.patch
 # Don't add rpath to standard libdir
-Patch1:         ldc-no-default-rpath.patch
+Patch:          ldc-no-default-rpath.patch
 %if 0%{?rhel} && 0%{?rhel} <= 9
 # Keep on using ld.gold on RHEL 8 and 9 where using ldc with ld.bfd breaks gtkd
 # and leads to crashing tilix.
 # https://bugzilla.redhat.com/show_bug.cgi?id=2134875
-Patch2:         0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
+Patch:          0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
 %endif
 
 # https://github.com/ldc-developers/phobos/pull/72
