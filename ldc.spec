@@ -3,7 +3,7 @@
 %else
 %global llvm_version 16
 %endif
-%global soversion 104
+%global soversion 105
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
 # older, working LDC compiler in the buildroot, which is then used to build a
@@ -16,7 +16,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.34.0
+Version:        1.35.0
 Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
@@ -37,6 +37,9 @@ Patch1:         ldc-no-default-rpath.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2134875
 Patch2:         0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
 %endif
+
+# https://github.com/ldc-developers/phobos/pull/72
+Patch:          fix-ppc-build.patch
 
 ExclusiveArch:  %{ldc_arches} ppc64le
 
@@ -158,6 +161,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Sun Oct 15 2023 Kalev Lember <klember@redhat.com> - 1:1.35.0-1
+- Update to 1.35.0
+
 * Sun Aug 27 2023 Kalev Lember <klember@redhat.com> - 1:1.34.0-1
 - Update to 1.34.0
 - Build with llvm 16

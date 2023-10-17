@@ -1,0 +1,24 @@
+From 87baf4a6f87c6776ba8f5dad276fb77e32e80065 Mon Sep 17 00:00:00 2001
+From: Kalev Lember <klember@redhat.com>
+Date: Tue, 17 Oct 2023 10:44:24 +0200
+Subject: [PATCH] LDC: Fix PPC support to compile without deprecation warnings
+
+Fixes the following:
+std/math/hardware.d(929): Deprecation: `asm` statement cannot be marked `@safe`, use `@system` or `@trusted` instead
+---
+ std/math/hardware.d | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git ldc-1.35.0-src/runtime/phobos/std/math/hardware.d ldc-1.35.0-src/runtime/phobos/std/math/hardware.d
+index 3e0c2fd6fbb..24fcbb89a63 100644
+--- ldc-1.35.0-src/runtime/phobos/std/math/hardware.d
++++ ldc-1.35.0-src/runtime/phobos/std/math/hardware.d
+@@ -926,7 +926,7 @@ private:
+             }
+             else version (PPC_Any)
+             {
+-                asm pure nothrow @nogc @safe
++                asm pure nothrow @nogc @trusted
+                 {
+                     `mtfsb0 24
+                      mtfsb0 25
