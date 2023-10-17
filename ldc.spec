@@ -61,13 +61,6 @@ Requires:       %{name}-libs = %{epoch}:%{version}-%{release}
 # Require gcc for linking
 Requires:       gcc
 
-# Removed in F33
-Obsoletes:      ldc-druntime-devel < 1:1.23.0
-Obsoletes:      ldc-jit-devel < 1:1.23.0
-Obsoletes:      ldc-phobos-devel < 1:1.23.0
-# Removed in F38
-Obsoletes:      ldc-phobos-geany-tags < 1:1.32.0
-
 %description
 LDC is a portable compiler for the D programming language with modern
 optimization and code generation capabilities.
@@ -78,11 +71,6 @@ of D, and relies on the LLVM Core libraries for code generation.
 %package        libs
 Summary:        LLVM D Compiler libraries
 License:        Boost
-# Removed in F35
-Obsoletes:      ldc-jit < 1:1.27.1
-# Merged into -libs in F35
-Obsoletes:      ldc-druntime < 1:1.27.1-2
-Obsoletes:      ldc-phobos < 1:1.27.1-2
 
 %description    libs
 LDC is a portable compiler for the D programming language with modern
@@ -163,6 +151,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %changelog
 * Sun Oct 15 2023 Kalev Lember <klember@redhat.com> - 1:1.35.0-1
 - Update to 1.35.0
+- Drop old obsoletes
 
 * Sun Aug 27 2023 Kalev Lember <klember@redhat.com> - 1:1.34.0-1
 - Update to 1.34.0
