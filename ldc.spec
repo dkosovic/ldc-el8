@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.35.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -70,7 +70,8 @@ of D, and relies on the LLVM Core libraries for code generation.
 
 %package        libs
 Summary:        LLVM D Compiler libraries
-License:        Boost
+# Automatically converted from old format: Boost - review is highly recommended.
+License:        BSL-1.0
 
 %description    libs
 LDC is a portable compiler for the D programming language with modern
@@ -149,6 +150,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Wed Jul  24 2024 Miroslav Suchý <msuchy@redhat.com> - 1:1.35.0-5
+- convert license to SPDX
+
 * Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.35.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
