@@ -3,7 +3,7 @@
 %else
 %global llvm_version 16
 %endif
-%global soversion 105
+%global soversion 109
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
 # older, working LDC compiler in the buildroot, which is then used to build a
@@ -16,8 +16,8 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.35.0
-Release:        5%{?dist}
+Version:        1.39.0
+Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -37,9 +37,6 @@ Patch:          ldc-no-default-rpath.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2134875
 Patch:          0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
 %endif
-
-# https://github.com/ldc-developers/phobos/pull/72
-Patch:          fix-ppc-build.patch
 
 ExclusiveArch:  %{ldc_arches} ppc64le
 
@@ -126,6 +123,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_bindir}/ldc-build-plugin
 %{_bindir}/ldc-build-runtime
 %{_bindir}/ldc-profdata
+%{_bindir}/ldc-profgen
 %{_bindir}/ldc-prune-cache
 %{_bindir}/timetrace2txt
 %{_rpmconfigdir}/macros.d/macros.ldc
@@ -150,6 +148,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Tue Aug 06 2024 Kalev Lember <klember@redhat.com> - 1:1.39.0-1
+- Update to 1.39.0
+
 * Wed Jul  24 2024 Miroslav Suchý <msuchy@redhat.com> - 1:1.35.0-5
 - convert license to SPDX
 
