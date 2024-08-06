@@ -1,7 +1,7 @@
 %if 0%{?rhel}
 #global llvm_version 15
 %else
-%global llvm_version 16
+%global llvm_version 17
 %endif
 %global soversion 109
 
