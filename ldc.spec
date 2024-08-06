@@ -1,7 +1,7 @@
 %if 0%{?rhel}
 #global llvm_version 15
 %else
-%global llvm_version 17
+%global llvm_version 18
 %endif
 %global soversion 109
 
@@ -150,6 +150,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %changelog
 * Tue Aug 06 2024 Kalev Lember <klember@redhat.com> - 1:1.39.0-1
 - Update to 1.39.0
+- Build with llvm 18
 
 * Wed Jul  24 2024 Miroslav Suchý <msuchy@redhat.com> - 1:1.35.0-5
 - convert license to SPDX
