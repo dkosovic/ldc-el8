@@ -79,6 +79,9 @@ This package contains the Phobos D standard library and the D runtime library.
 %prep
 %autosetup -n %{name}-%{version_no_tilde}-src -p1
 
+# Remove bundled zlib
+rm -fr runtime/phobos/etc/c/zlib
+
 %build
 # This package appears to be failing because links to the LLVM plugins
 # are not installed which results in the tools not being able to
@@ -91,6 +94,7 @@ This package contains the Phobos D standard library and the D runtime library.
 mkdir build-bootstrap
 pushd build-bootstrap
 cmake -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
+      -DPHOBOS_SYSTEM_ZLIB=ON \
       ..
 make %{?_smp_mflags}
 popd
@@ -100,6 +104,7 @@ popd
        -DINCLUDE_INSTALL_DIR:PATH=%{_prefix}/lib/ldc/%{_target_platform}/include/d \
        -DBASH_COMPLETION_COMPLETIONSDIR:PATH=%{_datadir}/bash-completion/completions \
        -DLLVM_CONFIG:PATH=llvm-config%{?llvm_version:-%{llvm_version}} \
+       -DPHOBOS_SYSTEM_ZLIB=ON \
 %if %{with bootstrap}
        -DD_COMPILER:PATH=`pwd`/build-bootstrap/bin/ldmd2 \
 %endif
@@ -150,6 +155,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %changelog
 * Tue Dec 17 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-1
 - Update to 1.40.0
+- Use system zlib instead of bundled
 
 * Tue Aug 06 2024 Kalev Lember <klember@redhat.com> - 1:1.39.0-1
 - Update to 1.39.0
