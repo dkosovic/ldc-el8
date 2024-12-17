@@ -3,7 +3,7 @@
 %else
 %global llvm_version 18
 %endif
-%global soversion 109
+%global soversion 110
 
 # bootstrapping is used for updating LDC to a newer version: it relies on an
 # older, working LDC compiler in the buildroot, which is then used to build a
@@ -16,7 +16,7 @@
 
 Name:           ldc
 Epoch:          1
-Version:        1.39.0
+Version:        1.40.0
 Release:        1%{?dist}
 Summary:        LLVM D Compiler
 
@@ -148,6 +148,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Tue Dec 17 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-1
+- Update to 1.40.0
+
 * Tue Aug 06 2024 Kalev Lember <klember@redhat.com> - 1:1.39.0-1
 - Update to 1.39.0
 - Build with llvm 18
