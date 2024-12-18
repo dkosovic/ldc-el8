@@ -1,7 +1,7 @@
 %if 0%{?rhel}
 #global llvm_version 15
 %else
-%global llvm_version 18
+#global llvm_version 19
 %endif
 %global soversion 110
 
@@ -156,6 +156,7 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 * Tue Dec 17 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-1
 - Update to 1.40.0
 - Use system zlib instead of bundled
+- Build with llvm 19
 
 * Tue Aug 06 2024 Kalev Lember <klember@redhat.com> - 1:1.39.0-1
 - Update to 1.39.0
