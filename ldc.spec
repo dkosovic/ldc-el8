@@ -17,7 +17,7 @@
 Name:           ldc
 Epoch:          1
 Version:        1.40.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LLVM D Compiler
 
 # The DMD frontend in dmd/* GPL version 1 or artistic license
@@ -42,7 +42,6 @@ ExclusiveArch:  %{ldc_arches} ppc64le
 
 BuildRequires:  bash-completion
 BuildRequires:  cmake
-BuildRequires:  gc
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ldc
@@ -153,6 +152,9 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
+* Wed Dec 18 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-2
+- Drop unused gc build dep
+
 * Tue Dec 17 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-1
 - Update to 1.40.0
 - Use system zlib instead of bundled
