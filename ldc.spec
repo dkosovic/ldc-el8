@@ -24,18 +24,18 @@ Summary:        LLVM D Compiler
 # The files gen/asmstmt.cpp and gen/asm-*.hG PL version 2+ or artistic license
 License:        BSD
 URL:            https://github.com/ldc-developers/ldc
-Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}-src.tar.gz
+Source0:        https://github.com/ldc-developers/ldc/releases/download/v%{version}/%{name}-%{version}-src.tar.gz
 Source3:        macros.%{name}
 
 # Make sure /usr/include/d is in the include search path
-Patch:          ldc-include-path.patch
+Patch0:          ldc-include-path.patch
 # Don't add rpath to standard libdir
-Patch:          ldc-no-default-rpath.patch
+Patch1:          ldc-no-default-rpath.patch
 %if 0%{?rhel} && 0%{?rhel} <= 9
 # Keep on using ld.gold on RHEL 8 and 9 where using ldc with ld.bfd breaks gtkd
 # and leads to crashing tilix.
 # https://bugzilla.redhat.com/show_bug.cgi?id=2134875
-Patch:          0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
+# Patch2:          0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
 %endif
 
 ExclusiveArch:  %{ldc_arches} ppc64le
@@ -76,7 +76,7 @@ optimization and code generation capabilities.
 This package contains the Phobos D standard library and the D runtime library.
 
 %prep
-%autosetup -n %{name}-%{version_no_tilde}-src -p1
+%autosetup -n %{name}-%{version}-src -p1
 
 # Remove bundled zlib
 rm -fr runtime/phobos/etc/c/zlib
@@ -152,8 +152,12 @@ install --mode=0644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/macros.d/macros.ldc
 %{_libdir}/libphobos2-ldc-shared.so.%{soversion}*
 
 %changelog
-* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.40.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+* Fri Jan 18 2025 Douglas Kosovic <doug@uq.edu.au> - 1:1.40.0-3
+- Add numbers back to patches for RHEL8
+- Replace version_no_tilde with version for RHEL8
+- Unset llvm_version for RHEL build
+- Do not apply 0001-Revert-Linux-Don-t-default-to-ld.gold-linker.patch
+  which fails to apply.
 
 * Wed Dec 18 2024 Kalev Lember <klember@redhat.com> - 1:1.40.0-2
 - Drop unused gc build dep
